@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Peticol - Clínica Veterinaria</title>
+
+  <link rel="stylesheet" href="css/inicio.css">
+  <link rel="stylesheet" href="css/gallery.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- 🎥 VIDEO DE FONDO -->
+  <video class="body-video" autoplay muted loop playsinline>
+    <source src="assets/videos/video1.mp4" type="video/mp4">
+    Tu navegador no soporta video HTML5
+  </video>
+
+  <!-- CAPA OSCURA PARA LEGIBILIDAD -->
+  <div class="body-video-overlay"></div>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <img src="assets/imagenes/logo.svg" alt="Logo Peticol">
+      </div>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#inicio">Inicio</a></li>
+          <li><a href="#servicios">Servicios</a></li>
+          <li><a href="#nosotros">Nosotros</a></li>
+          <li><a href="#login" class="btn">Iniciar Sesion</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="app">
+
+    <section class="gallery-section" id="galeria">
+
+      <p class="clinic-description">
+        Peticol es una clínica veterinaria dedicada a la venta de alimentos, medicamentos y productos especializados
+        para mascotas, complementando sus servicios con revisión general y peluquería animal. Nos enfocamos en brindar
+        atención responsable, productos de calidad y un servicio confiable que contribuya al bienestar y cuidado diario
+        de las mascotas.
+      </p>
+
+      <div class="gallery">
+        <div class="gallery-card"><img src="assets/imagenes/imagen1.jpg"></div>
+        <div class="gallery-card"><img src="assets/imagenes/imagen2.jpg"></div>
+        <div class="gallery-card"><img src="assets/imagenes/imagen3.jpg"></div>
+        <div class="gallery-card"><img src="assets/imagenes/imagen4.jpg"></div>
+      </div>
+    </section>
+
+    <section class="carousel-cards-section">
+      <h3>Nuestros Productos</h3>
+
+      <div class="carousel-3d">
+        <button class="nav-btn left">&#10094;</button>
+
+        <div class="carousel-viewport">
+          <div class="carousel-cards">
+            <div class="card active"><img src="assets/imagenes/imagen5.jpg">
+              <h4>Juguetes para perros</h4>
+            </div>
+            <div class="card"><img src="assets/imagenes/imagen6.jpg">
+              <h4>Juguetes para gatos</h4>
+            </div>
+            <div class="card"><img src="assets/imagenes/imagen7.jpg">
+              <h4>Purina</h4>
+            </div>
+            <div class="card"><img src="assets/imagenes/imagen8.jpg">
+              <h4>Medicamentos</h4>
+            </div>
+            <div class="card"><img src="assets/imagenes/imagen9.jpg">
+              <h4>Peluquería canina</h4>
+            </div>
+            <div class="card"><img src="assets/imagenes/imagen10.jpg">
+              <h4>Vacunación</h4>
+            </div>
+          </div>
+        </div>
+
+        <button class="nav-btn right">&#10095;</button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Peticol</p>
+  </footer>
+
+
+  <!-- MODAL LOGIN -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal-login">
+
+    <div class="modal-paw">🐾</div>
+    <span class="modal-close" onclick="cerrarLogin()">×</span>
+
+    <div class="modal-body">
+
+      <!-- FORMULARIO -->
+      <div class="login-form">
+
+        <div class="login-logo">
+          <img src="assets/imagenes/logo.svg" alt="Logo Peticol">
+        </div>
+
+        <h2>Inicio de sesión</h2>
+        <p class="login-subtitle">Accede a tu cuenta para continuar</p>
+
+        <form id="loginForm">
+          <div class="input-group">
+            <label>Correo electrónico</label>
+            <input id="correo" type="email" required>
+          </div>
+
+          <div class="input-group">
+            <label>Contraseña</label>
+            <input id="clave" type="password" required>
+          </div>
+
+          <button type="submit" class="login-btn">Ingresar</button>
+        </form>
+
+      </div>
+
+      <!-- IMAGEN -->
+      <div class="login-image">
+        <img src="assets/imagenes/imagenlogin2.jpg" alt="Mascotas Peticol">
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+    <script type="module" src="js/app.js"></script>
+    <script src="js/carousel.js"></script>
+    <script src="js/modal.js"></script>
+
+
+    <div id="toast" class="toast"></div>
+
+
+</body>
+
+</html>
