@@ -1,4 +1,6 @@
-/* RESET BÁSICO */
+/* ===============================
+   RESET BÁSICO
+================================ */
 * {
   margin: 0;
   padding: 0;
@@ -8,12 +10,9 @@
 /* ===============================
    VIDEO DE FONDO GLOBAL
 ================================ */
-
-
 .body-video {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100vw;
   height: 100vh;
   object-fit: cover;
@@ -32,46 +31,33 @@ body {
   font-family: 'Poppins', system-ui, Arial, sans-serif;
   background: transparent;
   color: #fff;
+  overflow-x: hidden;
 }
-
 
 /* ===============================
    NAVBAR
 ================================ */
-
 .navbar {
-  background-color: rgba(255, 255, 255, 0.95); /* blanca pero translúcida */
+  background-color: rgba(255, 255, 255, 0.95);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
-/* CONTENEDOR */
 .nav-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1.2rem;
-  height: 64px;
+  height: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
 /* LOGO */
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: #2c7be5;
-}
-
-/* IMAGEN DEL LOGO */
 .logo img {
-  height: 150px;
-  width: auto;
+  height: 90px;
   object-fit: contain;
 }
 
@@ -80,6 +66,7 @@ body {
   list-style: none;
   display: flex;
   gap: 1.5rem;
+  align-items: center;
 }
 
 .nav-links a {
@@ -93,30 +80,26 @@ body {
   color: #ff8533;
 }
 
-/* BOTÓN */
 .nav-links .btn {
   background-color: #ff8533;
-  color: white;
+  color: #fff;
   padding: 0.45rem 1rem;
   border-radius: 6px;
-  transition: background-color 0.3s ease;
 }
 
 .nav-links .btn:hover {
-  background-color: #0a0a0a;
+  background: #000;
 }
 
 /* ===============================
    SECCIONES
 ================================ */
-
 .gallery-section,
 .carousel-cards-section,
 footer {
-  background: transparent; /* 🔑 deja ver el video */
+  background: transparent;
 }
 
-/* Si quieres cajas blancas encima del video */
 .gallery-card,
 .card {
   background: rgba(255, 255, 255, 0.9);
@@ -124,26 +107,8 @@ footer {
 }
 
 /* ===============================
-   RESPONSIVE
+   MODAL LOGIN
 ================================ */
-
-@media (max-width: 768px) {
-  .nav-links {
-    gap: 1rem;
-    font-size: 0.95rem;
-  }
-
-  /* Opcional: ocultar video en móvil */
-  .body-video {
-    display: none;
-  }
-
-  body {
-    background: #000;
-  }
-}
-
-/* OVERLAY */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -154,37 +119,30 @@ footer {
   z-index: 999;
 }
 
-/* CONTENEDOR */
 .modal-login {
   position: relative;
-  width: 90%;
+  width: 92%;
   max-width: 900px;
-  background: #ffffff;
+  background: #fff;
   border-radius: 20px;
   box-shadow: 0 30px 70px rgba(0, 0, 0, 0.25);
   overflow: hidden;
   animation: slideUp 0.4s ease;
 }
 
-/* HUELLITAS */
 .modal-paw {
   position: absolute;
   top: -18px;
   left: -18px;
   font-size: 2.2rem;
-
-  background: #ffffff;
+  background: #fff;
   color: #2c7be5;
-
   padding: 14px 18px;
   border-radius: 50%;
-
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  z-index: 2;
+  animation: pop 0.5s ease;
 }
 
-
-/* CERRAR */
 .modal-close {
   position: absolute;
   top: 20px;
@@ -195,10 +153,9 @@ footer {
 }
 
 .modal-close:hover {
-  color:#ff8533;
+  color: #ff8533;
 }
 
-/* CUERPO */
 .modal-body {
   display: flex;
   min-height: 480px;
@@ -207,22 +164,38 @@ footer {
 /* FORMULARIO */
 .login-form {
   flex: 1;
-  padding: 3.5rem;
+  padding: 3rem;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* 🔑 centra vertical */
+  justify-content: center;
 }
 
+.login-logo {
+  background: rgba(255, 133, 51, 0.1);
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+}
+
+.login-logo img {
+  width: 70px;
+}
 
 .login-form h2 {
   font-size: 2rem;
   color: #ff8533;
   margin-bottom: 0.5rem;
+  text-align: center;
 }
 
 .login-subtitle {
-  color: #000000;
+  color: #000;
   margin-bottom: 2rem;
+  text-align: center;
 }
 
 /* INPUTS */
@@ -250,24 +223,22 @@ footer {
   border-color: #2c7be5;
 }
 
-/* BOTÓN */
 .login-btn {
   width: 100%;
-  padding: 0.8rem;
+  padding: 0.9rem;
   background: #ff8533;
   color: white;
   border: none;
   border-radius: 10px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background 0.3s;
 }
 
 .login-btn:hover {
-  background: #000000;
+  background: #000;
 }
 
-/* IMAGEN */
+/* IMAGEN LOGIN */
 .login-image {
   flex: 1;
   overflow: hidden;
@@ -277,71 +248,21 @@ footer {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
-
-/* ANIMACIONES */
-@keyframes slideUp {
-  from {
-    transform: translateY(40px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .modal-body {
-    flex-direction: column;
-  }
-
-  .login-image {
-    display: none;
-  }
-}
-
-
-.modal-paw {
-  animation: pop 0.5s ease;
-}
-
-@keyframes pop {
-  from {
-    transform: scale(0.6);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-
-.login-logo {
-  background: rgba(255, 133, 51, 0.1);
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  align-items: center;
-  margin: 0 auto 1.5rem;
-}
-
-
+/* ===============================
+   TOAST
+================================ */
 .toast {
   position: fixed;
-  top: 30px;
-  right: 30px;
+  top: 20px;
+  right: 20px;
   background: rgba(30, 30, 30, 0.95);
   color: #fff;
   padding: 16px 24px;
   border-radius: 14px;
-  font-family: 'Poppins', sans-serif;
   font-size: 15px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
   opacity: 0;
   transform: translateY(-20px);
   transition: all 0.4s ease;
@@ -353,10 +274,75 @@ footer {
   transform: translateY(0);
 }
 
-.toast.success {
-  border-left: 6px solid #4CAF50;
+.toast.success { border-left: 6px solid #4CAF50; }
+.toast.error { border-left: 6px solid #FF5252; }
+
+/* ===============================
+   ANIMACIONES
+================================ */
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
-.toast.error {
-  border-left: 6px solid #FF5252;
+@keyframes pop {
+  from { transform: scale(0.6); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ===============================
+   RESPONSIVE MOBILE
+================================ */
+@media (max-width: 768px) {
+
+  /* Oculta video (performance móvil) */
+  .body-video {
+    display: none;
+  }
+
+  body {
+    background: #000;
+  }
+
+  /* Navbar */
+  .nav-container {
+    flex-direction: column;
+    height: auto;
+    padding: 0.8rem;
+  }
+
+  .logo img {
+    height: 70px;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    padding-bottom: 0.5rem;
+  }
+
+  /* Modal */
+  .modal-body {
+    flex-direction: column;
+  }
+
+  .login-image {
+    display: none;
+  }
+
+  .login-form {
+    padding: 2rem 1.5rem;
+  }
+
+  .login-form h2 {
+    font-size: 1.6rem;
+  }
+
+  /* Toast */
+  .toast {
+    right: 10px;
+    left: 10px;
+    text-align: center;
+  }
 }
