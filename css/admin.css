@@ -5,21 +5,44 @@
   font-family: 'Poppins', sans-serif;
 }
 
-body {
-  background: #f4f6f9;
+.content {
+  background: transparent;
+  position: relative;
+  z-index: 1;
 }
+
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+
+  background-image: url("../assets/imagenes/fondodomestico.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  z-index: -2;
+}
+
+
+body {
+  background: none;
+}
+
+
 
 /* ===============================
    NAVBAR
 ================================ */
 .navbar {
   height: 60px;
-  background: #0f172a;
+  background: #ff9505;
   display: flex;
   align-items: center;
   padding: 0 20px;
   gap: 20px;
-  color: white;
+  color: #fdf0d5;
 }
 
 .navbar input {
@@ -47,32 +70,106 @@ body {
   left: 0;
   width: 220px;
   height: calc(100vh - 60px);
-  background: #020617;
-  padding: 20px;
+
+  /* 🔥 Fondo negro elegante translúcido */
+  background: rgba(10, 10, 10, 0.75);
+  backdrop-filter: blur(14px);
+
+  padding: 24px 20px;
   transition: transform 0.4s ease;
   z-index: 100;
+
+  /* Detalle sutil */
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+/* LOGO / TÍTULO */
 .sidebar h2 {
-  color: white;
-  margin-bottom: 20px;
+  color: #ffffff;
+  margin-bottom: 28px;
+  font-size: 1.4rem;
+  letter-spacing: 1px;
+  font-weight: 600;
 }
 
+/* LINKS */
 .sidebar a {
-  display: block;
-  color: #cbd5f5;
-  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  color: rgba(255, 255, 255, 0.75);
+  padding: 12px 10px;
+  margin-bottom: 6px;
+
   text-decoration: none;
-  transition: color 0.3s;
+  border-radius: 10px;
+
+  transition: all 0.3s ease;
 }
 
+/* HOVER */
 .sidebar a:hover {
-  color: #38bdf8;
+  background: rgba(255, 183, 3, 0.15);
+  color: #ffb703;
+  transform: translateX(6px);
 }
 
+/* ACTIVO (opcional) */
+.sidebar a.active {
+  background: rgba(255, 183, 3, 0.25);
+  color: #ffb703;
+  font-weight: 500;
+}
+
+.sidebar-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.sidebar-brand h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  letter-spacing: 1px;
+}
+
+.sidebar-brand img {
+  width: 80px;                 /* tamaño controlado */
+  height: 80px;
+  object-fit: contain;
+
+  background: #ffffff;         /* fondo blanco */
+  border-radius: 50%;          /* redondo */
+  padding: 10px;               /* aire interno */
+
+  box-shadow: 
+    0 6px 15px rgba(0,0,0,0.4);
+
+  transition: transform 0.3s ease;
+}
+
+.sidebar-brand img:hover {
+  transform: scale(1.05);
+}
+
+
+
+
+/* OCULTA */
 .sidebar.hidden {
   transform: translateX(-100%);
 }
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 240px;
+  }
+}
+
 
 /* ===============================
    CONTENT
