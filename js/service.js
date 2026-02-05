@@ -1,0 +1,3 @@
+function obtenerServicios() {
+  return servicios;
+}

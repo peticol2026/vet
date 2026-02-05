@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin | Productos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Fuente -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/productos.css">
+</head>
+
+<body>
+
+  <!-- 🔝 NAVBAR -->
+  <header class="topbar">
+    <h2>Gestión de Productos</h2>
+
+    <div class="top-actions">
+      <input type="text" placeholder="Buscar producto..." id="searchProduct">
+      <button class="btn primary">+ Agregar producto</button>
+    </div>
+  </header>
+
+  <!-- 📦 CONTENEDOR PRINCIPAL -->
+  <main class="container">
+
+    <!-- 📋 LISTADO DE PRODUCTOS -->
+    <section class="product-list">
+
+      <table>
+        <thead>
+          <tr>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Categoría</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <!-- Producto -->
+          <tr>
+            <td><img src="https://i.pinimg.com/736x/f2/0d/c8/f20dc8de941acbac3dd75336d614da3f.jpg" class="product-img"></td>
+            <td>Alimento Premium</td>
+            <td>Comida</td>
+            <td>$45.000</td>
+            <td>20</td>
+            <td class="actions">
+              <button class="btn edit">Editar</button>
+              <button class="btn delete">Eliminar</button>
+            </td>
+          </tr>
+
+          <!-- Más productos dinámicos luego -->
+        </tbody>
+      </table>
+
+    </section>
+
+  </main>
+
+  <!-- ➕ MODAL AGREGAR / EDITAR PRODUCTO -->
+  <div class="modal-overlay hidden" id="productModal">
+    <div class="modal">
+
+      <h3>Agregar producto</h3>
+
+      <form id="productForm">
+
+        <div class="form-group">
+          <label>Nombre</label>
+          <input type="text" required>
+        </div>
+
+        <div class="form-group">
+          <label>Categoría</label>
+          <input type="text" required>
+        </div>
+
+        <div class="form-group">
+          <label>Precio</label>
+          <input type="number" required>
+        </div>
+
+        <div class="form-group">
+          <label>Stock</label>
+          <input type="number" required>
+        </div>
+
+        <div class="form-group">
+          <label>Imagen</label>
+          <input type="file">
+        </div>
+
+        <div class="modal-actions">
+          <button type="submit" class="btn primary">Guardar</button>
+          <button type="button" class="btn cancel">Cancelar</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>
