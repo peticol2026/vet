@@ -175,3 +175,139 @@ body {
 .hidden {
   display: none;
 }
+
+/* =========================
+   MODAL FORM
+========================= */
+
+.modal-header h3 {
+  margin: 0 0 1rem 0;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Grupo */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+
+/* Labels */
+.form-group label {
+  font-size: .7rem;
+  color: var(--muted);
+}
+
+/* Inputs */
+.form-group input {
+  padding: .65rem .8rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255,255,255,.15);
+  background: rgba(255,255,255,.06);
+  outline: none;
+  font-size: .8rem;
+  transition: border .2s ease, background .2s ease;
+}
+
+/* Focus */
+.form-group input:focus {
+  border-color: var(--orange);
+  background: rgba(255,255,255,.1);
+}
+
+/* File input */
+.form-group input[type="file"] {
+  padding: .45rem;
+  font-size: .7rem;
+  cursor: pointer;
+}
+
+/* Fila doble */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .75rem;
+}
+
+/* Footer */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: .6rem;
+  margin-top: .5rem;
+}
+
+
+@media (max-width: 768px) {
+
+  .modal-card {
+    width: 90%;
+    padding: 1.25rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .modal-actions .btn {
+    width: 100%;
+  }
+}
+
+
+
+
+/* =========================
+   RESPONSIVE (MOBILE)
+========================= */
+@media (max-width: 768px) {
+
+  .topbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .topbar h2 {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .top-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .top-actions input {
+    width: 100%;
+  }
+
+  .top-actions .btn {
+    width: 100%;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .topbar {
+    position: relative;
+  }
+}
+
+
+
