@@ -57,54 +57,69 @@
   </main>
 
   <!-- 🪟 MODAL -->
-  <div class="modal-overlay hidden" id="productModal">
-    <div class="modal-card">
+<div class="modal-overlay hidden" id="productModal">
+  <div class="modal-card">
 
-      <header class="modal-header">
-        <h3 id="modalTitle">Agregar producto</h3>
-      </header>
+    <header class="modal-header">
+      <h3 id="modalTitle">Agregar producto</h3>
+    </header>
 
-      <form id="productForm" class="modal-body">
+    <form id="productForm" class="modal-body">
 
+      <div class="form-group">
+        <label>Nombre</label>
+        <input type="text" id="nombreProducto" required>
+      </div>
+
+      <div class="form-group">
+        <label>Categoría</label>
+        <input type="text" id="categoria" required>
+      </div>
+
+      <!-- PRECIOS -->
+      <div class="form-row">
         <div class="form-group">
-          <label>Nombre</label>
-          <input type="text" id="nombreProducto" required>
-        </div>
-
-        <div class="form-group">
-          <label>Categoría</label>
-          <input type="text" id="categoria" required>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label>Precio</label>
-            <input type="number" id="precio" required>
-          </div>
-
-          <div class="form-group">
-            <label>Stock</label>
-            <input type="number" id="stock" required>
-          </div>
+          <label>Precio costo</label>
+          <input type="number" id="precioCosto" required>
         </div>
 
         <div class="form-group">
-          <label>Imagen</label>
-          <input type="file" id="imagen">
+          <label>Precio venta</label>
+          <input type="number" id="precioVenta" required>
         </div>
+      </div>
 
-        <footer class="modal-actions">
-          <button type="button" class="btn ghost" id="btnCancelModal">
-            Cancelar
-          </button>
-          <button type="submit" class="btn primary">
-            Guardar
-          </button>
-        </footer>
+      <!-- STOCK -->
+      <div class="form-group">
+        <label>Cantidad</label>
+        <input type="number" id="cantidad" required>
+      </div>
 
-      </form>
-    </div>
+      <!-- FECHA -->
+      <div class="form-group">
+        <label>Fecha de vencimiento</label>
+        <input type="date" id="fechaVencimiento">
+      </div>
+
+      <!-- IMAGEN -->
+      <div class="form-group">
+        <label>Imagen</label>
+        <input type="file" id="imagen" accept="image/*">
+      </div>
+
+      <footer class="modal-actions">
+        <button type="button" class="btn ghost" id="btnCancelModal">
+          Cancelar
+        </button>
+        <button type="submit" class="btn primary">
+          Guardar
+        </button>
+      </footer>
+
+    </form>
   </div>
+</div>
+
 
   <!-- JS -->
   <script type="module" src="./js/productos.js"></script>
