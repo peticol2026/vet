@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="css/productos.css">
+  <link rel="stylesheet" href="./css/productos.css">
 </head>
 
 <body>
@@ -19,92 +19,95 @@
     <h2>Gestión de Productos</h2>
 
     <div class="top-actions">
-      <input type="text" placeholder="Buscar producto..." id="searchProduct">
-      <button class="btn primary">+ Agregar producto</button>
+      <input
+        type="text"
+        placeholder="Buscar producto..."
+        id="searchProduct"
+      >
+      <button class="btn primary" id="btnAddProduct">
+        + Agregar producto
+      </button>
     </div>
   </header>
 
   <!-- 📦 CONTENEDOR PRINCIPAL -->
   <main class="container">
 
-    <!-- 📋 LISTADO DE PRODUCTOS -->
     <section class="product-list">
 
-      <table>
-        <thead>
-          <tr>
-            <th>Imagen</th>
-            <th>Nombre</th>
-            <th>Categoría</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
+      <section class="products-section">
 
-        <tbody>
-          <!-- Producto -->
-          <tr>
-            <td><img src="https://i.pinimg.com/736x/f2/0d/c8/f20dc8de941acbac3dd75336d614da3f.jpg" class="product-img"></td>
-            <td>Alimento Premium</td>
-            <td>Comida</td>
-            <td>$45.000</td>
-            <td>20</td>
-            <td class="actions">
-              <button class="btn edit">Editar</button>
-              <button class="btn delete">Eliminar</button>
-            </td>
-          </tr>
+        <!-- Header -->
+        <div class="products-header">
+          <h3>Productos</h3>
+          <span class="products-count" id="productsCount">
+            0 productos
+          </span>
+        </div>
 
-          <!-- Más productos dinámicos luego -->
-        </tbody>
-      </table>
+        <!-- Grid de cards -->
+        <div class="products-grid" id="productosGrid">
+          <!-- Cards dinámicas desde JS -->
+        </div>
+
+      </section>
 
     </section>
 
   </main>
 
-  <!-- ➕ MODAL AGREGAR / EDITAR PRODUCTO -->
+  <!-- 🪟 MODAL -->
   <div class="modal-overlay hidden" id="productModal">
-    <div class="modal">
+    <div class="modal-card">
 
-      <h3>Agregar producto</h3>
+      <header class="modal-header">
+        <h3 id="modalTitle">Agregar producto</h3>
+      </header>
 
-      <form id="productForm">
+      <form id="productForm" class="modal-body">
 
         <div class="form-group">
           <label>Nombre</label>
-          <input type="text" required>
+          <input type="text" id="nombreProducto" required>
         </div>
 
         <div class="form-group">
           <label>Categoría</label>
-          <input type="text" required>
+          <input type="text" id="categoria" required>
         </div>
 
-        <div class="form-group">
-          <label>Precio</label>
-          <input type="number" required>
-        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Precio</label>
+            <input type="number" id="precio" required>
+          </div>
 
-        <div class="form-group">
-          <label>Stock</label>
-          <input type="number" required>
+          <div class="form-group">
+            <label>Stock</label>
+            <input type="number" id="stock" required>
+          </div>
         </div>
 
         <div class="form-group">
           <label>Imagen</label>
-          <input type="file">
+          <input type="file" id="imagen">
         </div>
 
-        <div class="modal-actions">
-          <button type="submit" class="btn primary">Guardar</button>
-          <button type="button" class="btn cancel">Cancelar</button>
-        </div>
+        <footer class="modal-actions">
+          <button type="button" class="btn ghost" id="btnCancelModal">
+            Cancelar
+          </button>
+          <button type="submit" class="btn primary">
+            Guardar
+          </button>
+        </footer>
 
       </form>
     </div>
   </div>
+
+  <!-- JS -->
+  <script type="module" src="./js/productos.js"></script>
 
 </body>
 </html>
