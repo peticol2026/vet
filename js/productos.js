@@ -1,64 +1,100 @@
-import {
-  obtenerProductos,
-  crearProducto,
-  subirImagen,
-  eliminarProducto,
-  eliminarImagen
-} from "./services/productos.service.js";
-
+import {obtenerProductos, crearProducto, subirImagen,  eliminarProducto,  eliminarImagen, actualizarProducto, buscarProductoIgual} from "./services/productos.service.js";
 import { mostrarToast } from "./ui/toast.ui.js";
+import {renderProductos, initModal ,initFormulario } from "./ui/productos.ui.js";
 
 
 
-import {
-  renderProductos,
-  initModal,
-  initFormulario
-} from "./ui/productos.ui.js";
+let productoEditando = null;
+let productosGlobales = [];
 
-/* =========================
-   CARGAR PRODUCTOS
-========================= */
+
+
+    // **********************************************************************************************************************************
+        //  FUNCIONES
+    // ***********************************************************************************************************************************
+
+
 async function cargarProductos() {
   const productos = await obtenerProductos();
-  renderProductos(productos, borrarProducto);
 
+  productosGlobales = productos; 
+
+  renderProductos(productos, borrarProducto, editarProducto);
 }
 
-/* =========================
-   GUARDAR PRODUCTO (ORQUESTADOR)
-========================= */
+
+// PROCESO PARA LA BARRA DE BUSQUEDA DE PRODUCTOS
+
+const inputBuscar = document.getElementById("searchProduct");
+
+if (inputBuscar) {
+  inputBuscar.addEventListener("input", () => {
+    const texto = inputBuscar.value.toLowerCase().trim();
+
+    const filtrados = productosGlobales.filter(producto =>
+      producto.nombreProducto.toLowerCase().includes(texto) ||
+      producto.categoria.toLowerCase().includes(texto)
+    );
+
+    renderProductos(filtrados, borrarProducto, editarProducto);
+  });
+}
+
+
+
+// GUARDAR PRODUCTOS
 async function guardarProducto(producto) {
   try {
-    let imagenUrl = null;
+    // 🔎 Buscar si ya existe un producto igual (SIN IMAGEN)
+    const productoExistente = await buscarProductoIgual(producto);
 
-    // 1️⃣ Subir imagen a Supabase Storage (si existe)
-    if (producto.imagenFile) {
-      imagenUrl = await subirImagen(producto.imagenFile);
+    // 🟡 CASO 1: YA EXISTE → SUMAR CANTIDAD
+    if (productoExistente && !productoEditando) {
+      const nuevaCantidad =
+        productoExistente.cantidad + producto.cantidad;
+
+      await actualizarProducto(productoExistente.idProducto, {
+        cantidad: nuevaCantidad
+      });
+
+      mostrarToast("Cantidad actualizada correctamente", "success");
     }
 
-    // 2️⃣ Armar objeto final para BD
-    const productoFinal = {
-      nombreProducto: producto.nombreProducto,
-      categoria: producto.categoria,
-      precioCosto: producto.precioCosto,
-      precioVenta: producto.precioVenta,
-      cantidad: producto.cantidad,
-      fechaVencimiento: producto.fechaVencimiento,
-      imagen: imagenUrl // 👈 URL pública
-    };
+    // 🟢 CASO 2: NO EXISTE o está editando → CREAR / ACTUALIZAR
+    else {
+      let imagenUrl = productoEditando?.imagen || null;
 
-    // 3️⃣ Guardar en Supabase
-    await crearProducto(productoFinal);
+      if (producto.imagenFile) {
+        if (productoEditando?.imagen) {
+          await eliminarImagen(productoEditando.imagen);
+        }
+        imagenUrl = await subirImagen(producto.imagenFile);
+      }
 
-    // 4️⃣ Recargar lista
-    await cargarProductos();
+      const productoFinal = {
+        nombreProducto: producto.nombreProducto,
+        categoria: producto.categoria,
+        precioCosto: producto.precioCosto,
+        precioVenta: producto.precioVenta,
+        cantidad: producto.cantidad,
+        fechaVencimiento: producto.fechaVencimiento,
+        imagen: imagenUrl
+      };
 
-    // 5️⃣ Cerrar modal
+      if (productoEditando) {
+        await actualizarProducto(productoEditando.idProducto, productoFinal);
+      } else {
+        await crearProducto(productoFinal);
+      }
+    }
+
+    // 🔄 RESET
+    productoEditando = null;
+    document.getElementById("productForm").reset();
+    document.getElementById("modalTitle").textContent = "Agregar producto";
     document.getElementById("productModal").classList.add("hidden");
 
-    // 6️⃣ Limpiar formulario
-    document.getElementById("productForm").reset();
+    await cargarProductos();
 
   } catch (error) {
     console.error(error);
@@ -66,6 +102,8 @@ async function guardarProducto(producto) {
   }
 }
 
+
+// BORRAR PRODUCTOS
 
 async function borrarProducto(producto) {
   try {
@@ -85,6 +123,41 @@ async function borrarProducto(producto) {
     console.error(error);
     mostrarToast("Error al eliminar producto", "error");
   }
+}
+
+
+
+// EDITAR PRODUCTOS
+
+function editarProducto(producto) {
+  productoEditando = producto;
+
+  document.getElementById("modalTitle").textContent = "Editar producto";
+  document.getElementById("productModal").classList.remove("hidden");
+
+  document.getElementById("nombreProducto").value = producto.nombreProducto;
+  document.getElementById("categoria").value = producto.categoria;
+  document.getElementById("precioCosto").value = producto.precioCosto;
+  document.getElementById("precioVenta").value = producto.precioVenta;
+  document.getElementById("cantidad").value = producto.cantidad;
+  document.getElementById("fechaVencimiento").value =
+    producto.fechaVencimiento ?? "";
+
+
+  // PROCESO INTERNO PARA CUANDO SE EDITA O CAMBIA LA IMAGEN 
+
+  const preview = document.getElementById("imagenPreview");
+  const btnQuitarImagen = document.getElementById("btnQuitarImagen");
+
+  if (producto.imagen) {
+    preview.src = producto.imagen;
+    preview.style.display = "block";
+    btnQuitarImagen.style.display = "block";
+  } else {
+    preview.style.display = "none";
+    btnQuitarImagen.style.display = "none";
+  }
+
 }
 
 

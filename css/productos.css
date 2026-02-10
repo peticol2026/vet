@@ -163,6 +163,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-top: 140px;
 }
 
 .modal-card {
@@ -389,3 +390,60 @@ body {
 .toast.error {
   background: #ef4444;
 }
+
+
+/* =========================
+   MODAL PRODUCTOS (EXTENDIDO)
+========================= */
+
+.modal-productos {
+  width: 90%;
+  max-width: 900px;     /* 👈 más ancho */
+  max-height: 85vh;     /* 👈 límite de altura */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+
+.modal-productos .modal-body {
+  overflow-y: auto;
+  overflow-x: hidden ;
+  padding-right: .5rem;
+}
+
+.modal-productos .modal-body {
+  scroll-behavior: smooth;
+}
+
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.1rem 1.5rem;
+}
+
+
+.form-group.full {
+  grid-column: span 2;
+}
+
+
+.imagen-preview {
+  max-width: 140px;
+  border-radius: var(--radius-sm);
+  margin-top: .5rem;
+  display: none;
+}
+
+
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group.full {
+    grid-column: span 1;
+  }
+}
+
