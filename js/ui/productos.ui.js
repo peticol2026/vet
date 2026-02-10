@@ -13,16 +13,7 @@ const modal = document.getElementById("productModal");
 const btnAdd = document.getElementById("btnAddProduct");
 const btnCancel = document.getElementById("btnCancelModal");
 
-/* =========================
-   FORMATO MONEDA
-========================= */
-function formatoCOP(valor) {
-  return new Intl.NumberFormat("es-CO", {
-    style: "currency",
-    currency: "COP",
-    minimumFractionDigits: 0
-  }).format(valor);
-}
+
 
 /* =========================
    RENDER PRODUCTOS (CARDS)
@@ -40,6 +31,10 @@ export function renderProductos(productos = [], onEliminar, onEditar, editarProd
     const card = document.createElement("div");
     card.classList.add("product-card");
 
+    const vencido = estaVencido(producto.fechaVencimiento);
+
+
+
     card.innerHTML = `
   <img 
     src="${imagenSrc}" 
@@ -51,9 +46,13 @@ export function renderProductos(productos = [], onEliminar, onEditar, editarProd
 
   <p class="product-category">${producto.categoria}</p>
 
-  <p class="product-category">
-    Fecha de vencimiento: ${producto.fechaVencimiento ?? "N/A"}
-  </p>
+    <p class="product-category ${vencido ? "vencido" : ""}">
+    Fecha de vencimiento: 
+    ${producto.fechaVencimiento ?? "N/A"}
+    </p>
+
+    ${vencido ? `<span class="badge-vencido">Vencido</span>` : ""}
+
 
   <div class="product-info">
     <span class="product-price">
@@ -83,6 +82,38 @@ export function renderProductos(productos = [], onEliminar, onEditar, editarProd
 
 
 `;
+
+
+// LOGICA VENCIMIENTO DE FECHAS DE PRODUCTOS
+
+function estaVencido(fecha) {
+  if (!fecha) return false;
+
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+
+  const fechaProducto = new Date(fecha);
+  fechaProducto.setHours(0, 0, 0, 0);
+
+  return fechaProducto <= hoy;
+}
+
+
+
+
+
+
+    // LOGICA MONEDA COLOMBIANA
+
+function formatoCOP(valor) {
+  return new Intl.NumberFormat("es-CO", {
+    style: "currency",
+    currency: "COP",
+    minimumFractionDigits: 0
+  }).format(valor);
+}
+
+
 
 
 // LOGICA PARA BOTON DE ELIMINAR
