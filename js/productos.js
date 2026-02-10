@@ -17,9 +17,26 @@ let productosGlobales = [];
 async function cargarProductos() {
   const productos = await obtenerProductos();
 
-  productosGlobales = productos; 
+  productosGlobales = productos;
 
   renderProductos(productos, borrarProducto, editarProducto);
+
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+
+  const vencidos = productos.filter(p => {
+    if (!p.fechaVencimiento) return false;
+    const f = new Date(p.fechaVencimiento);
+    f.setHours(0, 0, 0, 0);
+    return f <= hoy;
+  });
+
+  if (vencidos.length > 0) {
+    mostrarToast(
+      `⚠️ Tienes ${vencidos.length} producto(s) vencido(s)`,
+      "error"
+    );
+  }
 }
 
 
