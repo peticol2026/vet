@@ -100,3 +100,50 @@ export async function eliminarImagen(url) {
     console.error("Error eliminando imagen:", error);
   }
 }
+
+
+
+/* =========================
+   ACTUALIZAR PRODUCTO
+========================= */
+
+export async function actualizarProducto(idProducto, data) {
+
+  const { error } = await supabase
+
+    .from("productos")
+    .update(data)
+    .eq("idProducto", idProducto);
+
+
+    if(error) {
+
+      console.error("Error actualizando producto: ", error);
+      throw error;
+    }
+  
+}
+
+/* =========================
+   VALIDAR PRODUCTO IGUAL (SIN IMAGEN)
+========================= */
+export async function buscarProductoIgual(producto) {
+  const { data, error } = await supabase
+    .from("productos")
+    .select("*")
+    .eq("nombreProducto", producto.nombreProducto)
+    .eq("categoria", producto.categoria)
+    .eq("precioCosto", producto.precioCosto)
+    .eq("precioVenta", producto.precioVenta)
+    .eq("fechaVencimiento", producto.fechaVencimiento)
+    .limit(1)
+    .single();
+
+  // Cuando no encuentra registros, Supabase lanza este error (normal)
+  if (error && error.code !== "PGRST116") {
+    console.error("Error buscando producto:", error);
+    throw error;
+  }
+
+  return data || null;
+}

@@ -56,17 +56,23 @@
 
   </main>
 
-  <!-- 🪟 MODAL -->
+
+
+  <!-- ************************************************************************* MODAL ********************************************** -->
+  <!-- *************************************************************************        ********************************************** -->
+
+<!-- ================= MODAL ================= -->
 <div class="modal-overlay hidden" id="productModal">
-  <div class="modal-card">
+
+  <div class="modal-card modal-productos">
 
     <header class="modal-header">
       <h3 id="modalTitle">Agregar producto</h3>
     </header>
 
-    <form id="productForm" class="modal-body">
+    <form id="productForm" class="modal-body form-grid">
 
-      <div class="form-group">
+      <div class="form-group full">
         <label>Nombre</label>
         <input type="text" id="nombreProducto" required>
       </div>
@@ -76,38 +82,38 @@
         <input type="text" id="categoria" required>
       </div>
 
-      <!-- PRECIOS -->
-      <div class="form-row">
-        <div class="form-group">
-          <label>Precio costo</label>
-          <input type="number" id="precioCosto" required>
-        </div>
-
-        <div class="form-group">
-          <label>Precio venta</label>
-          <input type="number" id="precioVenta" required>
-        </div>
-      </div>
-
-      <!-- STOCK -->
       <div class="form-group">
         <label>Cantidad</label>
         <input type="number" id="cantidad" required>
       </div>
 
-      <!-- FECHA -->
       <div class="form-group">
+        <label>Precio costo</label>
+        <input type="number" id="precioCosto" required>
+      </div>
+
+      <div class="form-group">
+        <label>Precio venta</label>
+        <input type="number" id="precioVenta" required>
+      </div>
+
+      <div class="form-group full">
         <label>Fecha de vencimiento</label>
         <input type="date" id="fechaVencimiento">
       </div>
 
-      <!-- IMAGEN -->
-      <div class="form-group">
+      <div class="form-group full">
         <label>Imagen</label>
         <input type="file" id="imagen" accept="image/*">
+
+        <img id="imagenPreview" class="imagen-preview" alt="Preview">
+
+        <button type="button" id="btnQuitarImagen" class="btn ghost danger">
+          Quitar imagen
+        </button>
       </div>
 
-      <footer class="modal-actions">
+      <footer class="modal-actions full">
         <button type="button" class="btn ghost" id="btnCancelModal">
           Cancelar
         </button>
@@ -119,6 +125,7 @@
     </form>
   </div>
 </div>
+
 
 
   <!-- JS -->

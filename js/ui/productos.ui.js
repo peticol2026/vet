@@ -27,7 +27,7 @@ function formatoCOP(valor) {
 /* =========================
    RENDER PRODUCTOS (CARDS)
 ========================= */
-export function renderProductos(productos = [], onEliminar) {
+export function renderProductos(productos = [], onEliminar, onEditar, editarProducto) {
 
   grid.innerHTML = "";
 
@@ -74,8 +74,18 @@ export function renderProductos(productos = [], onEliminar) {
     data-id="${producto.idProducto}">
     Eliminar
   </button>
+
+  <button 
+      class="btn warning btn-edit"
+      data-id="${producto.idProducto}">
+      Editar
+  </button>
+
+
 `;
 
+
+// LOGICA PARA BOTON DE ELIMINAR
 
 const btnDelete = card.querySelector(".btn-delete");
 
@@ -87,6 +97,15 @@ btnDelete.addEventListener("click", () => {
   setTimeout(() => {
     onEliminar(producto);
   }, 300);
+});
+
+
+// lOGICA PARA BOTON DE EDITAR
+
+const btnEdit = card.querySelector(".btn-edit");
+
+btnEdit.addEventListener("click", () => {
+  onEditar(producto);
 });
 
 
@@ -104,10 +123,36 @@ btnDelete.addEventListener("click", () => {
 /* =========================
    MODAL
 ========================= */
+/* =========================
+   MODAL
+========================= */
 export function initModal() {
 
   btnAdd.addEventListener("click", () => {
+    // Abrir modal
     modal.classList.remove("hidden");
+
+    // Reset título (modo agregar)
+    const modalTitle = document.getElementById("modalTitle");
+    if (modalTitle) modalTitle.textContent = "Agregar producto";
+
+    // Limpiar preview de imagen
+    const preview = document.getElementById("imagenPreview");
+    const btnQuitarImagen = document.getElementById("btnQuitarImagen");
+    const inputImagen = document.getElementById("imagen");
+
+    if (preview) {
+      preview.src = "";
+      preview.style.display = "none";
+    }
+
+    if (btnQuitarImagen) {
+      btnQuitarImagen.style.display = "none";
+    }
+
+    if (inputImagen) {
+      inputImagen.value = "";
+    }
   });
 
   btnCancel.addEventListener("click", () => {
@@ -124,6 +169,7 @@ export function initModal() {
 
 
 
+
 /* =========================
    FORMULARIO
 ========================= */
@@ -134,23 +180,60 @@ const form = document.getElementById("productForm");
 export function initFormulario(onGuardar) {
   const form = document.getElementById("productForm");
 
-  form.addEventListener("submit", async (e) => {
+  form.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const file = document.getElementById("imagen").files[0];
+    const file = form.querySelector("#imagen").files[0];
 
     const producto = {
-      nombreProducto: document.getElementById("nombreProducto").value,
-      categoria: document.getElementById("categoria").value,
-      precioCosto: Number(document.getElementById("precioCosto").value),
-      precioVenta: Number(document.getElementById("precioVenta").value),
-      cantidad: Number(document.getElementById("cantidad").value),
-      imagenFile: file || null // 👈 NO sube aquí
+      nombreProducto: form.querySelector("#nombreProducto").value,
+      categoria: form.querySelector("#categoria").value,
+      precioCosto: Number(form.querySelector("#precioCosto").value),
+      precioVenta: Number(form.querySelector("#precioVenta").value),
+      cantidad: Number(form.querySelector("#cantidad").value),
+      fechaVencimiento: form.querySelector("#fechaVencimiento").value || null,
+      imagenFile: file || null
     };
+
+    console.log("Producto enviado:", producto);
 
     onGuardar(producto);
   });
 }
+
+
+// LOGICA PARA EL PROCESO DE CAMBIAR LA FOTO
+
+const inputImagen = document.getElementById("imagen");
+const preview = document.getElementById("imagenPreview");
+const btnQuitarImagen = document.getElementById("btnQuitarImagen");
+
+if (inputImagen) {
+  inputImagen.addEventListener("change", () => {
+    const file = inputImagen.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      preview.src = reader.result;
+      preview.style.display = "block";
+      btnQuitarImagen.style.display = "block";
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+
+if (btnQuitarImagen) {
+  btnQuitarImagen.addEventListener("click", () => {
+    inputImagen.value = "";
+    preview.src = "";
+    preview.style.display = "none";
+    btnQuitarImagen.style.display = "none";
+  });
+}
+
+
 
 
 
