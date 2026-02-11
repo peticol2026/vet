@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Ventas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./css/ventas.css">
+</head>
+
+<body>
+
+  <div class="layout">
+
+    <!-- SIDEBAR MINI -->
+    <aside class="sidebar">
+      <h2 class="logo">POS</h2>
+    </aside>
+
+    <!-- CONTENIDO -->
+    <div class="main">
+
+      <!-- HEADER MODERNO -->
+      <header class="header">
+        <div>
+          <h1>Ventas</h1>
+          <span class="sub">Panel de ventas</span>
+        </div>
+
+        <div class="search-area">
+          <input type="text" id="buscador" placeholder="Buscar producto...">
+          <select id="filtroCategoria">
+            <option value="">Todas</option>
+        </select>
+        </div>
+        
+        <div class="cart-indicator">
+            🛒
+            <span id="cartCount">0</span>
+        </div>
+
+
+      </header>
+<!-- CONTENIDO PRINCIPAL -->
+<div class="content">
+
+    <!-- PRODUCTOS -->
+    <section class="products">
+        <div id="productsGrid" class="products-grid"></div>
+    </section>
+
+    <!-- CARRITO MODERNO -->
+    <aside class="cart">
+        <div class="cart-header">
+            <h3>Carrito</h3>
+            <span id="cartCount">0 items</span>
+        </div>
+
+        <div id="carritoItems" class="cart-items"></div>
+
+        <div class="cart-footer">
+            
+
+            <div class="metodo-pago">
+                <div class="metodo-pago">
+                    <h4>Método de pago</h4>
+
+                    <div class="metodos">
+                        <button class="metodo active" data-pago="Efectivo">💵 Efectivo</button>
+                        <button class="metodo" data-pago="Nequi">📱 Nequi</button>
+                        <button class="metodo" data-pago="Tarjeta">💳 Tarjeta</button>
+                        <button class="metodo" data-pago="Transferencia">🏦 Transferencia</button>
+                    </div>
+                    </div>
+                    
+                    
+                    <div class="pago-box">
+                    
+                        <div class="pago-total">
+                            <span>Total a pagar</span>
+                            <h2 id="totalVenta">$0</h2>
+                        </div>
+                    
+                        <div class="pago-efectivo efectivo-row">
+                            <label>Monto recibido</label>
+                            <div class="input-wrapper">
+                                <span class="currency">$</span>
+                                <input type="number" id="valorPagado" placeholder="0">
+                            </div>
+                        </div>
+                    
+                        <div class="pago-vuelto efectivo-row">
+                            <span>Vuelto</span>
+                            <strong id="vuelto">$0</strong>
+                        </div>
+                    
+                    </div>
+
+
+
+
+
+<button id="btnFinalizar" class="btn-checkout">
+    Finalizar Venta
+</button>
+</div>
+
+        </aside>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script type="module" src="./js/ventas.js"></script>
+
+</body>
+</html>
