@@ -290,3 +290,19 @@ body {
     transform: scale(1.03);
   }
 }
+
+
+.btn-logout {
+  background: #ff4d4d;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn-logout:hover {
+  background: #ff1f1f;
+}

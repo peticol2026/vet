@@ -1,10 +1,22 @@
 import { supabase } from "../config/supabase.js";
 
 /* =========================
+   OBTENER TOKEN ACTUAL
+========================= */
+async function getAccessToken() {
+  const { data, error } = await supabase.auth.getSession();
+
+  if (error || !data.session) {
+    throw new Error("No hay sesión activa");
+  }
+
+  return data.session.access_token;
+}
+
+/* =========================
    OBTENER USUARIOS
 ========================= */
 export async function obtenerUsuarios() {
-
   const { data, error } = await supabase
     .from("usuarios")
     .select("*")
@@ -19,71 +31,67 @@ export async function obtenerUsuarios() {
 }
 
 /* =========================
-   CREAR USUARIO
+   CREAR USUARIO (EDGE)
 ========================= */
 export async function crearUsuario({ nombre, email, password, rol }) {
-  // 1️⃣ Crear en Auth
-  const { data: authData, error: authError } = await supabase.auth.signUp({
-    email,
-    password,
-  });
 
-  if (authError) {
-    console.error("Error al crear usuario en auth:", authError);
-    throw authError;
-  }
+  const token = await getAccessToken();
 
-  const user = authData.user;
+  const { data, error } = await supabase.functions.invoke(
+    "crear-usuario",
+    {
+      body: { nombre, email, password, rol },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
-  // 2️⃣ Insertar en tu tabla REAL
-  const { error } = await supabase.from("usuarios").insert({
-    idusuario: authData.user.id,
-    nombre,
-    correo: email,
-    clave: password,
-    rol,
-  });
+  if (error) throw error;
 
-  if (error) {
-    console.error("Error al insertar usuario:", error);
-    throw error;
-  }
-
-  return true;
+  return data;
 }
 
 /* =========================
-   ACTUALIZAR USUARIO
+   ACTUALIZAR USUARIO (EDGE)
 ========================= */
-export async function actualizarUsuario(id, datos) {
+export async function actualizarUsuario(datos) {
 
-  const { error } = await supabase
-    .from("usuarios")
-    .update(datos)
-    .eq("idusuario", id);  
+  const token = await getAccessToken();
 
-  if (error) {
-    console.error("Error al actualizar usuario:", error);
-    throw error;
-  }
+  const { data, error } = await supabase.functions.invoke(
+    "actualizar-usuario",
+    {
+      body: datos,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
-  return true;
+  if (error) throw error;
+
+  return data;
 }
 
 /* =========================
-   ELIMINAR USUARIO
+   ELIMINAR USUARIO (EDGE)
 ========================= */
-export async function eliminarUsuario(id) {
+export async function eliminarUsuario(idusuario) {
 
-  const { error } = await supabase
-    .from("usuarios")
-    .delete()
-    .eq("idusuario", id); 
+  const token = await getAccessToken();
 
-  if (error) {
-    console.error("Error al eliminar usuario:", error);
-    throw error;
-  }
+  const { data, error } = await supabase.functions.invoke(
+    "eliminar-usuario",
+    {
+      body: { idusuario },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
-  return true;
+  if (error) throw error;
+
+  return data;
 }

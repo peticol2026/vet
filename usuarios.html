@@ -88,6 +88,9 @@
 <!-- =========================
      MODAL EDITAR
 ========================= -->
+<!-- =========================
+     MODAL EDITAR
+========================= -->
 <div class="modal hidden" id="modalEdit">
   <div class="modal-card">
 
@@ -99,14 +102,24 @@
 
       <div class="form-group">
         <label>Nombre</label>
-        <input type="text" value="Juan Pérez" required>
+        <input type="text" id="editNombre" required>
+      </div>
+
+      <div class="form-group">
+        <label>Correo</label>
+        <input type="email" id="editCorreo" required>
+      </div>
+
+      <div class="form-group">
+        <label>Nueva contraseña (opcional)</label>
+        <input type="password" id="editPassword" placeholder="Dejar vacío para no cambiar">
       </div>
 
       <div class="form-group">
         <label>Rol</label>
-        <select required>
-          <option>Administrador</option>
-          <option>Trabajador</option>
+        <select id="editRol" required>
+          <option value="Administrador">Administrador</option>
+          <option value="Trabajador">Trabajador</option>
         </select>
       </div>
 
@@ -122,6 +135,8 @@
     </form>
   </div>
 </div>
+
+
 
 <script type="module" src="./js/usuarios.js"></script>
 

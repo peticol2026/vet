@@ -1,19 +1,24 @@
 import { supabase } from "../config/supabase.js";
 
+export async function login(email, password) {
 
-export async function login(correo, clave) {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
 
-    const {data, error } = await supabase
+  console.log("DATA:", data);
+  console.log("ERROR:", error);
+
+  if (error) throw error;
+
+  const { data: usuarioDB, error: errorDB } = await supabase
     .from("usuarios")
     .select("*")
-    .eq("correo", correo)
-    .eq("clave", clave)
+    .eq("auth_id", data.user.id)
     .single();
 
+  if (errorDB) throw errorDB;
 
-   if (error) {
-    throw new Error("Correo o contraseña incorrectos");
-  }
-
-  return data; 
+  return usuarioDB;
 }

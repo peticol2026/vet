@@ -87,6 +87,7 @@ async function cargarUsuarios() {
 
 cargarUsuarios();
 
+
 /* ==========================
    CREAR USUARIO
 ========================== */
@@ -99,13 +100,25 @@ formCreate.addEventListener("submit", async (e) => {
   const password = formCreate[2].value;
   const rol = formCreate[3].value;
 
-  await crearUsuario({ nombre, email, password, rol });
+  try {
+    await crearUsuario({ nombre, email, password, rol });
 
-  formCreate.reset();
-  modalCreate.classList.add("hidden");
+    formCreate.reset();
+    modalCreate.classList.add("hidden");
 
-  cargarUsuarios();
+    cargarUsuarios();
+    alert("Usuario creado correctamente");
+
+  } catch (error) {
+    console.error(error);
+    alert("Error al crear usuario");
+  }
+
 });
+
+
+
+
 
 /* ==========================
    EVENTOS DINÁMICOS
@@ -113,20 +126,25 @@ formCreate.addEventListener("submit", async (e) => {
 document.addEventListener("click", async (e) => {
 
   /* EDITAR */
-  if (e.target.classList.contains("btn-edit")) {
+ if (e.target.classList.contains("btn-edit")) {
 
   usuarioEditando = e.target.dataset.id;
 
   const card = e.target.closest(".user-card");
 
   const nombre = card.querySelector("h4").textContent;
+  const correo = card.querySelector("p").textContent;
   const rol = card.querySelector(".role").textContent.trim();
 
-  formEdit[0].value = nombre;
-  formEdit[1].value = rol;
+  document.getElementById("editNombre").value = nombre;
+  document.getElementById("editCorreo").value = correo;
+  document.getElementById("editRol").value = rol;
+  document.getElementById("editPassword").value = "";
 
   modalEdit.classList.remove("hidden");
 }
+
+
 
 
   /* ELIMINAR */
@@ -148,13 +166,25 @@ formEdit.addEventListener("submit", async (e) => {
 
   e.preventDefault();
 
- const nombre = formEdit[0].value;
-const rol = formEdit[1].value;
+  const nombre = document.getElementById("editNombre").value;
+  const email = document.getElementById("editCorreo").value;
+  const password = document.getElementById("editPassword").value;
+  const rol = document.getElementById("editRol").value;
 
-
-  await actualizarUsuario(usuarioEditando, { nombre, rol });
+  await actualizarUsuario({
+    idusuario: usuarioEditando,
+    nombre,
+    rol,
+    email,
+    password: password || null
+  });
 
   modalEdit.classList.add("hidden");
-
   cargarUsuarios();
 });
+
+
+
+
+
+

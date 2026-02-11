@@ -15,6 +15,12 @@
 <header class="navbar">
   <button id="toggleSidebar">☰</button>
   <input type="text" id="searchInput" placeholder="Buscar..." />
+
+<button id="logoutBtn" class="btn-logout">
+    Cerrar sesión
+  </button>
+
+
 </header>
 
 
@@ -49,20 +55,21 @@
       <div class="card-text">Usuarios</div>
     </div>
 
-    <div class="card" data-link="inventario.html">
+    <div class="card" data-link="indexVentas.html">
       <img src="./assets/cards/inventario2.jpg">
-      <div class="card-text">Inventario</div>
+      <div class="card-text">Ventas</div>
     </div>
 
-    <div class="card" data-link="pedidos.html">
+    <div class="card" data-link="historial.html">
       <img src="./assets/cards/pedidos2.jpg">
-      <div class="card-text">Pedidos</div>
+      <div class="card-text">Historial de ventas</div>
     </div>
 
   </section>
 </main>
 
-<script src="./js/admin.js"></script>
+<script type="module" src="./js/admin.js"></script>
 
 </body>
 </html>
+
