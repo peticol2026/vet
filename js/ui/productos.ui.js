@@ -33,6 +33,10 @@ export function renderProductos(productos = [], onEliminar, onEditar, editarProd
 
     const vencido = estaVencido(producto.fechaVencimiento);
 
+     if (vencido) {
+      card.classList.add("card-vencida");
+    }
+
 
 
     card.innerHTML = `
@@ -51,8 +55,6 @@ export function renderProductos(productos = [], onEliminar, onEditar, editarProd
     ${producto.fechaVencimiento ?? "N/A"}
     </p>
 
-    ${vencido ? `<span class="badge-vencido">Vencido</span>` : ""}
-
 
   <div class="product-info">
     <span class="product-price">
@@ -63,9 +65,14 @@ export function renderProductos(productos = [], onEliminar, onEditar, editarProd
       Precio venta: ${formatoCOP(producto.precioVenta)}
     </span>
 
-    <span class="product-stock">
-      ${producto.cantidad} u
-    </span>
+        <div class="product-stock-container">
+      <span class="product-stock">
+        ${producto.cantidad} u
+      </span>
+
+      ${vencido ? `<span class="badge-vencido">Vencido</span>` : ""}
+    </div>
+
   </div>
 
   <button 

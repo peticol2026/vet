@@ -1,0 +1,304 @@
+/* ======================================================
+   VARIABLES GLOBALES (COLORES + ESTILO BASE)
+====================================================== */
+:root {
+  --black: #0b0b0b;
+  --black-soft: rgba(15, 15, 15, 0.55);
+  --black-glass: rgba(20, 20, 20, 0.65);
+
+  --white: #ffffff;
+  --gray: #bdbdbd;
+
+  --orange: #ff8c00;
+  --orange-soft: rgba(255, 140, 0, 0.18);
+  --orange-glow: rgba(255, 140, 0, 0.35);
+
+  --radius: 16px;
+}
+
+/* ======================================================
+   RESET GENERAL
+====================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+/* ======================================================
+   BODY / FONDO
+====================================================== */
+body {
+  min-height: 100vh;
+  background-image: url("https://i.pinimg.com/1200x/9e/df/9b/9edf9b6c85ec664ea6da30d59993faa5.jpg");
+  background-size: cover;
+  background-position: center;
+  color: var(--white);
+}
+
+/* ======================================================
+   TOPBAR
+====================================================== */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.4rem 2rem;
+
+  backdrop-filter: blur(12px);
+  background: rgba(0, 0, 0, 0.45);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.topbar h2 {
+  font-weight: 600;
+}
+
+/* ======================================================
+   BOTONES
+====================================================== */
+.btn {
+  border: none;
+  padding: .55rem 1.15rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all .2s ease;
+}
+
+/* Botón principal */
+.btn.primary {
+  background: var(--orange);
+  color: var(--black);
+}
+
+.btn.primary:hover {
+  box-shadow: 0 0 14px var(--orange-glow);
+}
+
+/* Botón fantasma */
+.btn.ghost {
+  background: transparent;
+  color: var(--white);
+  border: 1px solid rgba(255,255,255,.18);
+}
+
+.btn.ghost:hover {
+  background: rgba(255,255,255,.08);
+}
+
+/* Botón peligro */
+.btn.danger {
+  background: transparent;
+  color: #ff4d4d;
+  border: 1px solid #ff4d4d;
+}
+
+/* ======================================================
+   CONTENEDOR PRINCIPAL
+====================================================== */
+.container {
+  padding: 2rem;
+}
+
+/* ======================================================
+   GRID DE USUARIOS
+====================================================== */
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.4rem;
+}
+
+/* ======================================================
+   CARD DE USUARIO (DISEÑO 2026 🔥)
+====================================================== */
+.user-card {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,0.04),
+      rgba(0,0,0,0.35)
+    ),
+    var(--black-glass);
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius);
+  padding: 1.4rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: .85rem;
+
+  transition:
+    transform .25s ease,
+    box-shadow .25s ease,
+    border .25s ease;
+}
+
+/* Hover elegante */
+.user-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255,140,0,.6);
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.45),
+    0 0 0 1px var(--orange-soft),
+    0 0 18px var(--orange-glow);
+}
+
+/* ======================================================
+   INFO PRINCIPAL DEL USUARIO
+====================================================== */
+.user-main h4 {
+  font-weight: 600;
+  letter-spacing: .2px;
+}
+
+.user-main p {
+  font-size: .85rem;
+  color: rgba(255,255,255,.65);
+}
+
+/* ======================================================
+   ROL (BADGE)
+====================================================== */
+.role {
+  align-self: flex-start;
+  padding: .3rem .75rem;
+  border-radius: 999px;
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .3px;
+}
+
+/* Rol administrador */
+.role.admin {
+  background: linear-gradient(
+    135deg,
+    rgba(255,140,0,.25),
+    rgba(255,140,0,.1)
+  );
+  color: var(--orange);
+  border: 1px solid rgba(255,140,0,.35);
+}
+
+/* Rol trabajador */
+.role.worker {
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.75);
+  border: 1px solid rgba(255,255,255,.12);
+}
+
+/* ======================================================
+   ACCIONES DE USUARIO
+====================================================== */
+.user-actions {
+  margin-top: .6rem;
+  display: flex;
+  gap: .5rem;
+}
+
+.user-actions .btn {
+  backdrop-filter: blur(6px);
+}
+
+/* ======================================================
+   MODAL (FONDO)
+====================================================== */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.75);
+  display: grid;
+  place-items: center;
+  z-index: 100;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+/* ======================================================
+   MODAL CARD
+====================================================== */
+.modal-card {
+  background: var(--black-glass);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: 420px;
+  overflow: hidden;
+
+  animation: modalIn .25s ease;
+}
+
+/* Animación entrada */
+@keyframes modalIn {
+  from {
+    transform: translateY(20px) scale(.97);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* ======================================================
+   CONTENIDO DEL MODAL
+====================================================== */
+.modal-header {
+  padding: 1.2rem;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.modal-body {
+  padding: 1.2rem;
+  display: grid;
+  gap: .9rem;
+}
+
+/* ======================================================
+   FORMULARIOS
+====================================================== */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+}
+
+label {
+  font-size: .75rem;
+  color: var(--gray);
+}
+
+input,
+select {
+  background: rgba(0,0,0,.55);
+  border: 1px solid rgba(255,255,255,.15);
+  color: var(--white);
+  padding: .55rem .7rem;
+  border-radius: 10px;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--orange);
+}
+
+/* ======================================================
+   ACCIONES MODAL
+====================================================== */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: .5rem;
+  margin-top: .5rem;
+}

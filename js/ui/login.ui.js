@@ -29,7 +29,7 @@ form.addEventListener("submit", async (e) => {
       if (usuario.rol === "Admin") {
         window.location.href = "indexAdmin.html";
       } else {
-        window.location.href = "indexCliente.html";
+        window.location.href = "indexTrabajador.html";
       }
     }, 1500);
 
