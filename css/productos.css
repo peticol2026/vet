@@ -491,14 +491,41 @@ body {
   font-weight: 600;
 }
 
-.badge-vencido {
-  margin-top: .4rem;
-  align-self: flex-start;
-  background: #ef4444;
-  color: white;
-  font-size: .65rem;
-  padding: .2rem .6rem;
-  border-radius: 999px;
+.product-stock-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
+
+.badge-vencido {
+  background: #ffffff;
+  color: #000000;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+
+
+.card-vencida {
+  border: 1px solid #219ebc;
+  background: rgba(33, 158, 188, 0.1);
+}
+
+
+
+.card-vencida img {
+  filter: grayscale(30%);
+}
+
+@keyframes alertaVencido {
+  0% { box-shadow: 0 0 0 rgba(239,68,68,0.4); }
+  100% { box-shadow: 0 0 8px rgba(239,68,68,0.4); }
+}
+
+.card-vencida {
+  animation: alertaVencido 1.2s ease-in-out infinite alternate;
+}
 
