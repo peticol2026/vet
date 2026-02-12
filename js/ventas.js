@@ -567,3 +567,42 @@ async function obtenerIdUsuario(authId) {
   return data.idusuario;
 }
 
+
+
+// MODAL DE CARRITO
+
+const cartIndicator = document.querySelector(".cart-indicator");
+const cart = document.querySelector(".cart");
+
+cartIndicator.addEventListener("click", () => {
+  if (window.innerWidth <= 600) {
+    cart.classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+});
+
+cart.addEventListener("click", (e) => {
+  if (window.innerWidth <= 600) {
+
+    // Si el click NO fue dentro del contenido del carrito
+    const isClickInside = e.target.closest(".cart-header") ||
+                          e.target.closest(".cart-items") ||
+                          e.target.closest(".cart-footer");
+
+    if (!isClickInside) {
+      cart.classList.remove("open");
+      document.body.style.overflow = "auto";
+    }
+  }
+});
+
+
+const closeBtn = document.querySelector(".close-cart");
+
+closeBtn.addEventListener("click", () => {
+  cart.classList.remove("open");
+  document.body.style.overflow = "auto";
+});
+
+
+
