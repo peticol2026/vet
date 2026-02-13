@@ -1,0 +1,277 @@
+/* =====================================
+   VARIABLES (estilo moderno oscuro)
+===================================== */
+
+:root {
+  --black: #0b0f1a;
+  --black-soft: #111827;
+  --black-card: rgba(17, 24, 39, 0.75);
+
+  --orange: #ff9505;
+  --orange-soft: rgba(255, 149, 5, 0.15);
+
+  --white: #ffffff;
+  --white-soft: rgba(255, 255, 255, 0.08);
+
+  --gray: #9ca3af;
+  --border: rgba(255, 255, 255, 0.08);
+}
+
+/* =====================================
+   BASE
+===================================== */
+
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, var(--black), #0f172a);
+  color: var(--white);
+  margin: 0;
+  padding: 20px;
+  transition: background 0.3s ease;
+}
+
+h2 {
+  color: var(--orange);
+  margin-bottom: 25px;
+}
+
+/* =====================================
+   CONTENEDOR
+===================================== */
+
+.historial-container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* =====================================
+   RESUMEN CARDS
+===================================== */
+
+.resumen-metodos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.resumen-card {
+  background: var(--black-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  padding: 18px;
+  border-radius: 12px;
+  transition: 0.3s ease;
+}
+
+.resumen-card span {
+  font-size: 14px;
+  color: var(--gray);
+}
+
+.resumen-card strong {
+  display: block;
+  font-size: 20px;
+  margin-top: 5px;
+}
+
+.resumen-card:hover {
+  border-color: var(--orange);
+  box-shadow: 0 0 15px var(--orange-soft);
+}
+
+/* =====================================
+   FORMULARIO
+===================================== */
+
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.filtros input,
+.filtros select {
+  background: var(--black-card);
+  border: 1px solid var(--border);
+  color: var(--white);
+  padding: 8px 12px;
+  border-radius: 8px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.filtros input:focus,
+.filtros select:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 8px var(--orange-soft);
+}
+
+.filtros button {
+  background: var(--orange);
+  color: black;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.filtros button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px var(--orange-soft);
+}
+
+/* =====================================
+   TABLA
+===================================== */
+
+.tabla-historial {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--black-card);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.tabla-historial thead {
+  background: var(--white-soft);
+}
+
+.tabla-historial th,
+.tabla-historial td {
+  padding: 10px;
+  text-align: center;
+}
+
+.tabla-historial th {
+  font-size: 14px;
+  color: var(--orange);
+}
+
+.tabla-historial tr {
+  border-bottom: 1px solid var(--border);
+  transition: 0.2s;
+}
+
+.tabla-historial tr:hover {
+  background: var(--orange-soft);
+}
+
+/* =====================================
+   UTILIDAD NEGATIVA
+===================================== */
+
+.negativo {
+  color: #ff4d4d !important;
+  font-weight: bold;
+}
+
+/* =====================================
+   MODO CLARO
+===================================== */
+
+body.light-mode {
+  background: #f4f4f4;
+  color: #111;
+}
+
+body.light-mode .resumen-card,
+body.light-mode .tabla-historial,
+body.light-mode .filtros input,
+body.light-mode .filtros select {
+  background: white;
+  color: black;
+  border: 1px solid #ddd;
+}
+
+body.light-mode .resumen-card:hover {
+  border-color: var(--orange);
+}
+
+/* =====================================
+   FILTROS DE TIEMPO (BOTONES)
+===================================== */
+
+.filtros-tiempo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filtros-tiempo button {
+  background: var(--black-card);
+  border: 1px solid var(--border);
+  color: var(--white);
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  font-size: 13px;
+}
+
+.filtros-tiempo button:hover {
+  border-color: var(--orange);
+  box-shadow: 0 0 10px var(--orange-soft);
+  transform: translateY(-2px);
+}
+
+.filtros-tiempo button.active {
+  background: var(--orange);
+  color: black;
+  font-weight: bold;
+}
+
+/* =====================================
+   FILTRO POR RANGO DE FECHAS
+===================================== */
+
+.filtro-fechas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.filtro-fechas input[type="date"] {
+  background: var(--black-card);
+  border: 1px solid var(--border);
+  color: var(--white);
+  padding: 8px 12px;
+  border-radius: 8px;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.filtro-fechas input[type="date"]:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 8px var(--orange-soft);
+}
+
+.filtro-fechas button {
+  background: var(--orange);
+  color: black;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s ease;
+}
+
+.filtro-fechas button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px var(--orange-soft);
+}
+
+body.light-mode .filtros-tiempo button,
+body.light-mode .filtro-fechas input {
+  background: white;
+  color: black;
+  border: 1px solid #ddd;
+}
