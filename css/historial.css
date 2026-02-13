@@ -10,6 +10,21 @@
   --gray: #a0a0a0;
 }
 
+/* ================= MODO CLARO ================= */
+
+body.light-mode {
+  --black-1: #f5f5f5;
+  --black-2: #ffffff;
+  --black-3: #eeeeee;
+
+  --white: #111111;
+  --gray: #555555;
+
+  background: linear-gradient(145deg, #f2f2f2, #ffffff);
+  color: #111;
+}
+
+
 /* ================= BASE ================= */
 
 body {
@@ -211,3 +226,79 @@ h2 {
   }
 
 }
+
+/* ================= SWITCH TEMA ================= */
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+/* Animación suave global */
+body {
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+.resumen-card,
+.tabla-historial,
+.filtros input,
+.filtros select {
+  transition: background 0.4s ease, color 0.4s ease, border 0.4s ease;
+}
+
+/* Switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #444;
+  transition: 0.4s;
+  border-radius: 30px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+/* Cuando está activado */
+input:checked + .slider {
+  background: linear-gradient(135deg, var(--orange), #ff9833);
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+/* Texto negro SOLO en modo claro para las ventas */
+body.light-mode .tabla-historial td {
+  color: #111111;
+}
+
+body.light-mode .tabla-historial tr:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+

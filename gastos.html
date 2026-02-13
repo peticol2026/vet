@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Control de Gastos</title>
+  <link rel="stylesheet" href="./css/gastos.css">
+</head>
+
+<body>
+
+<section class="historial-container">
+
+  <!-- 🌙 MODO CLARO / OSCURO -->
+  <div class="theme-toggle">
+    <span>🌙</span>
+    <label class="switch">
+      <input type="checkbox" id="toggleTheme">
+      <span class="slider"></span>
+    </label>
+    <span>☀️</span>
+    </div>
+    <h2>💸 Control de Gastos</h2>
+    
+    <div class="filtros-tiempo">
+        <button data-filtro="dia">Hoy</button>
+        <button data-filtro="semana">Esta Semana</button>
+        <button data-filtro="mes">Este Mes</button>
+        <button data-filtro="anio">Este Año</button>
+        <button data-filtro="todo">Todo</button>
+    </div>
+    
+    <div class="filtro-fechas">
+        <input type="date" id="fechaInicio">
+        <input type="date" id="fechaFin">
+        <button id="btnFiltrarFechas">Filtrar</button>
+    </div>
+    
+    
+    
+    
+    <!-- 📊 RESUMEN GENERAL -->
+    <div class="resumen-metodos">
+
+    <div class="resumen-card">
+      <span>Total Ventas</span>
+      <strong id="totalVentas">$0</strong>
+    </div>
+
+    <div class="resumen-card">
+      <span>Total Gastos</span>
+      <strong id="totalGastos">$0</strong>
+    </div>
+
+    <div class="resumen-card">
+      <span>SALDO FINAL</span>
+      <strong id="totalFinal">$0</strong>
+    </div>
+
+  </div>
+
+  <!-- 📝 FORMULARIO -->
+  <div class="filtros">
+
+    <select id="tipoGasto" required>
+      <option value="">Tipo de gasto</option>
+      <option value="Trabajador">Pago Trabajador</option>
+      <option value="Recibo">Recibo</option>
+      <option value="Local">Gasto Local</option>
+      <option value="Pedido">Gasto Pedido</option>
+      <option value="Otro">Otro</option>
+    </select>
+
+    <input type="text" id="descripcionGasto" placeholder="Descripción">
+    <input type="number" id="montoGasto" placeholder="Monto" required>
+    <input type="text" id="registradoPor" placeholder="Registrado por" required>
+
+    <button id="btnGuardarGasto">Guardar</button>
+
+  </div>
+
+  <!-- 📋 TABLA DE GASTOS -->
+  <table class="tabla-historial">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Tipo</th>
+        <th>Descripción</th>
+        <th>Monto</th>
+        <th>Registrado por</th>
+      </tr>
+    </thead>
+    <tbody id="tablaGastos"></tbody>
+  </table>
+
+</section>
+
+<script type="module" src="./js/gastos.js"></script>
+
+</body>
+</html>
