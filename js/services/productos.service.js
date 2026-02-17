@@ -3,30 +3,32 @@ import { supabase } from "../config/supabase.js";
 
 
 
-export async function  obtenerProductos () {
+export async function obtenerProductos() {
 
-            const {data, error } = await supabase
+  const { data, error } = await supabase
+    .from("productos")
+    .select(`
+      idProducto,
+      nombreProducto,
+      precioVenta,
+      cantidad,
+      imagen,
+      categoria_id,
+      categorias (
+        nombre
+      )
+    `);
 
-                .from("productos")
-                .select(`          
-                    idProducto,
-                    nombreProducto,
-                    precioCosto,
-                    precioVenta,
-                    cantidad,
-                    fechaVencimiento,
-                    idUsuario,
-                    codigoBarras,
-                    imagen,
-                    categoria  
-                    `);
+  if (error) {
+    console.error("Error obteniendo productos:", error);
+    return [];
+  }
 
-                    if(error){
-                        console.error("Error al obtener productos:", error);
-                        return[];
-                    }
-                return data;
-
+  // 🔥 Normalizamos para que ventas.js siga funcionando
+  return data.map(p => ({
+    ...p,
+    categoria: p.categorias?.nombre || "Sin categoría"
+  }));
 }
 
 
@@ -132,7 +134,7 @@ export async function buscarProductoIgual(producto) {
     .from("productos")
     .select("*")
     .eq("nombreProducto", producto.nombreProducto)
-    .eq("categoria", producto.categoria)
+    .eq("categoria_id", producto.categoria_id)
     .eq("precioCosto", producto.precioCosto)
     .eq("precioVenta", producto.precioVenta)
     .eq("fechaVencimiento", producto.fechaVencimiento)

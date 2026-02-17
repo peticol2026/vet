@@ -18,28 +18,46 @@
       <span class="slider"></span>
     </label>
     <span>☀️</span>
+  </div>
+
+  <!-- 🔥 HEADER SUPERIOR -->
+  <div class="header-gastos">
+
+    <div class="header-left">
+      <button class="btn-back" onclick="window.location.href='indexAdmin.html'">
+        ← Volver
+      </button>
+      <h2>💸 Control de Gastos</h2>
     </div>
-    <h2>💸 Control de Gastos</h2>
-    
-    <div class="filtros-tiempo">
-        <button data-filtro="dia">Hoy</button>
-        <button data-filtro="semana">Esta Semana</button>
-        <button data-filtro="mes">Este Mes</button>
-        <button data-filtro="anio">Este Año</button>
-        <button data-filtro="todo">Todo</button>
-    </div>
-    
-    <div class="filtro-fechas">
-        <input type="date" id="fechaInicio">
-        <input type="date" id="fechaFin">
-        <button id="btnFiltrarFechas">Filtrar</button>
-    </div>
-    
-    
-    
-    
-    <!-- 📊 RESUMEN GENERAL -->
-    <div class="resumen-metodos">
+
+    <button id="btnEliminarTodos" class="btn-delete-all">
+      <span class="icon">🗑</span>
+      <span>Eliminar todos</span>
+    </button>
+
+  </div>
+
+  <!-- 📆 FILTROS RÁPIDOS -->
+  <div class="filtros-tiempo">
+    <button data-filtro="dia">Hoy</button>
+    <button data-filtro="semana">Esta Semana</button>
+    <button data-filtro="mes">Este Mes</button>
+    <button data-filtro="anio">Este Año</button>
+    <button data-filtro="todo" class="active">Todo</button>
+  </div>
+
+  <!-- 📅 FILTRO POR FECHAS -->
+  <div class="filtro-fechas">
+    <input type="date" id="fechaInicio">
+    <input type="date" id="fechaFin">
+    <button id="btnFiltrarFechas">Filtrar</button>
+    <button id="btnEliminarRango" class="btn-delete-range">
+      Eliminar por rango
+    </button>
+  </div>
+
+  <!-- 📊 RESUMEN GENERAL -->
+  <div class="resumen-metodos">
 
     <div class="resumen-card">
       <span>Total Ventas</span>
@@ -51,22 +69,22 @@
       <strong id="totalGastos">$0</strong>
     </div>
 
-    <div class="resumen-card">
+    <div class="resumen-card saldo-final">
       <span>SALDO FINAL</span>
       <strong id="totalFinal">$0</strong>
     </div>
 
   </div>
 
-  <!-- 📝 FORMULARIO -->
+  <!-- 📝 FORMULARIO NUEVO GASTO -->
   <div class="filtros">
 
     <select id="tipoGasto" required>
       <option value="">Tipo de gasto</option>
-      <option value="Trabajador">Pago Trabajador</option>
+      <option value="Pago Trabajador">Pago Trabajador</option>
       <option value="Recibo">Recibo</option>
-      <option value="Local">Gasto Local</option>
-      <option value="Pedido">Gasto Pedido</option>
+      <option value="Gasto Local">Gasto Local</option>
+      <option value="Gasto Pedido">Gasto Pedido</option>
       <option value="Otro">Otro</option>
     </select>
 
@@ -79,22 +97,42 @@
   </div>
 
   <!-- 📋 TABLA DE GASTOS -->
-  <table class="tabla-historial">
-    <thead>
-      <tr>
-        <th>Fecha</th>
-        <th>Tipo</th>
-        <th>Descripción</th>
-        <th>Monto</th>
-        <th>Registrado por</th>
-      </tr>
-    </thead>
-    <tbody id="tablaGastos"></tbody>
-  </table>
+  <div class="tabla-wrapper">
+    <table class="tabla-historial">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Descripción</th>
+          <th>Monto</th>
+          <th>Registrado por</th>
+          <th>Tipo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tablaGastos"></tbody>
+    </table>
+  </div>
 
 </section>
 
 <script type="module" src="./js/gastos.js"></script>
+
+<!-- 🗑 MODAL ELIMINAR -->
+<div id="modalEliminar" class="modal">
+  <div class="modal-content">
+    <h3>⚠️ Confirmar eliminación</h3>
+    <p id="modalMensaje"></p>
+
+    <div class="modal-buttons">
+      <button id="btnCancelarEliminar" class="btn-cancelar">
+        Cancelar
+      </button>
+      <button id="btnConfirmarEliminar" class="btn-confirmar">
+        Eliminar
+      </button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>

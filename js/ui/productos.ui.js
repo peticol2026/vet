@@ -48,7 +48,7 @@ export function renderProductos(productos = [], onEliminar, onEditar, editarProd
 
   <h4 class="product-name">${producto.nombreProducto}</h4>
 
-  <p class="product-category">${producto.categoria}</p>
+  <p class="product-category">${producto.categoriaNombre}</p>
 
     <p class="product-category ${vencido ? "vencido" : ""}">
     Fecha de vencimiento: 
@@ -225,7 +225,7 @@ export function initFormulario(onGuardar) {
 
     const producto = {
       nombreProducto: form.querySelector("#nombreProducto").value,
-      categoria: form.querySelector("#categoria").value,
+      categoria_id: form.querySelector("#categoria").value || null,
       precioCosto: Number(form.querySelector("#precioCosto").value),
       precioVenta: Number(form.querySelector("#precioVenta").value),
       cantidad: Number(form.querySelector("#cantidad").value),

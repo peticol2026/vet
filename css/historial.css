@@ -159,6 +159,35 @@ h2 {
   color: var(--orange);
 }
 
+
+/* ================= TOP BAR ================= */
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.btn-back {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  color: var(--white);
+  padding: 8px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.25s ease;
+  backdrop-filter: blur(8px);
+}
+
+.btn-back:hover {
+  background: var(--orange);
+  color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px var(--orange-soft);
+}
+
 /* ================= RESPONSIVE ================= */
 
 /* Tablets */
@@ -198,6 +227,21 @@ h2 {
   .resumen-metodos {
     grid-template-columns: 1fr;
   }
+
+   .top-bar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--black-1);
+    padding: 10px 0;
+    backdrop-filter: blur(8px);
+  }
+
+  .btn-back {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
 
 }
 
@@ -301,4 +345,25 @@ body.light-mode .tabla-historial tr:hover {
   background: rgba(0, 0, 0, 0.05);
 }
 
+.btn-delete-range {
+  background: linear-gradient(135deg, #ff3c3c, #ff6b6b);
+  color: white;
+  font-weight: 600;
+}
 
+.btn-delete-range:hover {
+  box-shadow: 0 0 18px rgba(255, 60, 60, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-delete {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.2s ease;
+}
+
+.btn-delete:hover {
+  transform: scale(1.2);
+}

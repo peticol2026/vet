@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title>Historial de Ventas</title>
@@ -8,100 +9,108 @@
 
 <body>
 
-<section class="historial-container">
+  <section class="historial-container">
 
-<div class="theme-toggle">
-  <span>🌙</span>
-  <label class="switch">
-    <input type="checkbox" id="toggleTheme">
-    <span class="slider"></span>
-  </label>
-  <span>☀️</span>
-</div>
-
-
-
-
-  <h2>📊 Historial de Ventas</h2>
-
-  <!-- Filtros -->
-  <div class="filtros">
-
-  <!-- Rango de fechas -->
-  <input type="date" id="fechaInicio">
-  <input type="date" id="fechaFin">
-
-  <!-- Método de pago -->
-  <select id="filtroMetodo">
-    <option value="">Todos los métodos</option>
-    <option value="Efectivo">Efectivo</option>
-    <option value="Nequi">Nequi</option>
-    <option value="Tarjeta">Tarjeta</option>
-    <option value="Transferencia">Transferencia</option>
-  </select>
-
-  <!-- Categoría -->
-  <input type="text" id="filtroCategoria" placeholder="Categoría">
-
-  <button id="btnFiltrar">Filtrar</button>
-
-</div>
-
-
-  <div class="resumen">
-    Total vendido: <span id="totalGeneral">$0</span>
+  <div class="top-bar">
+    <button class="btn-back">← Volver</button>
+    <div class="theme-toggle">
+      <span>🌙</span>
+      <label class="switch">
+        <input type="checkbox" id="toggleTheme">
+        <span class="slider"></span>
+      </label>
+      <span>☀️</span>
+    </div>
   </div>
 
-  <div class="resumen-metodos">
-
-  <div class="resumen-card">
-    <span>Total General</span>
-    <strong id="totalGeneral">$0</strong>
-  </div>
-
-  <div class="resumen-card">
-    <span>Efectivo</span>
-    <strong id="totalEfectivo">$0</strong>
-  </div>
-
-  <div class="resumen-card">
-    <span>Nequi</span>
-    <strong id="totalNequi">$0</strong>
-  </div>
-
-  <div class="resumen-card">
-    <span>Tarjeta</span>
-    <strong id="totalTarjeta">$0</strong>
-  </div>
-
-  <div class="resumen-card">
-    <span>Transferencia</span>
-    <strong id="totalTransferencia">$0</strong>
-  </div>
-
-</div>
 
 
 
-  <table class="tabla-historial">
-    <thead>
-      <tr>
-        <th>Fecha</th>
-        <th>Producto</th>
-        <th>Categoría</th>
-        <th>Cantidad</th>
-        <th>Precio</th>
-        <th>Total</th>
-        <th>Empleado</th>
-        <th>Método Pago</th>
-      </tr>
-    </thead>
-    <tbody id="tablaVentas"></tbody>
-  </table>
+    <h2>📊 Historial de Ventas</h2>
 
-</section>
+    <!-- Filtros -->
+    <div class="filtros">
 
-<script type="module" src="./js/historial.js"></script>
+      <!-- Rango de fechas -->
+      <input type="date" id="fechaInicio">
+      <input type="date" id="fechaFin">
+
+      <!-- Método de pago -->
+      <select id="filtroMetodo">
+        <option value="">Todos los métodos</option>
+        <option value="Efectivo">Efectivo</option>
+        <option value="Nequi">Nequi</option>
+        <option value="Tarjeta">Tarjeta</option>
+        <option value="Transferencia">Transferencia</option>
+      </select>
+
+      <!-- Categoría -->
+        <input type="text" id="filtroCategoria" placeholder="Categoría">
+
+        <button id="btnFiltrar">Filtrar</button>
+
+        <button id="btnEliminarRango" class="btn-delete-range">
+          🗑 Eliminar por rango
+        </button>  
+    </div>
+
+
+    <div class="resumen">
+      Total vendido: <span id="totalGeneral">$0</span>
+    </div>
+
+    <div class="resumen-metodos">
+
+      <div class="resumen-card">
+        <span>Total General</span>
+        <strong id="totalGeneral">$0</strong>
+      </div>
+
+      <div class="resumen-card">
+        <span>Efectivo</span>
+        <strong id="totalEfectivo">$0</strong>
+      </div>
+
+      <div class="resumen-card">
+        <span>Nequi</span>
+        <strong id="totalNequi">$0</strong>
+      </div>
+
+      <div class="resumen-card">
+        <span>Tarjeta</span>
+        <strong id="totalTarjeta">$0</strong>
+      </div>
+
+      <div class="resumen-card">
+        <span>Transferencia</span>
+        <strong id="totalTransferencia">$0</strong>
+      </div>
+
+    </div>
+
+
+
+    <table class="tabla-historial">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Producto</th>
+          <th>Categoría</th>
+          <th>Cantidad</th>
+          <th>Precio</th>
+          <th>Total</th>
+          <th>Empleado</th>
+          <th>Método Pago</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tablaVentas"></tbody>
+    </table>
+
+  </section>
+
+  <script type="module" src="./js/historial.js"></script>
 
 </body>
+
 </html>
