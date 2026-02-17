@@ -1,5 +1,5 @@
 /* =====================================
-   VARIABLES (estilo moderno oscuro)
+   VARIABLES
 ===================================== */
 
 :root {
@@ -15,6 +15,28 @@
 
   --gray: #9ca3af;
   --border: rgba(255, 255, 255, 0.08);
+
+  --danger: #ff4d4d;
+  --success: #00c853;
+}
+
+/* =====================================
+   MODO CLARO
+===================================== */
+
+body.light-mode {
+
+  --black: #f1f5f9;
+  --black-soft: #ffffff;
+  --black-card: rgba(255, 255, 255, 0.85);
+
+  --white: #111827;
+  --white-soft: rgba(0, 0, 0, 0.06);
+
+  --gray: #6b7280;
+  --border: rgba(0, 0, 0, 0.08);
+
+  --orange-soft: rgba(255, 149, 5, 0.2);
 }
 
 /* =====================================
@@ -22,26 +44,105 @@
 ===================================== */
 
 body {
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, var(--black), #0f172a);
+  font-family: 'Inter', sans-serif;
+  background: radial-gradient(circle at top left, var(--black-soft), var(--black) 60%);
   color: var(--white);
   margin: 0;
-  padding: 20px;
-  transition: background 0.3s ease;
+  padding: 40px 20px;
+  min-height: 100vh;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-h2 {
-  color: var(--orange);
-  margin-bottom: 25px;
+.resumen-card,
+.header-gastos,
+.tabla-historial,
+.modal-content {
+  transition: background 0.3s ease, border 0.3s ease;
 }
-
-/* =====================================
-   CONTENEDOR
-===================================== */
 
 .historial-container {
   max-width: 1200px;
   margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* =====================================
+   HEADER
+===================================== */
+
+.header-gastos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 28px;
+  border-radius: 18px;
+  background: var(--black-card);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(15px);
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.header-left h2 {
+  font-size: 26px;
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--orange), #ffb347);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* =====================================
+   BOTÓN VOLVER
+===================================== */
+
+.btn-back {
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  color: var(--white);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-back:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+  box-shadow: 0 0 15px var(--orange-soft);
+  transform: translateY(-2px);
+}
+
+/* =====================================
+   BOTÓN ELIMINAR TODOS
+===================================== */
+
+.btn-delete-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 22px;
+  border-radius: 14px;
+  background: rgba(255, 59, 59, 0.12);
+  border: 1px solid rgba(255, 59, 59, 0.35);
+  color: var(--danger);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-delete-all:hover {
+  background: var(--danger);
+  color: white;
+  box-shadow: 0 10px 25px rgba(255, 0, 0, 0.25);
+  transform: translateY(-3px);
 }
 
 /* =====================================
@@ -51,106 +152,146 @@ h2 {
 .resumen-metodos {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 15px;
-  margin-bottom: 30px;
+  gap: 18px;
 }
 
 .resumen-card {
   background: var(--black-card);
-  backdrop-filter: blur(12px);
   border: 1px solid var(--border);
-  padding: 18px;
-  border-radius: 12px;
-  transition: 0.3s ease;
+  padding: 20px;
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.resumen-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.4);
 }
 
 .resumen-card span {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--gray);
 }
 
 .resumen-card strong {
   display: block;
-  font-size: 20px;
-  margin-top: 5px;
+  font-size: 22px;
+  margin-top: 6px;
+  font-weight: 700;
 }
 
-.resumen-card:hover {
-  border-color: var(--orange);
-  box-shadow: 0 0 15px var(--orange-soft);
+/* Glow dinámico saldo */
+.saldo-final strong {
+  transition: 0.3s ease;
+}
+
+.saldo-positivo {
+  color: var(--success);
+  text-shadow: 0 0 12px rgba(0,200,83,0.6);
+}
+
+.saldo-negativo {
+  color: var(--danger);
+  text-shadow: 0 0 12px rgba(255,77,77,0.6);
 }
 
 /* =====================================
-   FORMULARIO
+   FILTROS
 ===================================== */
 
-.filtros {
+.filtros,
+.filtro-fechas,
+.filtros-tiempo {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 25px;
 }
 
 .filtros input,
-.filtros select {
+.filtros select,
+.filtro-fechas input {
   background: var(--black-card);
   border: 1px solid var(--border);
   color: var(--white);
-  padding: 8px 12px;
-  border-radius: 8px;
-  outline: none;
+  padding: 10px 14px;
+  border-radius: 10px;
   transition: 0.2s;
 }
 
 .filtros input:focus,
-.filtros select:focus {
+.filtros select:focus,
+.filtro-fechas input:focus {
   border-color: var(--orange);
-  box-shadow: 0 0 8px var(--orange-soft);
+  box-shadow: 0 0 10px var(--orange-soft);
 }
 
-.filtros button {
+.filtros button,
+.filtro-fechas button,
+.filtros-tiempo button {
+  padding: 9px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.05);
+  color: var(--gray);
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.filtros button:hover,
+.filtro-fechas button:hover,
+.filtros-tiempo button:hover {
+  border-color: var(--orange);
+  color: var(--white);
+  box-shadow: 0 0 12px var(--orange-soft);
+}
+
+.filtros-tiempo button.active {
   background: var(--orange);
   color: black;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.2s;
-}
-
-.filtros button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 12px var(--orange-soft);
+  font-weight: 600;
 }
 
 /* =====================================
    TABLA
 ===================================== */
 
+.tabla-wrapper {
+  overflow-x: auto;
+}
+
 .tabla-historial {
   width: 100%;
   border-collapse: collapse;
   background: var(--black-card);
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
   border: 1px solid var(--border);
 }
 
 .tabla-historial thead {
-  background: var(--white-soft);
+  background: rgba(255,255,255,0.06);
+}
+
+.tabla-historial thead th {
+  position: sticky;
+  top: 0;
+  background: #111827;
+  z-index: 5;
 }
 
 .tabla-historial th,
 .tabla-historial td {
-  padding: 10px;
+  padding: 14px;
   text-align: center;
 }
 
 .tabla-historial th {
-  font-size: 14px;
   color: var(--orange);
+  font-size: 13px;
+  letter-spacing: 0.5px;
 }
 
 .tabla-historial tr {
@@ -158,120 +299,146 @@ h2 {
   transition: 0.2s;
 }
 
-.tabla-historial tr:hover {
+.tabla-historial tbody tr:hover {
   background: var(--orange-soft);
 }
 
 /* =====================================
-   UTILIDAD NEGATIVA
+   BOTÓN ELIMINAR FILA
 ===================================== */
 
-.negativo {
-  color: #ff4d4d !important;
-  font-weight: bold;
-}
-
-/* =====================================
-   MODO CLARO
-===================================== */
-
-body.light-mode {
-  background: #f4f4f4;
-  color: #111;
-}
-
-body.light-mode .resumen-card,
-body.light-mode .tabla-historial,
-body.light-mode .filtros input,
-body.light-mode .filtros select {
-  background: white;
-  color: black;
-  border: 1px solid #ddd;
-}
-
-body.light-mode .resumen-card:hover {
-  border-color: var(--orange);
-}
-
-/* =====================================
-   FILTROS DE TIEMPO (BOTONES)
-===================================== */
-
-.filtros-tiempo {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.filtros-tiempo button {
-  background: var(--black-card);
-  border: 1px solid var(--border);
-  color: var(--white);
-  padding: 8px 14px;
-  border-radius: 8px;
+.btn-delete-row {
+  background: transparent;
+  border: 1px solid rgba(255,77,77,0.4);
+  color: rgba(255,77,77,0.8);
+  padding: 5px 12px;
+  border-radius: 20px;
   cursor: pointer;
-  transition: 0.2s ease;
-  font-size: 13px;
+  transition: 0.2s;
 }
 
-.filtros-tiempo button:hover {
-  border-color: var(--orange);
-  box-shadow: 0 0 10px var(--orange-soft);
-  transform: translateY(-2px);
-}
-
-.filtros-tiempo button.active {
-  background: var(--orange);
-  color: black;
-  font-weight: bold;
+.btn-delete-row:hover {
+  background: var(--danger);
+  color: white;
+  transform: scale(1.1);
 }
 
 /* =====================================
-   FILTRO POR RANGO DE FECHAS
+   MODAL
 ===================================== */
 
-.filtro-fechas {
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 25px;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s ease;
+  z-index: 1000;
 }
 
-.filtro-fechas input[type="date"] {
-  background: var(--black-card);
+.modal.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-content {
+  background: rgba(20,20,20,0.75);
+  backdrop-filter: blur(20px);
+  padding: 30px;
+  border-radius: 18px;
+  width: 360px;
+  text-align: center;
   border: 1px solid var(--border);
-  color: var(--white);
-  padding: 8px 12px;
-  border-radius: 8px;
-  outline: none;
-  transition: 0.2s ease;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+  animation: pop 0.25s ease;
 }
 
-.filtro-fechas input[type="date"]:focus {
-  border-color: var(--orange);
-  box-shadow: 0 0 8px var(--orange-soft);
+@keyframes pop {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
 
-.filtro-fechas button {
-  background: var(--orange);
-  color: black;
+.modal-buttons {
+  margin-top: 25px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.btn-cancelar {
+  flex: 1;
+  background: #444;
   border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
+  padding: 10px;
+  border-radius: 10px;
   cursor: pointer;
-  font-weight: bold;
-  transition: 0.2s ease;
 }
 
-.filtro-fechas button:hover {
+.btn-confirmar {
+  flex: 1;
+  background: linear-gradient(135deg, var(--danger), #c62828);
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.btn-confirmar:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 12px var(--orange-soft);
+  box-shadow: 0 10px 25px rgba(255,0,0,0.3);
 }
 
-body.light-mode .filtros-tiempo button,
-body.light-mode .filtro-fechas input {
-  background: white;
-  color: black;
-  border: 1px solid #ddd;
+/* =====================================
+   ANIMACIONES
+===================================== */
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(15px);
+  animation: fadeSlideUp 0.6s ease forwards;
+}
+
+@keyframes fadeSlideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-out {
+  animation: fadeOutRow 0.3s forwards;
+}
+
+@keyframes fadeOutRow {
+  to {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+}
+
+/* =====================================
+   RESPONSIVE
+===================================== */
+
+@media (max-width: 768px) {
+  .header-gastos {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-left {
+    justify-content: space-between;
+  }
+
+  .btn-delete-all {
+    width: 100%;
+    justify-content: center;
+  }
 }

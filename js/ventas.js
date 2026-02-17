@@ -5,7 +5,7 @@ import { obtenerProductos, actualizarProducto }
 from "./services/productos.service.js";
 
 import { supabase } from "./config/supabase.js";
-
+import { initBackButton } from "./ui/backButton.ui.js";
 
 let usuarioLogueado = null;
 
@@ -74,7 +74,7 @@ function renderProductos(lista) {
 
     card.innerHTML = `
       <div class="product-img">
-        <img src="${prod.imagen || 'https://via.placeholder.com/300'}">
+        <img src="${prod.imagen || 'https://aramar.com/wp-content/uploads/2017/05/aramar-suministros-para-el-vidrio-cristal-sin-imagen-disponible.jpg'}">
       </div>
 
       <div class="product-info">
@@ -406,7 +406,7 @@ function generarTicketTermico(idVenta, pagado, metodoPago, nombreEmpleado) {
 
         <div class="center">
           <strong>PETICOL</strong><br>
-          NIT: 1451231241231<br>
+          NIT: 11935811351<br>
           ${fecha}
         </div>
 
@@ -605,4 +605,4 @@ closeBtn.addEventListener("click", () => {
 });
 
 
-
+initBackButton();

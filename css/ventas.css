@@ -38,8 +38,10 @@ body {
   width: 85px;
   background: linear-gradient(180deg, var(--black-2), var(--black-3));
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between; /* 👈 separa arriba y abajo */
+  padding: 20px 0;
   border-right: 1px solid #252525;
 }
 
@@ -511,6 +513,10 @@ body {
 
 }
 
+.mobile-only {
+  display: none;
+}
+
 /* ====== MÓVIL OPTIMIZADO ====== */
 @media (max-width: 600px) {
 
@@ -589,6 +595,16 @@ body {
   .btn.primary {
     padding: 10px;
     font-size: 13px;
+  }
+
+  .mobile-only {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    margin-bottom: 8px;
   }
 
   /* ===== CARRITO FIX REAL MÓVIL ===== */
@@ -718,4 +734,24 @@ body {
     gap: 12px;
   }
 
+}
+
+
+.btn-back {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  color: var(--white);
+  padding: .5rem .8rem;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: .75rem;
+  transition: all .25s ease;
+  backdrop-filter: blur(8px);
+}
+
+.btn-back:hover {
+  background: var(--orange);
+  color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255,149,5,.35);
 }

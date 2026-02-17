@@ -5,6 +5,7 @@ import {
   eliminarUsuario
 } from "./services/usuarios.service.js";
 
+import { initBackButton } from "./ui/backButton.ui.js";
 /* ==========================
    ELEMENTOS
 ========================== */
@@ -185,6 +186,6 @@ formEdit.addEventListener("submit", async (e) => {
 
 
 
-
+initBackButton();
 
 

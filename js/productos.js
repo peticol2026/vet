@@ -1,7 +1,13 @@
 import {obtenerProductos, crearProducto, subirImagen,  eliminarProducto,  eliminarImagen, actualizarProducto, buscarProductoIgual} from "./services/productos.service.js";
 import { mostrarToast } from "./ui/toast.ui.js";
 import {renderProductos, initModal ,initFormulario } from "./ui/productos.ui.js";
-
+import { initBackButton } from "./ui/backButton.ui.js";
+import {
+  obtenerCategorias,
+  crearCategoria,
+  eliminarCategoria,
+  categoriaTieneProductos
+} from "./services/categorias.service.js";
 
 
 let productoEditando = null;
@@ -50,7 +56,7 @@ if (inputBuscar) {
 
     const filtrados = productosGlobales.filter(producto =>
       producto.nombreProducto.toLowerCase().includes(texto) ||
-      producto.categoria.toLowerCase().includes(texto)
+      producto.categoriaNombre.toLowerCase().includes(texto)
     );
 
     renderProductos(filtrados, borrarProducto, editarProducto);
@@ -90,7 +96,7 @@ async function guardarProducto(producto) {
 
       const productoFinal = {
         nombreProducto: producto.nombreProducto,
-        categoria: producto.categoria,
+        categoria_id: producto.categoria_id,
         precioCosto: producto.precioCosto,
         precioVenta: producto.precioVenta,
         cantidad: producto.cantidad,
@@ -153,7 +159,7 @@ function editarProducto(producto) {
   document.getElementById("productModal").classList.remove("hidden");
 
   document.getElementById("nombreProducto").value = producto.nombreProducto;
-  document.getElementById("categoria").value = producto.categoria;
+ document.getElementById("categoria").value = producto.categoria_id;
   document.getElementById("precioCosto").value = producto.precioCosto;
   document.getElementById("precioVenta").value = producto.precioVenta;
   document.getElementById("cantidad").value = producto.cantidad;
@@ -177,6 +183,94 @@ function editarProducto(producto) {
 
 }
 
+async function cargarCategorias() {
+
+  const select = document.getElementById("categoria");
+  const categorias = await obtenerCategorias();
+
+  select.innerHTML = `<option value="">Seleccionar categoría</option>`;
+
+  categorias.forEach(cat => {
+    select.innerHTML += `
+      <option value="${cat.id}">
+        ${cat.nombre}
+      </option>
+    `;
+  });
+
+
+
+  // Opción especial
+  select.innerHTML += `
+    <option value="__nueva__">➕ Agregar categoría</option>
+  `;
+
+  select.innerHTML += `
+  <option value="__eliminar__">🗑 Administrar categorías</option>
+`;
+}
+
+document.getElementById("categoria")
+  .addEventListener("change", async (e) => {
+
+    // ➕ CREAR CATEGORÍA
+    if (e.target.value === "__nueva__") {
+
+      const nombre = prompt("Nombre de la nueva categoría:");
+
+      if (!nombre) {
+        e.target.value = "";
+        return;
+      }
+
+      try {
+        const nueva = await crearCategoria(nombre.trim());
+        await cargarCategorias();
+        e.target.value = nueva.id;
+      } catch (err) {
+        alert("Error creando categoría");
+        console.error(err);
+      }
+    }
+
+    // 🗑 ELIMINAR CATEGORÍA
+    if (e.target.value === "__eliminar__") {
+
+  const categorias = await obtenerCategorias();
+
+  const lista = categorias
+    .map(c => `${c.id} - ${c.nombre}`)
+    .join("\n");
+
+  const id = prompt(
+    "Escribe el ID de la categoría que deseas eliminar:\n\n" + lista
+  );
+
+  if (!id) {
+  e.target.value = "";
+  return;
+}
+
+await eliminarCategoria(id);
+
+if (!id || isNaN(idNumero)) {
+  e.target.value = "";
+  return;
+}
+
+  try {
+    await eliminarCategoria(idNumero);
+    await cargarCategorias();
+    alert("Categoría eliminada");
+  } catch (err) {
+    alert("No se puede eliminar (puede estar en uso)");
+  }
+
+  e.target.value = "";
+}
+
+  });
+
 
 
 /* =========================
@@ -185,3 +279,5 @@ function editarProducto(producto) {
 initModal();
 initFormulario(guardarProducto);
 cargarProductos();
+initBackButton();
+cargarCategorias();

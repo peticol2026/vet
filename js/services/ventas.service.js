@@ -35,3 +35,31 @@ export async function obtenerTotalVentas(fechaInicio, fechaFin) {
 
   return totalGeneral;
 }
+
+
+export async function eliminarVenta(id) {
+
+  // Primero eliminar detalle_venta
+  const { error: errorDetalle } = await supabase
+    .from("detalle_venta")
+    .delete()
+    .eq("venta_id", id);
+
+  if (errorDetalle) {
+    console.error("Error eliminando detalle:", errorDetalle);
+    return false;
+  }
+
+  // Luego eliminar venta
+  const { error } = await supabase
+    .from("ventas")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    console.error("Error eliminando venta:", error);
+    return false;
+  }
+
+  return true;
+}
