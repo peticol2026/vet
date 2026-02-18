@@ -320,12 +320,19 @@ const { data: venta, error: errorVenta } = await supabase
   }
 
   /* 2️⃣ Insertar detalle */
-  const detalles = carrito.map(p => ({
+ const detalles = carrito.map(p => {
+
+  const gananciaUnidad = p.precioVenta - p.precioCosto;
+  const gananciaTotal = gananciaUnidad * p.cantidad;
+
+  return {
     idventa: venta.idventa,
     idproducto: p.idProducto,
     cantidad: p.cantidad,
-    precio: p.precioVenta
-  }));
+    precio: p.precioVenta,
+    ganancia: gananciaTotal
+  };
+});
 
   const { error: errorDetalle } = await supabase
     .from("detalle_venta")
@@ -380,7 +387,6 @@ function generarTicketTermico(idVenta, pagado, metodoPago, nombreEmpleado) {
     acc + p.precioVenta * p.cantidad, 0);
 
   const vuelto = pagado - total;
-
   const fecha = new Date().toLocaleString("es-CO");
 
   const ventana = window.open("", "", "width=300,height=600");
@@ -397,14 +403,22 @@ function generarTicketTermico(idVenta, pagado, metodoPago, nombreEmpleado) {
             padding: 10px;
             font-size: 12px;
           }
+
           .center { text-align:center; }
           .row { display:flex; justify-content:space-between; }
           hr { border: 1px dashed #000; margin:5px 0; }
+
+          img {
+            width: 120px;
+            margin-bottom: 5px;
+          }
         </style>
       </head>
       <body>
 
         <div class="center">
+          <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iQ2FwYV84X2NvcGlhIiBkYXRhLW5hbWU9IkNhcGEgOCBjb3BpYSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgNTAwIDUwMCI+CiAgPGRlZnM+CiAgICA8c3R5bGU+CiAgICAgIC5jbHMtMSB7CiAgICAgICAgZmlsbDogbm9uZTsKICAgICAgICBzdHJva2U6ICNmZjg1MzM7CiAgICAgICAgc3Ryb2tlLW1pdGVybGltaXQ6IDEwOwogICAgICAgIHN0cm9rZS13aWR0aDogMy4wNXB4OwogICAgICB9CgogICAgICAuY2xzLTIgewogICAgICAgIGZpbGw6ICNmZmY7CiAgICAgIH0KCiAgICAgIC5jbHMtMyB7CiAgICAgICAgZmlsbDogI2ZmODUzMzsKICAgICAgfQoKICAgICAgLmNscy00IHsKICAgICAgICBmaWxsOiAjM2EzYTNhOwogICAgICB9CiAgICA8L3N0eWxlPgogIDwvZGVmcz4KICA8cGF0aCBjbGFzcz0iY2xzLTQiIGQ9Ik0xNTMuMDksMTYyLjg5bC0xLjg5LDE4Ljc5djc3LjgyYzYuNjguNzYsMTYuMjgsMS40OCwyNy44NCwxLjAzLDE2LjM0LS42NCwyNC41LS45NywzMi41NS02LjAyLDEzLjU5LTguNTMsMTcuNTItMjMuNDcsMTguMzMtMjYuNTQsMi45Ni0xMS4yNC42OC0xNy4wNy4xMS0xOS4zOC0uODctMy41Ni0xLjg4LTUuNzktMi44NS03Ljg0aC01OC42MXYtMTkuMDFzLTIuMzgtMTItMTUuNDgtMTguODZaIi8+CiAgPHBhdGggY2xhc3M9ImNscy0zIiBkPSJNMTI4LjYzLDE2Mi4zNnYxNDIuMjFoNTUuNDRzLTkuNjQtMjguNjctMS40NC01Ni4xN2MyLjQ2LTMuMDgsMjUuNSwyLjI2LDMyLjQ4LTMzLjQ0LDAtNy4xOC4yMS0xNC4yLjIxLTE0LjJoLTE4Ljczcy01LjY4LTIwLjYxLTQwLjE1LTE4LjQyYy01LjkyLTguMjgtMTUuODItMTcuNzItMjcuODEtMTkuOThaIi8+CiAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMTUwLjMsMTg5LjE2YzMzLjEtNS43NCw0MS43MiwxNy43MSw0MS43MiwxNy43MSwwLDAsMTcuMjMuNDEsMjMuMTgsMCwxLjY0LDkuMjMsMTAuNjMsNy45MywxMC42Myw3LjkzLjA1LDIuMjItLjEsNS4zOS0xLjA5LDkuMDMtMi40NSw4Ljk5LTguMywxNC41MS0xMC45NCwxNi42OS04LjcxLDcuMTgtMTguNjksNy43OC0yNS43Miw4LjIxLTUuMTQuMzEtOS40MS0uMTEtMTIuMzEtLjU1LTguNDgsMzQuNzQsMCw1Ni4zOSwwLDU2LjM5aC00Ny4xNXYtMTA5LjEybDIxLjY3LTYuMjlaIi8+CiAgPHBhdGggY2xhc3M9ImNscy00IiBkPSJNMTI4LjYzLDE2Ny43NnYxMzYuODJoNDUuNTFzLTM4LjMtMjguNDgtMjcuMDgtNzQuMTdjMS40MS0uMDQsMy40My0uMjksNS40Ny0xLjM3LDcuMDMtMy43LDcuOS0xMy43Myw4LjIxLTE3LjIzLDEuNDEtMTYuMTYtMTEuNzItMjguODctMTQuNS0zMS40NiwwLDAtOC41OC0xMC4xMi0xNy42LTEyLjU4WiIvPgogIDxjaXJjbGUgY2xhc3M9ImNscy00IiBjeD0iMTc3LjA1IiBjeT0iMjA3LjExIiByPSI0LjEzIi8+CiAgPHBhdGggY2xhc3M9ImNscy00IiBkPSJNMzQyLjAxLDI5NGMwLDIuMjgtMS44NSw0LjEzLTQuMTMsNC4xMy0uMjIsMC0uNDMtLjAyLS42NS0uMDUtMS41OS0xLjEyLTIuNTctMS44Ny00LjUyLTEuODdzLTIuOTYuODktNC41NywxLjkxYy0uMDguMDItLjE2LjAyLS4yNC4wMi0yLjI4LDAtNC4xMy0xLjg1LTQuMTMtNC4xMywwLTEuMDIuMzctMS45NS45OC0yLjY3aDBzMCwwLDAtLjAyYy4yNy0uMzEuNTgtLjU5LjkzLS44MS44Ni0uODMsMS40Mi0xLjYyLDEuNzktMi4yNC42OC0xLjE1LjY4LTEuNjcsMS40Ny0yLjYyLjQ5LS42LDEuMzctMS42NCwyLjg2LTEuOTksMS44Ni0uNDMsMy4zOS41MywzLjczLjczLDEuNDUuOTEsMi4wOCwyLjMsMi4yNiwyLjczLjMuNjcuMjQuODkuNTUsMS41LjY4LDEuMzQsMS42NCwxLjQsMi4wNiwyLjA5aDBjLjk4Ljc3LDEuNjEsMS45NSwxLjYxLDMuMjlaIi8+CiAgPGNpcmNsZSBjbGFzcz0iY2xzLTQiIGN4PSIzMjcuNzQiIGN5PSIyOTQuMzYiIHI9IjMuNzgiLz4KICA8Y2lyY2xlIGNsYXNzPSJjbHMtNCIgY3g9IjMzNy44OCIgY3k9IjI5NC4zNiIgcj0iMy43OCIvPgogIDxlbGxpcHNlIGNsYXNzPSJjbHMtNCIgY3g9IjMzNy4zOCIgY3k9IjI3OC4zNCIgcng9IjQuNSIgcnk9IjMuNjIiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDYuNDggNTY0LjM1KSByb3RhdGUoLTgwLjM2KSIvPgogIDxlbGxpcHNlIGNsYXNzPSJjbHMtNCIgY3g9IjMyOC4yMiIgY3k9IjI3OC4zNCIgcng9IjMuNjIiIHJ5PSI0LjUiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC00MS45NyA1OC44OCkgcm90YXRlKC05LjY0KSIvPgogIDxlbGxpcHNlIGNsYXNzPSJjbHMtNCIgY3g9IjM0My41NCIgY3k9IjI4NS4yMSIgcng9IjMuODUiIHJ5PSIzLjEiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDQuODQgNTc2LjE0KSByb3RhdGUoLTgwLjM2KSIvPgogIDxlbGxpcHNlIGNsYXNzPSJjbHMtNCIgY3g9IjMyMi4yOCIgY3k9IjI4NC44OCIgcng9IjMuMSIgcnk9IjMuODUiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC00My4xNSA1Ny45OCkgcm90YXRlKC05LjY0KSIvPgogIDxjaXJjbGUgY2xhc3M9ImNscy0xIiBjeD0iMzMyLjgiIGN5PSIyODQuODgiIHI9IjE3LjQ3Ii8+CiAgPGc+CiAgICA8cGF0aCBjbGFzcz0iY2xzLTQiIGQ9Ik0yMDQuNjQsMzA1LjA4Yy00LjMzLDAtOC4xMi0uODYtMTEuMzUtMi41OS0zLjI0LTEuNzMtNS43NC00LjA5LTcuNTItNy4wOC0xLjc4LTIuOTktMi42Ny02LjQ0LTIuNjctMTAuMzNzLjg2LTcuMzQsMi41OS0xMC4zM2MxLjczLTIuOTksNC4xMS01LjM1LDcuMTUtNy4wOCwzLjA0LTEuNzMsNi41MS0yLjU5LDEwLjQtMi41OXM3LjE4Ljg0LDEwLjE1LDIuNTIsNS4zLDQuMDMsNy4wMSw3LjA0YzEuNywzLjAyLDIuNTUsNi41OSwyLjU1LDEwLjczLDAsLjM0LS4wMS43Ny0uMDQsMS4yOC0uMDMuNTEtLjA2Ljk2LS4xMSwxLjM1aC0zMi40OHYtNi4wNmgyNy42N2wtMy42NSwxLjljLjA1LTIuMTktLjQtNC4xNS0xLjM1LTUuODgtLjk1LTEuNzMtMi4yNS0zLjA3LTMuOTEtNC4wMS0xLjY2LS45NS0zLjYtMS40Mi01Ljg0LTEuNDJzLTQuMTUuNDctNS44OCwxLjQyYy0xLjczLjk1LTMuMDUsMi4zLTMuOTgsNC4wNS0uOTIsMS43NS0xLjM5LDMuNzctMS4zOSw2LjA2djEuNDZjMCwyLjM0LjUyLDQuNDEsMS41Nyw2LjIxLDEuMDUsMS44LDIuNTQsMy4yLDQuNDksNC4yLDEuOTUsMSw0LjIxLDEuNSw2Ljc5LDEuNSwyLjE5LDAsNC4xNi0uMzYsNS45MS0xLjA5LDEuNzUtLjczLDMuMzEtMS44LDQuNjctMy4yMWw0Ljk2LDUuNjljLTEuOCwyLjA0LTQuMDMsMy42LTYuNjgsNC42Ny0yLjY1LDEuMDctNS42OCwxLjYxLTkuMDksMS42MVoiLz4KICAgIDxwYXRoIGNsYXNzPSJjbHMtNCIgZD0iTTIyNS4wOCwyNzIuODl2LTcuM2gyNS45OXY3LjNoLTI1Ljk5Wk0yNDQuOTMsMzA1LjA4Yy00LjI4LDAtNy41OS0xLjExLTkuOTMtMy4zMi0yLjM0LTIuMjEtMy41LTUuNDYtMy41LTkuNzV2LTM1LjA0aDkuMDV2MzQuNzVjMCwxLjg1LjQ5LDMuMjgsMS40Niw0LjMxLjk3LDEuMDIsMi4zNCwxLjUzLDQuMDksMS41MywyLDAsMy42NS0uNTQsNC45Ni0xLjYxbDIuNjMsNi41Yy0xLjEyLjg4LTIuNDYsMS41My00LjAxLDEuOTctMS41Ni40NC0zLjE0LjY2LTQuNzUuNjZaIi8+CiAgICA8cGF0aCBjbGFzcz0iY2xzLTQiIGQ9Ik0yNjQuMzUsMjU5LjE3Yy0xLjcsMC0zLjEtLjU0LTQuMi0xLjYxLTEuMS0xLjA3LTEuNjQtMi4zOC0xLjY0LTMuOTQsMC0xLjQ2LjU1LTIuNzMsMS42NC0zLjgsMS4wOS0xLjA3LDIuNDktMS42MSw0LjItMS42MXMzLjEuNSw0LjIsMS41YzEuMDksMSwxLjY0LDIuMjgsMS42NCwzLjgzcy0uNTQsMi44OC0xLjYxLDMuOThjLTEuMDcsMS4xLTIuNDgsMS42NC00LjIzLDEuNjRaTTI1OS44MywzMDQuNTd2LTM4Ljk4aDkuMDV2MzguOThoLTkuMDVaIi8+CiAgICA8cGF0aCBjbGFzcz0iY2xzLTQiIGQ9Ik0yOTcuMjcsMzA1LjA4Yy00LjA5LDAtNy43My0uODYtMTAuOTEtMi41OXMtNS42OC00LjA5LTcuNDgtNy4wOGMtMS44LTIuOTktMi43LTYuNDQtMi43LTEwLjMzcy45LTcuNCwyLjctMTAuMzdjMS44LTIuOTcsNC4yOS01LjMyLDcuNDgtNy4wNCwzLjE5LTEuNzMsNi44My0yLjU5LDEwLjkxLTIuNTksMy43NSwwLDcuMDguNzgsMTAsMi4zNCwyLjkyLDEuNTYsNS4xMSwzLjgyLDYuNTcsNi43OWwtNi45NCw0LjA5Yy0xLjE3LTEuOC0yLjU5LTMuMTUtNC4yNy00LjA1cy0zLjQ5LTEuMzUtNS40NC0xLjM1Yy0yLjI0LDAtNC4yNi41LTYuMDYsMS41LTEuOCwxLTMuMjEsMi40MS00LjIzLDQuMjMtMS4wMiwxLjgyLTEuNTMsMy45OC0xLjUzLDYuNDZzLjUxLDQuNjUsMS41Myw2LjVjMS4wMiwxLjg1LDIuNDMsMy4yNyw0LjIzLDQuMjcsMS44LDEsMy44MiwxLjUsNi4wNiwxLjUsMS45NSwwLDMuNzYtLjQ1LDUuNDQtMS4zNXMzLjEtMi4yNyw0LjI3LTQuMTJsNi45NCw0LjA5Yy0xLjQ2LDIuOTItMy42NSw1LjE3LTYuNTcsNi43NS0yLjkyLDEuNTgtNi4yNSwyLjM3LTEwLDIuMzdaIi8+CiAgPC9nPgogIDxwYXRoIGNsYXNzPSJjbHMtNCIgZD0iTTM1Ni4zMywzMDQuNTd2LTU0LjE3aDkuMDV2NTQuMTdoLTkuMDVaIi8+Cjwvc3ZnPg==" />
+          <br>
           <strong>PETICOL</strong><br>
           NIT: 11935811351<br>
           ${fecha}
@@ -419,9 +433,7 @@ function generarTicketTermico(idVenta, pagado, metodoPago, nombreEmpleado) {
 
         <hr>
 
-        ${carrito
-          .map(
-            (p) => `
+        ${carrito.map(p => `
           <div>
             ${p.nombreProducto}
             <div class="row">
@@ -430,9 +442,7 @@ function generarTicketTermico(idVenta, pagado, metodoPago, nombreEmpleado) {
             </div>
           </div>
           <br>
-        `,
-          )
-          .join("")}
+        `).join("")}
 
         <hr>
 
@@ -443,20 +453,19 @@ function generarTicketTermico(idVenta, pagado, metodoPago, nombreEmpleado) {
 
         ${
           metodoPago === "Efectivo"
-            ? `
-<div class="row">
-  <span>PAGADO:</span>
-  <span>${formatoCOP(pagado)}</span>
-</div>
+          ? `
+            <div class="row">
+              <span>PAGADO:</span>
+              <span>${formatoCOP(pagado)}</span>
+            </div>
 
-<div class="row">
-  <span>VUELTO:</span>
-  <span>${formatoCOP(vuelto)}</span>
-</div>
-`
-            : ""
+            <div class="row">
+              <span>VUELTO:</span>
+              <span>${formatoCOP(vuelto)}</span>
+            </div>
+          `
+          : ""
         }
-
 
         <div>
           Metodo: ${metodoPago}
@@ -473,8 +482,13 @@ function generarTicketTermico(idVenta, pagado, metodoPago, nombreEmpleado) {
   `);
 
   ventana.document.close();
-  ventana.print();
+
+  // 🔥 Esperar que cargue antes de imprimir
+  ventana.onload = function () {
+    ventana.print();
+  };
 }
+
 
 
 

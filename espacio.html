@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Uso de Espacio</title>
+  <link rel="stylesheet" href="./css/espacio.css">
+</head>
+<body>
+
+  <div class="container">
+    <h2>📦 Uso estimado de Base de Datos</h2>
+
+    <div class="card">
+      <div class="progress-info">
+        <span>Límite estimado</span>
+        <span id="limiteTexto">15,000 registros</span>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-fill" id="barraUso"></div>
+      </div>
+
+      <div class="progress-info">
+        <span>Uso actual</span>
+        <span id="usoTexto">Cargando...</span>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat-box">
+        <h4>Ventas</h4>
+        <p id="ventasCount">0</p>
+      </div>
+
+      <div class="stat-box">
+        <h4>Gastos</h4>
+        <p id="gastosCount">0</p>
+      </div>
+
+      <div class="stat-box">
+        <h4>Productos</h4>
+        <p id="productosCount">0</p>
+      </div>
+    </div>
+
+    <div id="alertaEspacio" class="alerta hidden"></div>
+
+    <div class="acciones">
+
+
+  <button id="btnLimpiar" class="btn danger">
+    🧹 Eliminar ventas
+  </button>
+</div>
+
+<canvas id="graficoCrecimiento"></canvas>
+
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  
+  <script type="module" src="./js/espacio.js"></script>
+</body>
+</html>

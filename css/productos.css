@@ -1,3 +1,6 @@
+/* =====================================================
+   VARIABLES
+===================================================== */
 :root {
   --black: #0b0f1a;
   --black-card: rgba(17, 24, 39, 0.75);
@@ -10,6 +13,9 @@
   --glass: blur(16px);
 }
 
+/* =====================================================
+   BASE
+===================================================== */
 * {
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
@@ -18,12 +24,14 @@
 
 body {
   margin: 0;
-  background-image:  url("https://i.pinimg.com/736x/e3/45/0c/e3450ceeb06a2654e719b47eda842217.jpg");
+  background-image: url("https://i.pinimg.com/736x/e3/45/0c/e3450ceeb06a2654e719b47eda842217.jpg");
   background-repeat: no-repeat;
   background-size: cover;
 }
 
-/* TOPBAR */
+/* =====================================================
+   TOPBAR
+===================================================== */
 .topbar {
   position: sticky;
   top: 0;
@@ -48,7 +56,9 @@ body {
   background: rgba(255,255,255,.08);
 }
 
-/* CONTENEDOR */
+/* =====================================================
+   CONTENEDOR
+===================================================== */
 .container {
   max-width: 1200px;
   margin: auto;
@@ -63,7 +73,9 @@ body {
   box-shadow: var(--shadow);
 }
 
-/* GRID */
+/* =====================================================
+   GRID PRODUCTOS
+===================================================== */
 .products-header {
   display: flex;
   justify-content: space-between;
@@ -76,7 +88,9 @@ body {
   gap: 1.25rem;
 }
 
-/* CARD */
+/* =====================================================
+   CARD PRODUCTO
+===================================================== */
 .product-card {
   background: rgba(255,255,255,.04);
   border-radius: var(--radius);
@@ -130,10 +144,9 @@ body {
   font-size: .7rem;
 }
 
-
-
-
-/* BOTONES */
+/* =====================================================
+   BOTONES
+===================================================== */
 .btn {
   padding: .5rem .8rem;
   border-radius: 999px;
@@ -156,7 +169,7 @@ body {
 }
 
 .btn.warning {
-  background-color: #f59e0b;   /* naranja */
+  background-color: #f59e0b;
   color: #fff;
 }
 
@@ -164,17 +177,23 @@ body {
   background-color: #d97706;
 }
 
-
-/* MODAL */
+/* =====================================================
+   MODAL GENERAL
+===================================================== */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.75);
+  background: rgba(0,0,0,.85);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: 140px;
+  padding: 1rem;
+  z-index: 9999; /* 👈 más alto que todo */
+  overflow-y: auto;
 }
+
+
+
 
 .modal-card {
   background: var(--black-card);
@@ -184,15 +203,13 @@ body {
   max-width: 95%;
 }
 
-
 .hidden {
   display: none;
 }
 
-/* =========================
+/* =====================================================
    MODAL FORM
-========================= */
-
+===================================================== */
 .modal-header h3 {
   margin: 0 0 1rem 0;
   text-align: center;
@@ -203,55 +220,21 @@ body {
 .modal-body {
   display: flex;
   flex-direction: column;
-   gap: 1.1rem;
+  gap: 1.1rem;
 }
 
-/* Grupo */
 .form-group {
   display: flex;
   flex-direction: column;
   gap: .3rem;
 }
 
-/* Labels */
 .form-group label {
   font-size: .7rem;
   color: var(--muted);
 }
 
-/* Inputs */
-.form-group input {
-  padding: .65rem .8rem;
-  border-radius: var(--radius-sm);
-  border: 1px solid rgba(255,255,255,.15);
-  background: rgba(255,255,255,.06);
-  outline: none;
-  font-size: .8rem;
-  transition: border .2s ease, background .2s ease;
-}
-
-/* Focus */
-.form-group input:focus {
-  border-color: var(--orange);
-  background: rgba(255,255,255,.1);
-}
-
-/* File input */
-.form-group input[type="file"] {
-  padding: .45rem;
-  font-size: .7rem;
-  cursor: pointer;
-}
-
-/* Fila doble */
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: .75rem;
-}
-
-
-
+.form-group input,
 .form-group select {
   padding: .65rem .8rem;
   border-radius: var(--radius-sm);
@@ -259,160 +242,40 @@ body {
   background: rgba(255,255,255,.06);
   outline: none;
   font-size: .8rem;
-  color: var(--white);
-  cursor: pointer;
 }
 
-/* Focus */
+.form-group input:focus,
 .form-group select:focus {
   border-color: var(--orange);
   background: rgba(255,255,255,.1);
 }
 
-/* Opciones */
-.form-group option {
-  background: #0b0f1a;
-  color: white;
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .75rem;
 }
 
-
-
-
-
-/* Footer */
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: .6rem;
-  margin-top: .5rem;
-}
-
-
-@media (max-width: 768px) {
-
-  .topbar {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    text-align: center;
-  }
-
-  .btn-back {
-    justify-self: start;
-  }
-
-  .top-actions {
-    flex-direction: column;
+ .modal-actions {
+    flex-direction: column;     /* 👈 uno debajo del otro */
+    align-items: center;        /* 👈 centrados horizontalmente */
+    justify-content: center;
     width: 100%;
   }
 
-  .top-actions input,
-  .top-actions .btn {
-    width: 100%;
-  }
-}
-
-@media (max-width: 420px) {
-
-  .topbar {
-    padding: 12px 16px;
-    gap: 10px;
+  .modal-actions .btn {
+    width: 80%;                 /* 👈 ancho controlado */
+    max-width: 280px;
   }
 
-  .topbar h2 {
-    font-size: .95rem;
-    line-height: 1.2;
-    justify-self: center;
-  }
-
-  .top-actions {
-    gap: 8px;
-  }
-
-  .top-actions input {
-    padding: 10px 14px;
-    font-size: .8rem;
-  }
-
-  .top-actions .btn {
-    padding: 10px;
-    font-size: .8rem;
-  }
-}
-
-
-
-
-
-/* =========================
-   RESPONSIVE (MOBILE)
-========================= */
-@media (max-width: 768px) {
-
-  .topbar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-  }
-
-  .topbar h2 {
-    font-size: 1rem;
-    text-align: center;
-  }
-
-  .top-actions {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .top-actions input {
-    width: 100%;
-  }
-
-  .top-actions .btn {
-    width: 100%;
-  }
-
-  .products-grid {
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  }
-}
-
-@media (max-width: 768px) {
-  .topbar {
-    position: relative;
-  }
-}
-
-@media (max-width: 420px) {
-  .topbar {
-    position: relative;
-  }
-}
-
-@media (max-width: 420px) {
-  #btnAddProduct {
-    font-weight: 500;
-    letter-spacing: .3px;
-  }
-}
-
-
-
-/* ANIMACION BORRAR CARD */
-
-.fade-out {
-  opacity: 0;
-  transform: scale(0.95);
-  transition: all 0.3s ease;
-}
-
-
+/* =====================================================
+   TOAST
+===================================================== */
 .toast {
   position: fixed;
   bottom: 25px;
   right: 25px;
   background: #111;
-  color: white;
   padding: 12px 18px;
   border-radius: 12px;
   opacity: 0;
@@ -426,39 +289,25 @@ body {
   transform: translateY(0);
 }
 
-.toast.success {
-  background: #22c55e;
-}
+.toast.success { background: #22c55e; }
+.toast.error { background: #ef4444; }
 
-.toast.error {
-  background: #ef4444;
-}
-
-
-/* =========================
-   MODAL PRODUCTOS (EXTENDIDO)
-========================= */
-
+/* =====================================================
+   MODAL PRODUCTOS EXTENDIDO
+===================================================== */
 .modal-productos {
   width: 90%;
-  max-width: 900px;     /* 👈 más ancho */
-  max-height: 85vh;     /* 👈 límite de altura */
+  max-width: 900px;
+  max-height: 85vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-
 .modal-productos .modal-body {
   overflow-y: auto;
-  overflow-x: hidden ;
   padding-right: .5rem;
 }
-
-.modal-productos .modal-body {
-  scroll-behavior: smooth;
-}
-
 
 .form-grid {
   display: grid;
@@ -466,11 +315,9 @@ body {
   gap: 1.1rem 1.5rem;
 }
 
-
 .form-group.full {
   grid-column: span 2;
 }
-
 
 .imagen-preview {
   max-width: 140px;
@@ -479,46 +326,28 @@ body {
   display: none;
 }
 
-
-@media (max-width: 768px) {
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .form-group.full {
-    grid-column: span 1;
-  }
-}
-
+/* =====================================================
+   ESTADOS
+===================================================== */
 .vencido {
   color: #ef4444;
   font-weight: 600;
 }
 
-.product-stock-container {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-
 .badge-vencido {
-  background: #ffffff;
-  color: #000000;
+  background: #fff;
+  color: #000;
   font-size: 0.7rem;
   padding: 0.25rem 0.5rem;
   border-radius: 12px;
   font-weight: 600;
 }
 
-
-
 .card-vencida {
   border: 1px solid #219ebc;
   background: rgba(33, 158, 188, 0.1);
+  animation: alertaVencido 1.2s ease-in-out infinite alternate;
 }
-
-
 
 .card-vencida img {
   filter: grayscale(30%);
@@ -529,14 +358,12 @@ body {
   100% { box-shadow: 0 0 8px rgba(239,68,68,0.4); }
 }
 
-.card-vencida {
-  animation: alertaVencido 1.2s ease-in-out infinite alternate;
-}
-
+/* =====================================================
+   BOTON VOLVER
+===================================================== */
 .btn-back {
   background: rgba(255,255,255,.08);
   border: 1px solid rgba(255,255,255,.15);
-  color: var(--white);
   padding: .55rem 1rem;
   border-radius: 999px;
   cursor: pointer;
@@ -552,3 +379,74 @@ body {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(255,149,5,.35);
 }
+
+/* =====================================================
+   RESPONSIVE MOBILE LIMPIO
+===================================================== */
+@media (max-width: 768px) {
+
+  .container {
+    max-width: 100%;
+    margin: 0;
+    padding: 1rem;
+  }
+
+  .product-list {
+    border-radius: 0;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .product-card img {
+    height: 95px;
+  }
+
+  .product-name { font-size: .85rem; }
+  .product-info { font-size: .75rem; }
+
+  .topbar {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .top-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .top-actions input,
+  .top-actions .btn {
+    width: 100%;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group.full {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .modal-card {
+    width: 100%;
+    max-height: 95vh;
+    border-radius: 20px;
+  }
+
+  .modal-productos {
+    max-height: 95vh;
+  }
+
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
