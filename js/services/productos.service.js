@@ -8,16 +8,19 @@ export async function obtenerProductos() {
   const { data, error } = await supabase
     .from("productos")
     .select(`
-      idProducto,
-      nombreProducto,
-      precioVenta,
-      cantidad,
-      imagen,
-      categoria_id,
-      categorias (
-        nombre
-      )
-    `);
+  idProducto,
+  nombreProducto,
+  precioVenta,
+  precioCosto,
+  cantidad,
+  imagen,
+  fechaVencimiento,
+  categoria_id,
+  categorias (
+    nombre
+  )
+`)
+;
 
   if (error) {
     console.error("Error obteniendo productos:", error);
@@ -27,7 +30,7 @@ export async function obtenerProductos() {
   // 🔥 Normalizamos para que ventas.js siga funcionando
   return data.map(p => ({
     ...p,
-    categoria: p.categorias?.nombre || "Sin categoría"
+    categoriaNombre: p.categorias?.nombre || "Sin categoría"
   }));
 }
 
@@ -139,13 +142,13 @@ export async function buscarProductoIgual(producto) {
     .eq("precioVenta", producto.precioVenta)
     .eq("fechaVencimiento", producto.fechaVencimiento)
     .limit(1)
-    .single();
+    .maybeSingle();
 
-  // Cuando no encuentra registros, Supabase lanza este error (normal)
-  if (error && error.code !== "PGRST116") {
+  if (error) {
     console.error("Error buscando producto:", error);
     throw error;
   }
 
-  return data || null;
+  return data;
 }
+

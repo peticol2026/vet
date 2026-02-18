@@ -1,0 +1,199 @@
+/* ===============================
+   BASE
+================================= */
+
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: radial-gradient(circle at 20% 20%, #1e293b, #0b0f1a 60%);
+  color: white;
+  min-height: 100vh;
+}
+
+/* ===============================
+   CONTAINER
+================================= */
+
+.container {
+  max-width: 950px;
+  margin: 70px auto;
+  padding: 30px;
+}
+
+/* ===============================
+   CARD PRINCIPAL
+================================= */
+
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 30px;
+  border-radius: 22px;
+  margin-bottom: 35px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  transition: transform .3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+/* ===============================
+   PROGRESS BAR
+================================= */
+
+.progress-bar {
+  height: 22px;
+  background: rgba(255,255,255,.08);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 15px 0;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ff9505, #ffb347);
+  border-radius: 999px;
+  transition: width .6s ease;
+  box-shadow: 0 0 15px rgba(255,149,5,0.6);
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: .85rem;
+  opacity: .8;
+}
+
+/* ===============================
+   STATS
+================================= */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.stat-box {
+  background: rgba(255,255,255,.04);
+  backdrop-filter: blur(10px);
+  padding: 25px;
+  border-radius: 18px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,.07);
+  transition: all .3s ease;
+  cursor: pointer;
+}
+
+.stat-box:hover {
+  transform: translateY(-6px);
+  background: rgba(255,255,255,.07);
+}
+
+.stat-box h4 {
+  margin: 0;
+  font-size: .85rem;
+  opacity: .6;
+  letter-spacing: 1px;
+}
+
+.stat-box p {
+  font-size: 1.9rem;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+/* ===============================
+   ALERTAS
+================================= */
+
+.alerta {
+  padding: 18px;
+  border-radius: 14px;
+  margin-top: 25px;
+  font-weight: 500;
+  border: 1px solid transparent;
+}
+
+.alerta.warning {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: #f59e0b;
+  color: #fbbf24;
+}
+
+.alerta.danger {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: #ef4444;
+  color: #f87171;
+}
+
+.hidden {
+  display: none;
+}
+
+/* ===============================
+   BOTONES MODERNOS
+================================= */
+
+.acciones {
+  display: flex;
+  gap: 18px;
+  margin-top: 25px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 14px 24px;
+  border-radius: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  font-size: .9rem;
+  transition: all .3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: .5px;
+}
+
+/* Botón primario */
+
+.btn.primary {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+}
+
+.btn.primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(37, 99, 235, 0.6);
+}
+
+/* Botón peligro */
+
+.btn.danger {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+}
+
+.btn.danger:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(239, 68, 68, 0.6);
+}
+
+/* ===============================
+   CANVAS
+================================= */
+
+canvas {
+  margin-top: 50px;
+  background: rgba(255,255,255,.04);
+  padding: 25px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,.06);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+}

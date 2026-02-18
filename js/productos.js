@@ -54,9 +54,10 @@ if (inputBuscar) {
   inputBuscar.addEventListener("input", () => {
     const texto = inputBuscar.value.toLowerCase().trim();
 
-    const filtrados = productosGlobales.filter(producto =>
-      producto.nombreProducto.toLowerCase().includes(texto) ||
-      producto.categoriaNombre.toLowerCase().includes(texto)
+    const filtrados = productosGlobales.filter(
+      (producto) =>
+        producto.nombreProducto?.toLowerCase().includes(texto) ||
+        producto.categoriaNombre?.toLowerCase().includes(texto),
     );
 
     renderProductos(filtrados, borrarProducto, editarProducto);
@@ -251,12 +252,17 @@ document.getElementById("categoria")
   return;
 }
 
-await eliminarCategoria(id);
 
-if (!id || isNaN(idNumero)) {
+
+const idNumero = id.trim();
+
+if (!idNumero) {
   e.target.value = "";
   return;
 }
+
+await eliminarCategoria(idNumero);
+
 
   try {
     await eliminarCategoria(idNumero);
@@ -270,6 +276,22 @@ if (!id || isNaN(idNumero)) {
 }
 
   });
+
+
+const productModal = document.getElementById("productModal");
+const modalCard = productModal.querySelector(".modal-card");
+
+productModal.addEventListener("click", (e) => {
+  if (!modalCard.contains(e.target)) {
+    cerrarModal();
+  }
+});
+
+function cerrarModal() {
+  productModal.classList.add("hidden");
+  document.body.classList.remove("modal-open");
+}
+
 
 
 

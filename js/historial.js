@@ -75,9 +75,10 @@ async function cargarVentas() {
         nombre
       ),
       detalle_venta (
-      cantidad,
-      precio,
-      productos (
+  cantidad,
+  precio,
+  ganancia,
+  productos (
         nombreProducto,
         categorias (
           nombre
@@ -111,51 +112,57 @@ async function cargarVentas() {
   }
 
   let totalGeneral = 0;
+  let totalGananciaGeneral = 0;
   let totalEfectivo = 0;
   let totalNequi = 0;
   let totalTarjeta = 0;
   let totalTransferencia = 0;
 
   data.forEach((venta) => {
-    const fechaVenta = new Date(venta.fecha);
-    const metodo = venta.metodo_pago;
+  const fechaVenta = new Date(venta.fecha);
+  const metodo = venta.metodo_pago;
 
-    venta.detalle_venta.forEach((item) => {
-      const categoria = item.productos?.categorias?.nombre || "";
+  venta.detalle_venta.forEach((item) => {
 
-      // 🔎 FILTRO CATEGORÍA (anidado, se hace aquí)
-      if (categoriaFiltro && !categoria.toLowerCase().includes(categoriaFiltro))
-        return;
+    const categoria = item.productos?.categorias?.nombre || "";
 
-      const totalItem = item.cantidad * item.precio;
+    if (categoriaFiltro && !categoria.toLowerCase().includes(categoriaFiltro))
+      return;
 
-      totalGeneral += totalItem;
+    const totalItem = item.cantidad * item.precio;
+    const gananciaItem = item.ganancia || 0;
 
-      if (metodo === "Efectivo") totalEfectivo += totalItem;
-      if (metodo === "Nequi") totalNequi += totalItem;
-      if (metodo === "Tarjeta") totalTarjeta += totalItem;
-      if (metodo === "Transferencia") totalTransferencia += totalItem;
+    totalGeneral += totalItem;
+    totalGananciaGeneral += gananciaItem; // ✅ AHORA SÍ EXISTE
 
-      tabla.innerHTML += `
-  <tr>
-    <td>${fechaVenta.toLocaleString("es-CO")}</td>
-    <td>${item.productos?.nombreProducto || "-"}</td>
-    <td>${categoria || "-"}</td>
-    <td>${item.cantidad}</td>
-    <td>${formatoCOP(item.precio)}</td>
-    <td>${formatoCOP(totalItem)}</td>
-    <td>${venta.usuarios?.nombre || "Sin usuario"}</td>
-    <td>${metodo}</td>
-    <td>
-      <button class="btn-delete" data-id="${venta.idventa}">
-        ❌
-      </button>
-    </td>
-  </tr>
-`;
+    if (metodo === "Efectivo") totalEfectivo += totalItem;
+    if (metodo === "Nequi") totalNequi += totalItem;
+    if (metodo === "Tarjeta") totalTarjeta += totalItem;
+    if (metodo === "Transferencia") totalTransferencia += totalItem;
 
-    });
+    tabla.innerHTML += `
+      <tr>
+        <td>${fechaVenta.toLocaleString("es-CO")}</td>
+        <td>${item.productos?.nombreProducto || "-"}</td>
+        <td>${categoria || "-"}</td>
+        <td>${item.cantidad}</td>
+        <td>${formatoCOP(item.precio)}</td>
+        <td>${formatoCOP(totalItem)}</td>
+        <td>${venta.usuarios?.nombre || "Sin usuario"}</td>
+        <td>${metodo}</td>
+        <td>${formatoCOP(gananciaItem)}</td>
+        <td>
+          <button class="btn-delete" data-id="${venta.idventa}">
+            ❌
+          </button>
+        </td>
+      </tr>
+    `;
   });
+});
+
+document.getElementById("totalGanancia").textContent =
+  formatoCOP(totalGananciaGeneral);
 
   // 🔥 ACTUALIZAR RESUMEN
   document.getElementById("totalGeneral").textContent = formatoCOP(totalGeneral);
@@ -218,6 +225,8 @@ async function eliminarPorRango() {
     alert("Ventas eliminadas correctamente ✅");
 
     cargarVentas();
+
+    
 
   } catch (err) {
     console.error(err);
