@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Productos | Tienda</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Fuente moderna -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="./css/productosCliente.css">
+</head>
+
+<body>
+
+  <header class="topbar">
+    <h1>Nuestros Productos</h1>
+
+    <div class="filters">
+      <input 
+        type="text" 
+        id="searchCliente" 
+        placeholder="🔍 Buscar producto..."
+      >
+
+      <select id="filtroCategoriaCliente">
+        <option value="">Todas las categorías</option>
+      </select>
+    </div>
+  </header>
+
+  <main class="productos-container">
+
+    <div class="productos-grid" id="productosGridCliente">
+      <!-- Cards dinámicas -->
+    </div>
+
+  </main>
+
+  <script type="module" src="./js/productosCliente.js"></script>
+
+  <!-- MODAL PRODUCTO -->
+<div class="modal-product-overlay" id="modalProducto">
+  <div class="modal-product">
+    <span class="modal-close" id="cerrarModalProducto">×</span>
+
+    <div class="modal-product-content">
+      <img id="modalImagen" src="" alt="Producto">
+
+      <div class="modal-product-info">
+        <h2 id="modalNombre"></h2>
+        <p id="modalCategoria"></p>
+        <h3 id="modalPrecio"></h3>
+        <p id="modalDescripcion"></p>
+
+        <button class="modal-btn">Agregar al carrito</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@3/tsparticles.bundle.min.js"></script>
+
+
+</body>
+
+<div id="particles-bg"></div>
+
+</html>

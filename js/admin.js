@@ -15,14 +15,38 @@ const cards = document.querySelectorAll(".card");
 
 document.addEventListener("DOMContentLoaded", async () => {
 
-  const { data } = await supabase.auth.getSession();
+  // 🔐 1. Verificar sesión
+  const { data: sessionData } = await supabase.auth.getSession();
 
-  if (!data.session) {
-    window.location.href = "index.html"; // 🔥 redirige al login
+  if (!sessionData.session) {
+    window.location.href = "index.html";
     return;
   }
 
+  const user = sessionData.session.user;
+
+  // 🔎 2. Buscar rol en tu tabla usuarios
+  const { data: usuarioDB, error } = await supabase
+    .from("usuarios")
+    .select("rol")
+    .eq("auth_id", user.id)
+    .single();
+
+  if (error) {
+    console.error("Error obteniendo rol:", error);
+    return;
+  }
+
+  // 🚫 3. Si es Trabajador ocultar cards admin
+  if (usuarioDB.rol === "Trabajador") {
+    document.querySelectorAll('[data-role="admin-only"]')
+      .forEach(card => {
+        card.style.display = "none";
+      });
+  }
+
 });
+
 
 
 // ==============================

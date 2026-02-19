@@ -1,28 +1,28 @@
 /* =====================================================
    IMPORTS
 ===================================================== */
-import { obtenerProductos, actualizarProducto } 
-from "./services/productos.service.js";
+import {
+  obtenerProductos,
+  actualizarProducto,
+} from "./services/productos.service.js";
 
 import { supabase } from "./config/supabase.js";
 import { initBackButton } from "./ui/backButton.ui.js";
 
 let usuarioLogueado = null;
 
-
 /* =====================================================
    REFERENCIAS DOM
 ===================================================== */
-const productsGrid     = document.getElementById("productsGrid");
-const carritoItems     = document.getElementById("carritoItems");
-const totalVentaEl     = document.getElementById("totalVenta");
-const btnFinalizar     = document.getElementById("btnFinalizar");
-const buscador         = document.getElementById("buscador");
-const filtroCategoria  = document.getElementById("filtroCategoria");
-const cartCount        = document.getElementById("cartCount");
+const productsGrid = document.getElementById("productsGrid");
+const carritoItems = document.getElementById("carritoItems");
+const totalVentaEl = document.getElementById("totalVenta");
+const btnFinalizar = document.getElementById("btnFinalizar");
+const buscador = document.getElementById("buscador");
+const filtroCategoria = document.getElementById("filtroCategoria");
+const cartCount = document.getElementById("cartCount");
 const valorPagadoInput = document.getElementById("valorPagado");
-const vueltoEl         = document.getElementById("vuelto");
-
+const vueltoEl = document.getElementById("vuelto");
 
 /* =====================================================
    ESTADO GLOBAL
@@ -31,14 +31,14 @@ let productos = [];
 let carrito = [];
 let metodoSeleccionado = "Efectivo";
 
-
 /* =====================================================
    INICIALIZACIÓN
 ===================================================== */
 document.addEventListener("DOMContentLoaded", async () => {
-
   // Obtener usuario autenticado
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) {
     alert("No hay usuario logueado");
@@ -52,8 +52,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   configurarEventosPago();
 });
 
-
-
 /* =====================================================
    PRODUCTOS
 ===================================================== */
@@ -64,17 +62,15 @@ async function cargarProductos() {
 }
 
 function renderProductos(lista) {
-
   productsGrid.innerHTML = "";
 
-  lista.forEach(prod => {
-
+  lista.forEach((prod) => {
     const card = document.createElement("div");
     card.className = "product-card";
 
     card.innerHTML = `
       <div class="product-img">
-        <img src="${prod.imagen || 'https://aramar.com/wp-content/uploads/2017/05/aramar-suministros-para-el-vidrio-cristal-sin-imagen-disponible.jpg'}">
+        <img src="${prod.imagen || "https://aramar.com/wp-content/uploads/2017/05/aramar-suministros-para-el-vidrio-cristal-sin-imagen-disponible.jpg"}">
       </div>
 
       <div class="product-info">
@@ -94,98 +90,105 @@ function renderProductos(lista) {
   });
 }
 
-
 /* =====================================================
    CARRITO
 ===================================================== */
-document.addEventListener("click", e => {
-
+document.addEventListener("click", (e) => {
   if (!e.target.classList.contains("btn-add")) return;
 
   const id = e.target.dataset.id;
-  const producto = productos.find(p => p.idProducto == id);
-  const existente = carrito.find(p => p.idProducto == id);
+  const producto = productos.find((p) => p.idProducto == id);
+  const existente = carrito.find((p) => p.idProducto == id);
 
   if (existente) {
-
     if (existente.cantidad < existente.stockInicial) {
       existente.cantidad++;
     } else {
       alert("No hay más stock disponible");
     }
-
   } else {
-
     carrito.push({
       ...producto,
       cantidad: 1,
-      stockInicial: producto.cantidad
+      stockInicial: producto.cantidad,
+      descuentoUnitario: 0, // 👈 NUEVO
     });
   }
 
   actualizarCarrito();
 });
 
+carritoItems.addEventListener("click", (e) => {
 
-document.addEventListener("click", e => {
+
+    // 🚫 Si es el input de descuento, NO hacer nada
+  if (e.target.classList.contains("input-descuento")) return;
+
 
   const id = e.target.dataset.id;
   if (!id) return;
 
-  const item = carrito.find(p => p.idProducto == id);
+  const item = carrito.find((p) => p.idProducto == id);
   if (!item) return;
 
   /* SUMAR */
   if (e.target.classList.contains("btn-sumar")) {
-
     if (item.cantidad < item.stockInicial) {
       item.cantidad++;
     }
-
   }
 
   /* RESTAR */
   if (e.target.classList.contains("btn-restar")) {
-
     item.cantidad--;
 
     if (item.cantidad <= 0) {
-      carrito = carrito.filter(p => p.idProducto != id);
+      carrito = carrito.filter((p) => p.idProducto != id);
     }
-
   }
 
   /* ELIMINAR */
   if (e.target.classList.contains("btn-eliminar")) {
-
-    carrito = carrito.filter(p => p.idProducto != id);
-
+    carrito = carrito.filter((p) => p.idProducto != id);
   }
 
   actualizarCarrito();
 });
 
-
-
-
 function actualizarCarrito() {
-
   carritoItems.innerHTML = "";
 
   let total = 0;
   let totalProductos = 0;
 
-  carrito.forEach(item => {
+  carrito.forEach((item) => {
+    const precioFinalUnit = item.precioVenta - (item.descuentoUnitario || 0);
 
-    total += item.precioVenta * item.cantidad;
-    totalProductos += item.cantidad;
+    total += precioFinalUnit * item.cantidad;
+
+    totalProductos += item.cantidad; // 👈 AQUÍ VA
 
     carritoItems.innerHTML += `
       <div class="carrito-item">
         
-        <div class="item-info">
+        <div class="item-info" id="info-${item.idProducto}">
+
           <strong>${item.nombreProducto}</strong>
-          <small>${formatoCOP(item.precioVenta)}</small>
+          ${
+            item.descuentoUnitario > 0
+              ? `
+      <small style="text-decoration: line-through; color:#999;">
+        ${formatoCOP(item.precioVenta)}
+      </small>
+      <small style="color:red;">
+        - ${formatoCOP(item.descuentoUnitario)}
+      </small>
+    `
+              : `
+      <small>${formatoCOP(item.precioVenta)}</small>
+    `
+          }
+
         </div>
 
         <div class="item-controls">
@@ -195,17 +198,99 @@ function actualizarCarrito() {
           <button class="btn-eliminar" data-id="${item.idProducto}">🗑</button>
         </div>
 
-        <div class="item-total">
-          ${formatoCOP(item.precioVenta * item.cantidad)}
+        <div class="descuento-unitario">
+          <span>- $</span>
+          <input 
+            type="number"
+            class="input-descuento"
+            data-id="${item.idProducto}"
+            value="${item.descuentoUnitario || 0}"
+            min="0"
+            placeholder="0"
+          >
         </div>
+
+
+
+<div class="item-total" id="total-${item.idProducto}">
+
+  ${formatoCOP(
+    (item.precioVenta - (item.descuentoUnitario || 0)) * item.cantidad,
+  )}
+</div>
+
 
       </div>
     `;
   });
 
-  totalVentaEl.textContent = total;
+  totalVentaEl.textContent = formatoCOP(total);
+
   cartCount.textContent = totalProductos;
 
+  calcularVuelto();
+
+  document.querySelectorAll(".input-descuento").forEach((input) => {
+    input.addEventListener("input", (e) => {
+  const id = e.target.dataset.id;
+  const valor = parseFloat(e.target.value) || 0;
+
+  const item = carrito.find((p) => p.idProducto == id);
+  if (!item) return;
+
+  item.descuentoUnitario = Math.min(valor, item.precioVenta);
+
+  recalcularTotales(); // 👈 solo recalcula, NO re-renderiza
+});
+
+  });
+}
+
+function recalcularTotales() {
+  let total = 0;
+  let totalProductos = 0;
+
+  carrito.forEach((item) => {
+
+    const precioFinalUnit =
+      item.precioVenta - (item.descuentoUnitario || 0);
+
+    const totalItem = precioFinalUnit * item.cantidad;
+
+    total += totalItem;
+    totalProductos += item.cantidad;
+
+    // 🔥 ACTUALIZAR SOLO ESTE ITEM VISUALMENTE
+    const info = document.getElementById(`info-${item.idProducto}`);
+    const totalDiv = document.getElementById(`total-${item.idProducto}`);
+
+    if (info) {
+      info.innerHTML = `
+        <strong>${item.nombreProducto}</strong>
+        ${
+          item.descuentoUnitario > 0
+            ? `
+              <small style="text-decoration: line-through; color:#999;">
+                ${formatoCOP(item.precioVenta)}
+              </small>
+              <small style="color:red;">
+                - ${formatoCOP(item.descuentoUnitario)}
+              </small>
+            `
+            : `
+              <small>${formatoCOP(item.precioVenta)}</small>
+            `
+        }
+      `;
+    }
+
+    if (totalDiv) {
+      totalDiv.textContent = formatoCOP(totalItem);
+    }
+  });
+
+  totalVentaEl.textContent = formatoCOP(total);
+  cartCount.textContent = totalProductos;
   calcularVuelto();
 }
 
@@ -217,51 +302,47 @@ function actualizarCarrito() {
 valorPagadoInput?.addEventListener("input", calcularVuelto);
 
 function calcularVuelto() {
+  const total = carrito.reduce(
+    (acc, item) =>
+      acc + (item.precioVenta - (item.descuentoUnitario || 0)) * item.cantidad,
+    0
+  );
 
-  const total  = parseFloat(totalVentaEl.textContent) || 0;
   const pagado = parseFloat(valorPagadoInput.value) || 0;
 
   const vuelto = pagado - total;
 
-  vueltoEl.textContent = vuelto > 0
-    ? formatoCOP(vuelto)
-    : formatoCOP(0);
+  vueltoEl.textContent = vuelto > 0 ? formatoCOP(vuelto) : formatoCOP(0);
 }
 
-function configurarEventosPago() {
 
+function configurarEventosPago() {
   const efectivoRows = document.querySelectorAll(".efectivo-row");
 
-  document.querySelectorAll(".metodo").forEach(btn => {
+  document.querySelectorAll(".metodo").forEach((btn) => {
     btn.addEventListener("click", () => {
-
-      document.querySelectorAll(".metodo")
-        .forEach(b => b.classList.remove("active"));
+      document
+        .querySelectorAll(".metodo")
+        .forEach((b) => b.classList.remove("active"));
 
       btn.classList.add("active");
       metodoSeleccionado = btn.dataset.pago;
 
       /* 🔥 Si NO es efectivo */
       if (metodoSeleccionado !== "Efectivo") {
-
-        efectivoRows.forEach(row => row.style.display = "none");
+        efectivoRows.forEach((row) => (row.style.display = "none"));
 
         // automáticamente se paga el total exacto
         valorPagadoInput.value = totalVentaEl.textContent;
         vueltoEl.textContent = formatoCOP(0);
-
       } else {
-
-        efectivoRows.forEach(row => row.style.display = "flex");
+        efectivoRows.forEach((row) => (row.style.display = "flex"));
         valorPagadoInput.value = "";
         vueltoEl.textContent = formatoCOP(0);
       }
-
     });
   });
 }
-
-
 
 /* =====================================================
    REGISTRAR VENTA
@@ -269,22 +350,18 @@ function configurarEventosPago() {
 btnFinalizar?.addEventListener("click", registrarVenta);
 
 async function registrarVenta() {
-
   if (carrito.length === 0) {
     alert("Carrito vacío");
     return;
   }
 
   const total = parseFloat(totalVentaEl.textContent);
-let pagado  = parseFloat(valorPagadoInput.value) || 0;
-
+  let pagado = parseFloat(valorPagadoInput.value) || 0;
 
   // Si no es efectivo, el pago es igual al total
-if (metodoSeleccionado !== "Efectivo") {
-  pagado = total;
-}
-
-
+  if (metodoSeleccionado !== "Efectivo") {
+    pagado = total;
+  }
 
   if (pagado < total) {
     alert("El monto es insuficiente");
@@ -292,26 +369,26 @@ if (metodoSeleccionado !== "Efectivo") {
   }
 
   /* 1️⃣ Insertar venta */
- /* 1️⃣ Obtener idusuario real */
-const idUsuarioReal = await obtenerIdUsuario(usuarioLogueado.id);
+  /* 1️⃣ Obtener idusuario real */
+  const idUsuarioReal = await obtenerIdUsuario(usuarioLogueado.id);
 
-if (!idUsuarioReal) {
-  alert("No se encontró el usuario en la base de datos");
-  return;
-}
+  if (!idUsuarioReal) {
+    alert("No se encontró el usuario en la base de datos");
+    return;
+  }
 
-/* 2️⃣ Insertar venta */
-const { data: venta, error: errorVenta } = await supabase
-  .from("ventas")
-  .insert([{
-    total: total,
-    metodo_pago: metodoSeleccionado,
-    idusuario: idUsuarioReal
-  }])
-  .select()
-  .single();
-
-
+  /* 2️⃣ Insertar venta */
+  const { data: venta, error: errorVenta } = await supabase
+    .from("ventas")
+    .insert([
+      {
+        total: total,
+        metodo_pago: metodoSeleccionado,
+        idusuario: idUsuarioReal,
+      },
+    ])
+    .select()
+    .single();
 
   if (errorVenta) {
     console.error(errorVenta);
@@ -320,19 +397,22 @@ const { data: venta, error: errorVenta } = await supabase
   }
 
   /* 2️⃣ Insertar detalle */
- const detalles = carrito.map(p => {
+  const detalles = carrito.map((p) => {
+    const descuento = p.descuentoUnitario || 0;
 
-  const gananciaUnidad = p.precioVenta - p.precioCosto;
-  const gananciaTotal = gananciaUnidad * p.cantidad;
+    const precioFinalUnit = p.precioVenta - descuento;
 
-  return {
-    idventa: venta.idventa,
-    idproducto: p.idProducto,
-    cantidad: p.cantidad,
-    precio: p.precioVenta,
-    ganancia: gananciaTotal
-  };
-});
+    const gananciaUnidadFinal = precioFinalUnit - p.precioCosto;
+
+    return {
+      idventa: venta.idventa,
+      idproducto: p.idProducto,
+      cantidad: p.cantidad,
+      precio: precioFinalUnit, // 👈 precio ya con descuento
+      descuento_unitario: descuento, // 👈 GUARDAMOS DESCUENTO
+      ganancia: gananciaUnidadFinal * p.cantidad,
+    };
+  });
 
   const { error: errorDetalle } = await supabase
     .from("detalle_venta")
@@ -346,27 +426,23 @@ const { data: venta, error: errorVenta } = await supabase
 
   /* 3️⃣ Descontar stock */
   for (let p of carrito) {
-
     const nuevoStock = p.stockInicial - p.cantidad;
 
     await actualizarProducto(p.idProducto, {
-      cantidad: nuevoStock
+      cantidad: nuevoStock,
     });
   }
 
   // Obtener nombre del empleado
-const nombreEmpleado = await obtenerNombreEmpleado(idUsuarioReal);
-
-
+  const nombreEmpleado = await obtenerNombreEmpleado(idUsuarioReal);
 
   /* 4️⃣ Generar ticket */
   generarTicketTermico(
-  venta.idventa,
-  pagado,
-  metodoSeleccionado,
-  nombreEmpleado
-);
-
+    venta.idventa,
+    pagado,
+    metodoSeleccionado,
+    nombreEmpleado,
+  );
 
   /* 5️⃣ Reset */
   carrito = [];
@@ -377,14 +453,14 @@ const nombreEmpleado = await obtenerNombreEmpleado(idUsuarioReal);
   alert("Venta registrada correctamente");
 }
 
-
 /* =====================================================
    TICKET 58mm REAL
 ===================================================== */
 function generarTicketTermico(idVenta, pagado, metodoPago, nombreEmpleado) {
-
-  const total = carrito.reduce((acc, p) =>
-    acc + p.precioVenta * p.cantidad, 0);
+  const total = carrito.reduce(
+    (acc, p) => acc + (p.precioVenta - (p.descuentoUnitario || 0)) * p.cantidad,
+    0,
+  );
 
   const vuelto = pagado - total;
   const fecha = new Date().toLocaleString("es-CO");
@@ -433,16 +509,23 @@ function generarTicketTermico(idVenta, pagado, metodoPago, nombreEmpleado) {
 
         <hr>
 
-        ${carrito.map(p => `
+        ${carrito
+          .map(
+            (p) => `
           <div>
             ${p.nombreProducto}
             <div class="row">
-              <span>${p.cantidad} x ${formatoCOP(p.precioVenta)}</span>
-              <span>${formatoCOP(p.cantidad * p.precioVenta)}</span>
+              <span>${p.cantidad} x ${formatoCOP(p.precioVenta - (p.descuentoUnitario || 0))} </span>
+              <span>${formatoCOP(
+                p.cantidad * (p.precioVenta - (p.descuentoUnitario || 0)),
+              )}</span>
+
             </div>
           </div>
           <br>
-        `).join("")}
+        `,
+          )
+          .join("")}
 
         <hr>
 
@@ -453,7 +536,7 @@ function generarTicketTermico(idVenta, pagado, metodoPago, nombreEmpleado) {
 
         ${
           metodoPago === "Efectivo"
-          ? `
+            ? `
             <div class="row">
               <span>PAGADO:</span>
               <span>${formatoCOP(pagado)}</span>
@@ -464,7 +547,7 @@ function generarTicketTermico(idVenta, pagado, metodoPago, nombreEmpleado) {
               <span>${formatoCOP(vuelto)}</span>
             </div>
           `
-          : ""
+            : ""
         }
 
         <div>
@@ -489,9 +572,6 @@ function generarTicketTermico(idVenta, pagado, metodoPago, nombreEmpleado) {
   };
 }
 
-
-
-
 /* =====================================================
    FORMATO COP
 ===================================================== */
@@ -499,36 +579,31 @@ function formatoCOP(valor) {
   return new Intl.NumberFormat("es-CO", {
     style: "currency",
     currency: "COP",
-    minimumFractionDigits: 0
+    minimumFractionDigits: 0,
   }).format(valor);
 }
-
 
 /* =====================================================
    FILTROS
 ===================================================== */
-buscador?.addEventListener("input", e => {
-
+buscador?.addEventListener("input", (e) => {
   const texto = e.target.value.toLowerCase();
 
-  const filtrados = productos.filter(p =>
-    p.nombreProducto.toLowerCase().includes(texto)
+  const filtrados = productos.filter((p) =>
+    p.nombreProducto.toLowerCase().includes(texto),
   );
 
   renderProductos(filtrados);
 });
 
 function cargarCategorias() {
-
   if (!filtroCategoria) return;
 
-  const categorias = [...new Set(productos.map(p => p.categoria))];
+  const categorias = [...new Set(productos.map((p) => p.categoria))];
 
-  filtroCategoria.innerHTML =
-    `<option value="">Todas las categorías</option>`;
+  filtroCategoria.innerHTML = `<option value="">Todas las categorías</option>`;
 
-  categorias.forEach(cat => {
-
+  categorias.forEach((cat) => {
     const option = document.createElement("option");
     option.value = cat;
     option.textContent = cat;
@@ -536,8 +611,7 @@ function cargarCategorias() {
   });
 }
 
-filtroCategoria?.addEventListener("change", e => {
-
+filtroCategoria?.addEventListener("change", (e) => {
   const categoria = e.target.value;
 
   if (!categoria) {
@@ -545,13 +619,10 @@ filtroCategoria?.addEventListener("change", e => {
     return;
   }
 
-  const filtrados = productos.filter(p =>
-    p.categoria === categoria
-  );
+  const filtrados = productos.filter((p) => p.categoria === categoria);
 
   renderProductos(filtrados);
 });
-
 
 async function obtenerNombreEmpleado(idUsuario) {
   const { data } = await supabase
@@ -563,10 +634,7 @@ async function obtenerNombreEmpleado(idUsuario) {
   return data?.nombre || "Empleado";
 }
 
-
-
 async function obtenerIdUsuario(authId) {
-
   const { data, error } = await supabase
     .from("usuarios")
     .select("idusuario")
@@ -580,8 +648,6 @@ async function obtenerIdUsuario(authId) {
 
   return data.idusuario;
 }
-
-
 
 // MODAL DE CARRITO
 
@@ -597,11 +663,11 @@ cartIndicator.addEventListener("click", () => {
 
 cart.addEventListener("click", (e) => {
   if (window.innerWidth <= 600) {
-
     // Si el click NO fue dentro del contenido del carrito
-    const isClickInside = e.target.closest(".cart-header") ||
-                          e.target.closest(".cart-items") ||
-                          e.target.closest(".cart-footer");
+    const isClickInside =
+      e.target.closest(".cart-header") ||
+      e.target.closest(".cart-items") ||
+      e.target.closest(".cart-footer");
 
     if (!isClickInside) {
       cart.classList.remove("open");
@@ -610,13 +676,11 @@ cart.addEventListener("click", (e) => {
   }
 });
 
-
 const closeBtn = document.querySelector(".close-cart");
 
 closeBtn.addEventListener("click", () => {
   cart.classList.remove("open");
   document.body.style.overflow = "auto";
 });
-
 
 initBackButton();
