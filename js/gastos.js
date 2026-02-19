@@ -1,3 +1,5 @@
+import { supabase } from "./config/supabase.js";
+
 import { obtenerTotalVentas } 
 from "./services/ventas.service.js";
 
@@ -10,6 +12,8 @@ import {
 } from "./services/gastos.service.js";
 
 import { initBackButton } from "./ui/backButton.ui.js";
+
+let rolUsuario = null;
 
 /* =========================
    ELEMENTOS DOM
@@ -96,11 +100,14 @@ function renderGastos(gastos) {
         <td>${formatoCOP(gasto.monto)}</td>
         <td>${gasto.registrado_por}</td>
         <td>${gasto.tipo}</td>
-        <td>
-          <button class="btn-delete-row" data-id="${gasto.id}">
-            ✕
-          </button>
+        <td ${rolUsuario === "Trabajador" ? 'style="display:none"' : ""}>
+            ${
+              rolUsuario !== "Trabajador"
+                ? `<button class="btn-delete-row" data-id="${gasto.id}">✕</button>`
+                : ""
+            }
         </td>
+
       </tr>
     `;
   });
@@ -338,9 +345,51 @@ toggleTheme.addEventListener("change", () => {
   }
 });
 
+function aplicarPermisosUI() {
+  if (rolUsuario === "Trabajador") {
+
+    // Ocultar botón eliminar todos
+    btnEliminarTodos.style.display = "none";
+
+    // Ocultar botón eliminar por rango
+    btnEliminarRango.style.display = "none";
+
+    // Ocultar columna Acciones (thead)
+    const thAcciones = document.querySelector("th:last-child");
+    if (thAcciones) thAcciones.style.display = "none";
+  }
+}
+
+
+async function obtenerRolUsuario() {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return;
+
+  const { data, error } = await supabase
+    .from("usuarios")
+    .select("rol")
+    .eq("auth_id", user.id)
+    .single();
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  rolUsuario = data.rol;
+
+  aplicarPermisosUI();
+}
+
+
 /* =========================
    INIT
 ========================= */
 
-initBackButton();
-cargarResumen();
+init();
+
+async function init() {
+  await obtenerRolUsuario();
+  await cargarResumen();
+  initBackButton();
+}

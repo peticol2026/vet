@@ -1,5 +1,4 @@
 import { supabase } from "./config/supabase.js";
-
 import { initBackButton } from "./ui/backButton.ui.js";
 
 const tabla = document.getElementById("tablaVentas");
@@ -11,51 +10,58 @@ const filtroCategoria = document.getElementById("filtroCategoria");
 
 const btnEliminarRango = document.getElementById("btnEliminarRango");
 
-// 🔥 FILTRO AUTOMÁTICO
+let rolUsuario = null;
+
+/* ===============================
+   FILTROS AUTOMÁTICOS
+=============================== */
+
 fechaInicioInput.addEventListener("change", cargarVentas);
 fechaFinInput.addEventListener("change", cargarVentas);
 filtroMetodo.addEventListener("change", cargarVentas);
 filtroCategoria.addEventListener("input", cargarVentas);
 
-cargarVentas();
+/* ===============================
+   INIT
+=============================== */
 
-// 🔥 EVENTO ELIMINAR INDIVIDUAL (SOLO UNA VEZ)
+init();
+
+async function init() {
+  await obtenerRolUsuario();
+  await cargarVentas();
+  initBackButton();
+}
+
+/* ===============================
+   ELIMINAR INDIVIDUAL
+=============================== */
+
 tabla.addEventListener("click", async (e) => {
-
   const btn = e.target.closest(".btn-delete");
   if (!btn) return;
 
   const id = btn.dataset.id;
-
   const confirmar = confirm("¿Eliminar esta venta?");
-
   if (!confirmar) return;
 
   try {
-
-    await supabase
-      .from("detalle_venta")
-      .delete()
-      .eq("idventa", id);
-
-    await supabase
-      .from("ventas")
-      .delete()
-      .eq("idventa", id);
+    await supabase.from("detalle_venta").delete().eq("idventa", id);
+    await supabase.from("ventas").delete().eq("idventa", id);
 
     alert("Venta eliminada correctamente");
-
     cargarVentas();
-
   } catch (err) {
     console.error(err);
     alert("Error eliminando venta");
   }
-
 });
 
-async function cargarVentas() {
+/* ===============================
+   CARGAR VENTAS
+=============================== */
 
+async function cargarVentas() {
   tabla.innerHTML = "";
 
   const fechaInicio = fechaInicioInput.value;
@@ -63,7 +69,6 @@ async function cargarVentas() {
   const metodoFiltro = filtroMetodo.value;
   const categoriaFiltro = filtroCategoria.value.toLowerCase();
 
-  // 🔥 QUERY DINÁMICA PROFESIONAL
   let query = supabase
     .from("ventas")
     .select(
@@ -71,41 +76,26 @@ async function cargarVentas() {
       idventa,
       fecha,
       metodo_pago,
-      usuarios (
-        nombre
-      ),
+      usuarios ( nombre ),
       detalle_venta (
-  cantidad,
-  precio,
-  ganancia,
-  productos (
-        nombreProducto,
-        categorias (
-          nombre
-          )
+        cantidad,
+        precio,
+        ganancia,
+        descuento_unitario,
+        productos (
+          nombreProducto,
+          categorias ( nombre )
         )
       )
     `,
     )
     .order("fecha", { ascending: false });
 
-  // ✅ FILTRO MÉTODO (desde base)
-  if (metodoFiltro) {
-    query = query.eq("metodo_pago", metodoFiltro);
-  }
-
-  // ✅ FILTRO FECHA INICIO
-  if (fechaInicio) {
-    query = query.gte("fecha", fechaInicio);
-  }
-
-  // ✅ FILTRO FECHA FIN
-  if (fechaFin) {
-    query = query.lte("fecha", fechaFin + "T23:59:59");
-  }
+  if (metodoFiltro) query = query.eq("metodo_pago", metodoFiltro);
+  if (fechaInicio) query = query.gte("fecha", fechaInicio);
+  if (fechaFin) query = query.lte("fecha", fechaFin + "T23:59:59");
 
   const { data, error } = await query;
-
   if (error) {
     console.error(error);
     return;
@@ -113,71 +103,102 @@ async function cargarVentas() {
 
   let totalGeneral = 0;
   let totalGananciaGeneral = 0;
+  let totalDescuentosGeneral = 0;
   let totalEfectivo = 0;
   let totalNequi = 0;
   let totalTarjeta = 0;
   let totalTransferencia = 0;
 
   data.forEach((venta) => {
-  const fechaVenta = new Date(venta.fecha);
-  const metodo = venta.metodo_pago;
+    const fechaVenta = new Date(venta.fecha);
+    const metodo = venta.metodo_pago;
 
-  venta.detalle_venta.forEach((item) => {
+    venta.detalle_venta.forEach((item) => {
+      const categoria = item.productos?.categorias?.nombre || "";
 
-    const categoria = item.productos?.categorias?.nombre || "";
+      if (categoriaFiltro && !categoria.toLowerCase().includes(categoriaFiltro))
+        return;
 
-    if (categoriaFiltro && !categoria.toLowerCase().includes(categoriaFiltro))
-      return;
+      const totalItem = item.cantidad * item.precio;
+      const gananciaItem = item.ganancia || 0;
 
-    const totalItem = item.cantidad * item.precio;
-    const gananciaItem = item.ganancia || 0;
+      const descuentoUnit = item.descuento_unitario || 0;
+      const descuentoTotalItem = descuentoUnit * item.cantidad;
 
-    totalGeneral += totalItem;
-    totalGananciaGeneral += gananciaItem; // ✅ AHORA SÍ EXISTE
+      totalGeneral += totalItem;
+      totalGananciaGeneral += gananciaItem;
+      totalDescuentosGeneral += descuentoTotalItem;
 
-    if (metodo === "Efectivo") totalEfectivo += totalItem;
-    if (metodo === "Nequi") totalNequi += totalItem;
-    if (metodo === "Tarjeta") totalTarjeta += totalItem;
-    if (metodo === "Transferencia") totalTransferencia += totalItem;
+      if (metodo === "Efectivo") totalEfectivo += totalItem;
+      if (metodo === "Nequi") totalNequi += totalItem;
+      if (metodo === "Tarjeta") totalTarjeta += totalItem;
+      if (metodo === "Transferencia") totalTransferencia += totalItem;
 
-    tabla.innerHTML += `
-      <tr>
-        <td>${fechaVenta.toLocaleString("es-CO")}</td>
-        <td>${item.productos?.nombreProducto || "-"}</td>
-        <td>${categoria || "-"}</td>
-        <td>${item.cantidad}</td>
-        <td>${formatoCOP(item.precio)}</td>
-        <td>${formatoCOP(totalItem)}</td>
-        <td>${venta.usuarios?.nombre || "Sin usuario"}</td>
-        <td>${metodo}</td>
-        <td>${formatoCOP(gananciaItem)}</td>
-        <td>
-          <button class="btn-delete" data-id="${venta.idventa}">
-            ❌
-          </button>
-        </td>
-      </tr>
-    `;
+      tabla.innerHTML += `
+        <tr>
+          <td>${fechaVenta.toLocaleString("es-CO")}</td>
+          <td>${item.productos?.nombreProducto || "-"}</td>
+          <td>${categoria || "-"}</td>
+          <td>${item.cantidad}</td>
+          <td>${formatoCOP(item.precio)}</td>
+          <td>${formatoCOP(totalItem)}</td>
+          <td>${venta.usuarios?.nombre || "Sin usuario"}</td>
+          <td>${metodo}</td>
+
+          <!-- DESCUENTO (solo admin) -->
+          <td ${rolUsuario === "Trabajador" ? 'style="display:none"' : ""}>
+            ${rolUsuario !== "Trabajador" ? formatoCOP(descuentoTotalItem) : ""}
+          </td>
+
+          <!-- GANANCIA (solo admin) -->
+          <td ${rolUsuario === "Trabajador" ? 'style="display:none"' : ""}>
+            ${rolUsuario !== "Trabajador" ? formatoCOP(gananciaItem) : ""}
+          </td>
+
+          <!-- ACCIONES (solo admin) -->
+          <td ${rolUsuario === "Trabajador" ? 'style="display:none"' : ""}>
+            ${
+              rolUsuario !== "Trabajador"
+                ? `<button class="btn-delete" data-id="${venta.idventa}">❌</button>`
+                : ""
+            }
+          </td>
+        </tr>
+      `;
+    });
   });
-});
 
-document.getElementById("totalGanancia").textContent =
-  formatoCOP(totalGananciaGeneral);
+  // RESUMEN
+  document.getElementById("totalGeneral").textContent =
+    formatoCOP(totalGeneral);
 
-  // 🔥 ACTUALIZAR RESUMEN
-  document.getElementById("totalGeneral").textContent = formatoCOP(totalGeneral);
-  document.getElementById("totalEfectivo").textContent = formatoCOP(totalEfectivo);
+  document.getElementById("totalGanancia").textContent =
+    formatoCOP(totalGananciaGeneral);
+
+  const elDescuentos = document.getElementById("totalDescuentos");
+  if (elDescuentos) {
+    elDescuentos.textContent = formatoCOP(totalDescuentosGeneral);
+  }
+
+  document.getElementById("totalEfectivo").textContent =
+    formatoCOP(totalEfectivo);
+
   document.getElementById("totalNequi").textContent = formatoCOP(totalNequi);
-  document.getElementById("totalTarjeta").textContent = formatoCOP(totalTarjeta);
-  document.getElementById("totalTransferencia").textContent = formatoCOP(totalTransferencia);
+
+  document.getElementById("totalTarjeta").textContent =
+    formatoCOP(totalTarjeta);
+
+  document.getElementById("totalTransferencia").textContent =
+    formatoCOP(totalTransferencia);
 }
 
-  // ELIMINAR POR RANGOS CON EL BOTON
+/* ===============================
+   ELIMINAR POR RANGO
+=============================== */
 
 btnEliminarRango.addEventListener("click", eliminarPorRango);
 
 async function eliminarPorRango() {
-
   const fechaInicio = fechaInicioInput.value;
   const fechaFin = fechaFinInput.value;
 
@@ -187,14 +208,12 @@ async function eliminarPorRango() {
   }
 
   const confirmar = confirm(
-    `¿Seguro que deseas eliminar las ventas desde ${fechaInicio} hasta ${fechaFin}?`
+    `¿Seguro que deseas eliminar las ventas desde ${fechaInicio} hasta ${fechaFin}?`,
   );
 
   if (!confirmar) return;
 
   try {
-
-    // 1️⃣ Obtener ventas en rango
     const { data: ventas, error } = await supabase
       .from("ventas")
       .select("idventa")
@@ -208,57 +227,92 @@ async function eliminarPorRango() {
       return;
     }
 
-    const ids = ventas.map(v => v.idventa);
+    const ids = ventas.map((v) => v.idventa);
 
-    // 2️⃣ Borrar detalle_venta primero
-    await supabase
-      .from("detalle_venta")
-      .delete()
-      .in("idventa", ids);
-
-    // 3️⃣ Borrar ventas
-    await supabase
-      .from("ventas")
-      .delete()
-      .in("idventa", ids);
+    await supabase.from("detalle_venta").delete().in("idventa", ids);
+    await supabase.from("ventas").delete().in("idventa", ids);
 
     alert("Ventas eliminadas correctamente ✅");
-
     cargarVentas();
-
-    
-
   } catch (err) {
     console.error(err);
     alert("Error al eliminar ventas");
   }
 }
 
-
-
 /* ===============================
-   FORMATO PESO COLOMBIANO
+   FORMATO COP
 =============================== */
 
 function formatoCOP(valor) {
   return new Intl.NumberFormat("es-CO", {
     style: "currency",
     currency: "COP",
-    minimumFractionDigits: 0
+    minimumFractionDigits: 0,
   }).format(valor);
 }
 
-// MODO CLARO
+/* ===============================
+   PERMISOS POR ROL
+=============================== */
+
+function aplicarPermisosUI() {
+  if (rolUsuario === "Trabajador") {
+    btnEliminarRango.style.display = "none";
+
+    const thAcciones = document.querySelector("th:last-child");
+    if (thAcciones) thAcciones.style.display = "none";
+
+    const thGanancia = document.querySelector("th:nth-last-child(2)");
+    if (thGanancia) thGanancia.style.display = "none";
+
+    const thDescuento = document.querySelector("th:nth-last-child(3)");
+    if (thDescuento) thDescuento.style.display = "none";
+
+    const cardGanancia = document.getElementById("cardGanancia");
+    if (cardGanancia) cardGanancia.style.display = "none";
+
+    const cardDescuentos = document.getElementById("cardDescuentos");
+    if (cardDescuentos) cardDescuentos.style.display = "none";
+  }
+}
+
+/* ===============================
+   OBTENER ROL
+=============================== */
+
+async function obtenerRolUsuario() {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+
+  const { data, error } = await supabase
+    .from("usuarios")
+    .select("rol")
+    .eq("auth_id", user.id)
+    .single();
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  rolUsuario = data.rol;
+  aplicarPermisosUI();
+}
+
+/* ===============================
+   MODO CLARO
+=============================== */
 
 const toggleTheme = document.getElementById("toggleTheme");
 
-// Cargar preferencia guardada
 if (localStorage.getItem("theme") === "light") {
   document.body.classList.add("light-mode");
   toggleTheme.checked = true;
 }
 
-// Cambiar tema
 toggleTheme.addEventListener("change", () => {
   document.body.classList.toggle("light-mode");
 
@@ -268,6 +322,3 @@ toggleTheme.addEventListener("change", () => {
     localStorage.setItem("theme", "dark");
   }
 });
-
-
-initBackButton();
