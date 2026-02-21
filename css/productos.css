@@ -88,6 +88,34 @@ body {
   gap: 1.25rem;
 }
 
+/* =====================================
+   EMPTY STATE
+===================================== */
+.empty-state {
+  grid-column: 1 / -1; /* ocupa todo el grid */
+  text-align: center;
+  padding: 3rem 1rem;
+  opacity: .7;
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.empty-state p {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.empty-state span {
+  font-size: .8rem;
+  color: var(--muted);
+}
+
+
+
 /* =====================================================
    CARD PRODUCTO
 ===================================================== */
@@ -428,10 +456,13 @@ body {
     border-radius: 0;
   }
 
-  .products-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+ @media (max-width: 768px) {
+
+  .products-grid:has(.empty-state) {
+    grid-template-columns: 1fr;
   }
+
+}
 
   .product-card img {
     height: 95px;
