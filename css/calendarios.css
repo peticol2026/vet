@@ -1,0 +1,535 @@
+/* =====================================
+   RESET + TRANSICIONES GLOBALES
+===================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.3s ease,
+              color 0.3s ease,
+              border 0.3s ease,
+              transform 0.3s ease,
+              box-shadow 0.3s ease;
+}
+
+body {
+  background: linear-gradient(135deg, #f3f5f7, #e9edf2);
+  min-height: 100vh;
+  padding: 50px 20px;
+  color: #111827;
+}
+
+/* =====================================
+   CONTAINER (Glass effect)
+===================================== */
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 50px;
+  border-radius: 24px;
+
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.6);
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
+}
+
+.container:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.08);
+}
+
+/* =====================================
+   TITULO MODERNO
+===================================== */
+
+.titulo-agenda {
+  text-align: center;
+  font-size: 52px;
+  font-weight: 800;
+  margin-bottom: 50px;
+  letter-spacing: -1px;
+
+  background: linear-gradient(90deg, #ff6a00, #ff8500, #ff6a00);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: slideIn 0.8s ease-out, gradientMove 4s linear infinite;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+.titulo-agenda span {
+  display: inline-block;
+}
+
+.titulo-agenda:hover span {
+  transform: rotate(-10deg) scale(1.2);
+}
+
+/* =====================================
+   FULLCALENDAR
+===================================== */
+
+.fc {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 20px;
+  animation: fadeCalendar 0.4s ease;
+}
+
+@keyframes fadeCalendar {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Toolbar */
+
+.fc-toolbar-title {
+  font-size: 26px !important;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: #111;
+}
+
+/* Botones navegación */
+
+.fc-button {
+  background: #111 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 10px 20px !important;
+  font-weight: 500;
+  font-size: 13px !important;
+}
+
+.fc-button:hover {
+  background: #ff6a00 !important;
+  transform: translateY(-2px);
+}
+
+.fc-button:active {
+  transform: scale(0.95);
+}
+
+.fc-button-active {
+  background: #ff6a00 !important;
+  color: #fff !important;
+}
+
+/* Header días semana */
+
+.fc-col-header-cell {
+  background: #fafafa;
+  padding: 18px 0 !important;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #6b7280;
+  border: none !important;
+}
+
+/* Bordes suaves */
+
+.fc-theme-standard td,
+.fc-theme-standard th {
+  border-color: #f0f0f0 !important;
+}
+
+/* Día */
+
+.fc-daygrid-day {
+  border-radius: 14px;
+}
+
+.fc-daygrid-day:hover {
+  background: #ffffff;
+  transform: scale(1.02);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+  cursor: pointer;
+}
+
+.fc-daygrid-day-number {
+  font-weight: 600;
+  font-size: 14px;
+  color: #111;
+  padding: 8px;
+}
+
+/* Evento */
+
+.fc-daygrid-event {
+  background: #ff6a00 !important;
+  border-radius: 14px !important;
+  padding: 8px 10px !important;
+  font-size: 12px;
+  font-weight: 600;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(255,106,0,0.25);
+}
+
+.fc-daygrid-event:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(255,106,0,0.35);
+}
+
+.fc-daygrid-event:active {
+  transform: scale(0.96);
+}
+
+/* =====================================
+   MODAL
+===================================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  animation: overlayFade 0.3s ease;
+}
+
+@keyframes overlayFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.hidden {
+  display: none;
+}
+
+.modal-card {
+  background: #ffffff;
+  width: 750px;
+  max-width: 95%;
+  border-radius: 28px;
+  padding: 45px;
+  box-shadow: 0 30px 90px rgba(0,0,0,0.12);
+  animation: modalIn 0.3s ease;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(30px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-header h3 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 35px;
+}
+
+/* =====================================
+   FORMULARIO
+===================================== */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group.full {
+  grid-column: span 2;
+}
+
+.form-group label {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #6b7280;
+  letter-spacing: 0.5px;
+}
+
+/* Inputs */
+
+.form-group input,
+.form-group select {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 16px;
+  font-size: 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+
+.form-group input:hover,
+.form-group select:hover {
+  border-color: #ff8500;
+  transform: translateY(-2px);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #ff6a00;
+  box-shadow: 0 0 0 4px rgba(255,106,0,0.15);
+  transform: translateY(-3px) scale(1.01);
+  outline: none;
+}
+
+/* =====================================
+   BOTONES
+===================================== */
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 35px;
+  gap: 15px;
+}
+
+.btn {
+  padding: 12px 24px;
+  border-radius: 14px;
+  cursor: pointer;
+  border: none;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.btn:active {
+  transform: scale(0.96);
+}
+
+.btn.primary {
+  background: #ff6a00;
+  color: white;
+}
+
+.btn.primary:hover {
+  background: #ff8500;
+  transform: translateY(-2px);
+}
+
+.btn.ghost {
+  background: #f3f4f6;
+  color: #333;
+}
+
+.btn.ghost:hover {
+  background: #e5e7eb;
+}
+
+.btn.danger {
+  background: #111;
+  color: white;
+}
+
+.btn.danger:hover {
+  background: #000;
+}
+
+/* =====================================
+   ERRORES
+===================================== */
+
+.error-text {
+  color: #dc2626;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.input-error {
+  border: 1px solid #dc2626 !important;
+  background-color: #fff5f5;
+}
+
+/* =====================================
+   EFECTO 3D FLIP AL CAMBIAR MES
+===================================== */
+
+.calendar-3d-wrapper {
+  perspective: 1200px;
+}
+
+.fc {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Clase que activaremos desde JS */
+.flip-anim {
+  animation: flipCalendar 0.6s ease;
+}
+
+@keyframes flipCalendar {
+  0% {
+    transform: rotateY(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: rotateY(90deg);
+    opacity: 0.4;
+  }
+  100% {
+    transform: rotateY(0deg);
+    opacity: 1;
+  }
+}
+
+/* =====================================
+   3D PAGE FLIP DIRECCIONAL
+===================================== */
+
+.calendar-3d-wrapper {
+  perspective: 1400px;
+  position: relative;
+}
+
+.fc {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Flip hacia la derecha (mes siguiente) */
+.flip-next {
+  animation: flipNext 0.6s cubic-bezier(.65,.05,.36,1);
+}
+
+/* Flip hacia la izquierda (mes anterior) */
+.flip-prev {
+  animation: flipPrev 0.6s cubic-bezier(.65,.05,.36,1);
+}
+
+@keyframes flipNext {
+  0% {
+    transform: rotateY(0deg);
+    opacity: 1;
+  }
+  40% {
+    transform: rotateY(-75deg);
+    opacity: 0.4;
+  }
+  100% {
+    transform: rotateY(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes flipPrev {
+  0% {
+    transform: rotateY(0deg);
+    opacity: 1;
+  }
+  40% {
+    transform: rotateY(75deg);
+    opacity: 0.4;
+  }
+  100% {
+    transform: rotateY(0deg);
+    opacity: 1;
+  }
+}
+
+/* ===============================
+   MODAL DETALLE MODERNO
+================================ */
+
+.modal-detalle-card {
+  width: 900px;
+  max-width: 95%;
+}
+
+.detalle-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  align-items: start;
+  padding: 10px 0 25px 0;
+}
+
+.detalle-info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px 22px;
+}
+
+.detalle-item {
+  background: #f9fafb;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 65px;
+}
+
+.detalle-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #9ca3af;
+  margin-bottom: 3px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.detalle-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.detalle-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.detalle-media img {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.18);
+  border: 6px solid white;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .modal-detalle-card {
+    width: 95%;
+  }
+
+  .detalle-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .detalle-info {
+    grid-template-columns: 1fr;
+  }
+
+  .detalle-media {
+    margin-top: 20px;
+  }
+
+  .detalle-media img {
+    width: 150px;
+    height: 150px;
+  }
+}

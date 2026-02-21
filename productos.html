@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title>Admin | Productos</title>
@@ -16,15 +17,13 @@
 
   <!-- 🔝 NAVBAR -->
   <header class="topbar">
-  
+
     <button class="btn-back">← Volver</button>
-  
+
     <h2>Gestión de Productos</h2>
-  
+
     <div class="top-actions">
-      <input type="text" placeholder="Buscar producto..."
-        id="searchProduct"
-      >
+      <input type="text" placeholder="Buscar producto..." id="searchProduct">
       <button class="btn primary" id="btnAddProduct">
         + Agregar producto
       </button>
@@ -62,73 +61,78 @@
   <!-- ************************************************************************* MODAL ********************************************** -->
   <!-- *************************************************************************        ********************************************** -->
 
-<!-- ================= MODAL ================= -->
-<div class="modal-overlay hidden" id="productModal">
+  <!-- ================= MODAL ================= -->
+  <div class="modal-overlay hidden" id="productModal">
 
-  <div class="modal-card modal-productos">
+    <div class="modal-card modal-productos">
 
-    <header class="modal-header">
-      <h3 id="modalTitle">Agregar producto</h3>
-    </header>
+      <header class="modal-header">
+        <h3 id="modalTitle">Agregar producto</h3>
+      </header>
 
-    <form id="productForm" class="modal-body form-grid">
+      <form id="productForm" class="modal-body form-grid">
 
-      <div class="form-group full">
-        <label>Nombre</label>
-        <input type="text" id="nombreProducto" required>
-      </div>
+        <div class="form-group full">
+          <label>Nombre</label>
+          <input type="text" id="nombreProducto" required>
+        </div>
 
-      <div class="form-group">
-  <label>Categoría</label>
-  <select id="categoria">
-  <option value="">Seleccionar categoría</option>
-</select>
-</div>
+        <div class="form-group full">
+          <label>Código de barras (opcional)</label>
+          <input type="text" id="codigoBarras" placeholder="Escanea o escribe el código">
+        </div>
+
+        <div class="form-group">
+          <label>Categoría</label>
+          <select id="categoria">
+            <option value="">Seleccionar categoría</option>
+          </select>
+        </div>
 
 
-      <div class="form-group">
-        <label>Cantidad</label>
-        <input type="number" id="cantidad" required>
-      </div>
+        <div class="form-group">
+          <label>Cantidad</label>
+          <input type="number" id="cantidad" required>
+        </div>
 
-      <div class="form-group">
-        <label>Precio costo</label>
-        <input type="number" id="precioCosto" required>
-      </div>
+        <div class="form-group">
+          <label>Precio costo</label>
+          <input type="number" id="precioCosto" required>
+        </div>
 
-      <div class="form-group">
-        <label>Precio venta</label>
-        <input type="number" id="precioVenta" required>
-      </div>
+        <div class="form-group">
+          <label>Precio venta</label>
+          <input type="number" id="precioVenta" required>
+        </div>
 
-      <div class="form-group full">
-        <label>Fecha de vencimiento</label>
-        <input type="date" id="fechaVencimiento">
-      </div>
+        <div class="form-group full">
+          <label>Fecha de vencimiento</label>
+          <input type="date" id="fechaVencimiento">
+        </div>
 
-      <div class="form-group full">
-        <label>Imagen</label>
-        <input type="file" id="imagen" accept="image/*">
+        <div class="form-group full">
+          <label>Imagen</label>
+          <input type="file" id="imagen" accept="image/*">
 
-        <img id="imagenPreview" class="imagen-preview" alt="Preview">
+          <img id="imagenPreview" class="imagen-preview" alt="Preview">
 
-        <button type="button" id="btnQuitarImagen" class="btn ghost danger">
-          Quitar imagen
-        </button>
-      </div>
+          <button type="button" id="btnQuitarImagen" class="btn ghost danger">
+            Quitar imagen
+          </button>
+        </div>
 
-      <footer class="modal-actions full">
-        <button type="button" class="btn ghost" id="btnCancelModal">
-          Cancelar
-        </button>
-        <button type="submit" class="btn primary">
-          Guardar
-        </button>
-      </footer>
+        <footer class="modal-actions full">
+          <button type="button" class="btn ghost" id="btnCancelModal">
+            Cancelar
+          </button>
+          <button type="submit" class="btn primary">
+            Guardar
+          </button>
+        </footer>
 
-    </form>
+      </form>
+    </div>
   </div>
-</div>
 
 
 
@@ -136,4 +140,5 @@
   <script type="module" src="./js/productos.js"></script>
 
 </body>
+
 </html>

@@ -10,6 +10,7 @@ export async function obtenerProductos() {
     .select(`
   idProducto,
   nombreProducto,
+   codigoBarras,
   precioVenta,
   precioCosto,
   cantidad,
@@ -137,6 +138,7 @@ export async function buscarProductoIgual(producto) {
     .from("productos")
     .select("*")
     .eq("nombreProducto", producto.nombreProducto)
+    .eq("codigoBarras", producto.codigoBarras)
     .eq("categoria_id", producto.categoria_id)
     .eq("precioCosto", producto.precioCosto)
     .eq("precioVenta", producto.precioVenta)

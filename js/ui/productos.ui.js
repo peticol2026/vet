@@ -225,6 +225,7 @@ export function initFormulario(onGuardar) {
 
     const producto = {
       nombreProducto: form.querySelector("#nombreProducto").value,
+      codigoBarras: form.querySelector("#codigoBarras").value.trim() || null,
       categoria_id: form.querySelector("#categoria").value || null,
       precioCosto: Number(form.querySelector("#precioCosto").value),
       precioVenta: Number(form.querySelector("#precioVenta").value),

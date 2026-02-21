@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Calendario Clientes</title>
+
+  <link rel="stylesheet" href="css/calendarios.css">
+
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h2>Citas Programadas 🐾</h2>
+  <div id="calendar"></div>
+</div>
+
+
+<!-- MODAL DETALLE -->
+<div id="modalDetalle" class="modal-overlay hidden">
+  <div class="modal-card">
+    <div class="modal-header">
+    <h3>Detalle de la Cita</h3>
+    </div>
+
+    <div id="detalleContenido" style="line-height: 1.8;"></div>
+
+    <div class="modal-actions">
+      <button class="btn ghost" id="cerrarDetalle">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { obtenerCitas } from "./js/services/citas.service.js";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const modalDetalle = document.getElementById("modalDetalle");
+  const contenido = document.getElementById("detalleContenido");
+  const btnCerrarDetalle = document.getElementById("cerrarDetalle");
+
+  const citas = await obtenerCitas();
+
+  const eventos = citas.map(c => ({
+    title: `${c.nombre_perro} - ${c.hora_servicio}`,
+    start: `${c.fecha_servicio}T${c.hora_servicio}`,
+    backgroundColor: "#ffd9cc",
+    borderColor: "#ffd9cc",
+    extendedProps: c
+  }));
+
+  const calendar = new FullCalendar.Calendar(document.getElementById("calendar"), {
+    initialView: "dayGridMonth",
+    height: "auto",
+    events: eventos,
+
+    eventClick: function(info) {
+
+      const cita = info.event.extendedProps;
+
+      contenido.innerHTML = `
+        <strong>🐶 Perro:</strong> ${cita.nombre_perro}<br>
+        <strong>🧬 Especie:</strong> ${cita.especie ?? "No especificada"}
+        <strong>🐾 Raza:</strong> ${cita.raza}<br>
+        <strong>📅 Fecha:</strong> ${cita.fecha_servicio}<br>
+        <strong>⏰ Hora:</strong> ${cita.hora_servicio}<br>
+        <strong>📌 Estado:</strong> ${cita.estado ?? "Pendiente"}<br>
+        <strong>📝 Notas:</strong> ${cita.notas ?? "Sin notas"}
+      `;
+
+      modalDetalle.classList.remove("hidden");
+    }
+  });
+
+  calendar.render();
+
+  btnCerrarDetalle.addEventListener("click", () => {
+    modalDetalle.classList.add("hidden");
+  });
+
+});
+</script>
+
+</body>
+</html>
