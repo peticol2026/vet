@@ -239,10 +239,43 @@ body {
   padding: .65rem .8rem;
   border-radius: var(--radius-sm);
   border: 1px solid rgba(255,255,255,.15);
-  background: rgba(255,255,255,.06);
+  background: rgba(17, 24, 39, 0.85);
+  color: var(--white);
   outline: none;
   font-size: .8rem;
 }
+
+/* ============================
+   FIX SELECT CATEGORÍA
+============================ */
+
+.form-group select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: rgba(17, 24, 39, 0.95);
+  color: var(--white);
+  cursor: pointer;
+}
+
+/* Opciones del dropdown */
+.form-group select option {
+  background: #111827;   /* fondo oscuro */
+  color: #ffffff;        /* texto blanco */
+}
+
+/* Opción seleccionada */
+.form-group select option:checked {
+  background: var(--orange);
+  color: #000;
+}
+
+/* Hover en algunos navegadores */
+.form-group select option:hover {
+  background: #1f2937;
+}
+
+
 
 .form-group input:focus,
 .form-group select:focus {

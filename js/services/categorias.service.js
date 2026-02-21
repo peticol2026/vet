@@ -35,13 +35,17 @@ export async function eliminarCategoria(id) {
   if (error) throw error;
 }
 
-export async function categoriaTieneProductos(id) {
-  const { count, error } = await supabase
+export async function categoriaTieneProductos(idCategoria) {
+  const { data, error } = await supabase
     .from("productos")
-    .select("*", { count: "exact", head: true })
-    .eq("categoria_id", id);
+    .select("idProducto")
+    .eq("categoria_id", idCategoria)
+    .limit(1);
 
-  if (error) throw error;
+  if (error) {
+    console.error(error);
+    return true; // por seguridad
+  }
 
-  return count > 0;
+  return data.length > 0;
 }

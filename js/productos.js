@@ -97,6 +97,7 @@ async function guardarProducto(producto) {
 
       const productoFinal = {
         nombreProducto: producto.nombreProducto,
+        codigoBarras: producto.codigoBarras,
         categoria_id: producto.categoria_id,
         precioCosto: producto.precioCosto,
         precioVenta: producto.precioVenta,
@@ -160,6 +161,8 @@ function editarProducto(producto) {
   document.getElementById("productModal").classList.remove("hidden");
 
   document.getElementById("nombreProducto").value = producto.nombreProducto;
+  document.getElementById("codigoBarras").value =
+  producto.codigoBarras ?? "";
  document.getElementById("categoria").value = producto.categoria_id;
   document.getElementById("precioCosto").value = producto.precioCosto;
   document.getElementById("precioVenta").value = producto.precioVenta;
@@ -235,41 +238,60 @@ document.getElementById("categoria")
     }
 
     // 🗑 ELIMINAR CATEGORÍA
-    if (e.target.value === "__eliminar__") {
+  if (e.target.value === "__eliminar__") {
 
   const categorias = await obtenerCategorias();
 
+  if (categorias.length === 0) {
+    alert("No hay categorías para eliminar");
+    e.target.value = "";
+    return;
+  }
+
+  // Creamos lista numerada
   const lista = categorias
-    .map(c => `${c.id} - ${c.nombre}`)
+    .map((c, index) => `${index + 1}. ${c.nombre}`)
     .join("\n");
 
-  const id = prompt(
-    "Escribe el ID de la categoría que deseas eliminar:\n\n" + lista
+  const opcion = prompt(
+    "Selecciona el número de la categoría a eliminar:\n\n" + lista
   );
 
-  if (!id) {
-  e.target.value = "";
-  return;
-}
+  if (!opcion) {
+    e.target.value = "";
+    return;
+  }
 
+  const indice = parseInt(opcion) - 1;
 
+  if (isNaN(indice) || !categorias[indice]) {
+    alert("Opción inválida");
+    e.target.value = "";
+    return;
+  }
 
-const idNumero = id.trim();
-
-if (!idNumero) {
-  e.target.value = "";
-  return;
-}
-
-await eliminarCategoria(idNumero);
-
+  const categoriaSeleccionada = categorias[indice];
 
   try {
-    await eliminarCategoria(idNumero);
+
+    // 🔍 Verificar si tiene productos
+    const tieneProductos = await categoriaTieneProductos(categoriaSeleccionada.id);
+
+    if (tieneProductos) {
+      alert("No se puede eliminar: tiene productos asociados.");
+      e.target.value = "";
+      return;
+    }
+
+    await eliminarCategoria(categoriaSeleccionada.id);
+
     await cargarCategorias();
-    alert("Categoría eliminada");
+
+    alert("Categoría eliminada correctamente");
+
   } catch (err) {
-    alert("No se puede eliminar (puede estar en uso)");
+    console.error(err);
+    alert("Error eliminando categoría");
   }
 
   e.target.value = "";
