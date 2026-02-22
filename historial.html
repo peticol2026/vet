@@ -31,6 +31,12 @@
     <!-- Filtros -->
     <div class="filtros">
 
+      <button id="btnDescargarExcel" class="btn-excel">
+  <span class="btn-text">📥 Exportar Excel</span>
+  <span class="btn-spinner"></span>
+</button>
+
+
       <!-- Rango de fechas -->
       <input type="date" id="fechaInicio">
       <input type="date" id="fechaFin">
@@ -122,6 +128,8 @@
 
   </section>
 
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
   <script type="module" src="./js/historial.js"></script>
 
 </body>
