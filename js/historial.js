@@ -7,8 +7,8 @@ const fechaInicioInput = document.getElementById("fechaInicio");
 const fechaFinInput = document.getElementById("fechaFin");
 const filtroMetodo = document.getElementById("filtroMetodo");
 const filtroCategoria = document.getElementById("filtroCategoria");
-
 const btnEliminarRango = document.getElementById("btnEliminarRango");
+const btnDescargarExcel = document.getElementById("btnDescargarExcel");
 
 let rolUsuario = null;
 
@@ -322,3 +322,184 @@ toggleTheme.addEventListener("change", () => {
     localStorage.setItem("theme", "dark");
   }
 });
+
+
+btnDescargarExcel.addEventListener("click", exportarExcel);
+
+/* ===============================
+   EXPORTAR A EXCEL
+=============================== */
+
+async function exportarExcel() {
+
+  const btnText = btnDescargarExcel.querySelector(".btn-text");
+
+  try {
+
+    // 🔒 Activar loading
+    btnDescargarExcel.disabled = true;
+    btnDescargarExcel.classList.add("loading");
+    btnText.textContent = "Generando archivo...";
+
+    const fechaInicio = fechaInicioInput.value;
+    const fechaFin = fechaFinInput.value;
+    const metodoFiltro = filtroMetodo.value;
+    const categoriaFiltro = filtroCategoria.value.toLowerCase();
+
+    let query = supabase
+      .from("ventas")
+      .select(`
+        idventa,
+        fecha,
+        metodo_pago,
+        usuarios ( nombre ),
+        detalle_venta (
+          cantidad,
+          precio,
+          ganancia,
+          descuento_unitario,
+          productos (
+            nombreProducto,
+            categorias ( nombre )
+          )
+        )
+      `)
+      .order("fecha", { ascending: false });
+
+    if (metodoFiltro) query = query.eq("metodo_pago", metodoFiltro);
+    if (fechaInicio) query = query.gte("fecha", fechaInicio);
+    if (fechaFin) query = query.lte("fecha", fechaFin + "T23:59:59");
+
+    const { data, error } = await query;
+
+    if (error) throw error;
+
+    if (!data.length) {
+      mostrarToast("No hay ventas para exportar", "error");
+      return;
+    }
+
+    let filas = [];
+
+    data.forEach((venta) => {
+
+      const fechaVenta = new Date(venta.fecha);
+      const metodo = venta.metodo_pago;
+
+      venta.detalle_venta.forEach((item) => {
+
+        const categoria = item.productos?.categorias?.nombre || "";
+
+        if (categoriaFiltro && !categoria.toLowerCase().includes(categoriaFiltro))
+          return;
+
+        const totalItem = item.cantidad * item.precio;
+        const descuentoTotal = (item.descuento_unitario || 0) * item.cantidad;
+        const ganancia = item.ganancia || 0;
+
+        let fila = {
+          Fecha: fechaVenta.toLocaleString("es-CO"),
+          Producto: item.productos?.nombreProducto || "-",
+          Categoria: categoria || "-",
+          Cantidad: item.cantidad,
+          Precio: item.precio,
+          Total: totalItem,
+          Empleado: venta.usuarios?.nombre || "Sin usuario",
+          Metodo_Pago: metodo,
+        };
+
+        if (rolUsuario !== "Trabajador") {
+          fila.Descuento = descuentoTotal;
+          fila.Ganancia = ganancia;
+        }
+
+        filas.push(fila);
+
+      });
+
+    });
+
+    if (!filas.length) {
+      mostrarToast("No hay datos después de aplicar filtros", "error");
+      return;
+    }
+
+    // Crear hoja
+const worksheet = XLSX.utils.json_to_sheet(filas);
+
+// 🎨 Obtener rango
+const rango = XLSX.utils.decode_range(worksheet['!ref']);
+
+// 🟢 Estilizar encabezados (fila 0)
+for (let C = rango.s.c; C <= rango.e.c; ++C) {
+  const celda = XLSX.utils.encode_cell({ r: 0, c: C });
+
+  if (worksheet[celda]) {
+    worksheet[celda].s = {
+      fill: {
+        fgColor: { rgb: "16A34A" } // Verde profesional
+      },
+      font: {
+        bold: true,
+        color: { rgb: "FFFFFF" }
+      },
+      alignment: {
+        horizontal: "center",
+        vertical: "center"
+      }
+    };
+  }
+}
+
+// 📏 Ajustar ancho automático de columnas
+worksheet['!cols'] = Object.keys(filas[0]).map(key => ({
+  wch: key.length + 5
+}));
+
+// Crear libro y agregar hoja
+const workbook = XLSX.utils.book_new();
+XLSX.utils.book_append_sheet(workbook, worksheet, "Ventas");
+
+    const fechaDescarga = new Date().toISOString().split("T")[0];
+
+    XLSX.writeFile(workbook, `Historial_Ventas_${fechaDescarga}.xlsx`);
+
+    // ✅ Mostrar estado éxito
+    btnText.textContent = "Descarga lista ✅";
+    mostrarToast("Archivo generado correctamente ✅", "success");
+
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+  } catch (err) {
+
+    console.error(err);
+    mostrarToast("Error generando Excel", "error");
+
+  } finally {
+
+    // 🔓 Restaurar botón
+    btnDescargarExcel.disabled = false;
+    btnDescargarExcel.classList.remove("loading");
+    btnText.textContent = "📥 Exportar Excel";
+
+  }
+
+}
+
+function mostrarToast(mensaje, tipo = "success") {
+
+  const toast = document.createElement("div");
+  toast.className = `toast ${tipo}`;
+  toast.textContent = mensaje;
+
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add("show");
+  }, 50);
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 300);
+  }, 2500);
+}

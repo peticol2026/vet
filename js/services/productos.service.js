@@ -23,10 +23,12 @@ export async function obtenerProductos() {
 `)
 ;
 
-  if (error) {
-    console.error("Error obteniendo productos:", error);
-    return [];
-  }
+if (error) {
+  console.error("Código:", error.code);
+  console.error("Mensaje:", error.message);
+  console.error("Detalles:", error.details);
+  throw error;
+}
 
   // 🔥 Normalizamos para que ventas.js siga funcionando
   return data.map(p => ({
@@ -134,17 +136,25 @@ export async function actualizarProducto(idProducto, data) {
    VALIDAR PRODUCTO IGUAL (SIN IMAGEN)
 ========================= */
 export async function buscarProductoIgual(producto) {
-  const { data, error } = await supabase
+
+  let query = supabase
     .from("productos")
     .select("*")
     .eq("nombreProducto", producto.nombreProducto)
     .eq("codigoBarras", producto.codigoBarras)
-    .eq("categoria_id", producto.categoria_id)
     .eq("precioCosto", producto.precioCosto)
     .eq("precioVenta", producto.precioVenta)
     .eq("fechaVencimiento", producto.fechaVencimiento)
-    .limit(1)
-    .maybeSingle();
+    .limit(1);
+
+  // 🔥 Manejo correcto de UUID nullable
+  if (producto.categoria_id) {
+    query = query.eq("categoria_id", producto.categoria_id);
+  } else {
+    query = query.is("categoria_id", null);
+  }
+
+  const { data, error } = await query.maybeSingle();
 
   if (error) {
     console.error("Error buscando producto:", error);

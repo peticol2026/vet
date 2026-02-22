@@ -333,7 +333,14 @@ function configurarEventosPago() {
         efectivoRows.forEach((row) => (row.style.display = "none"));
 
         // automáticamente se paga el total exacto
-        valorPagadoInput.value = totalVentaEl.textContent;
+        const total = carrito.reduce(
+          (acc, item) =>
+            acc +
+            (item.precioVenta - (item.descuentoUnitario || 0)) * item.cantidad,
+          0,
+        );
+
+        valorPagadoInput.value = total;
         vueltoEl.textContent = formatoCOP(0);
       } else {
         efectivoRows.forEach((row) => (row.style.display = "flex"));
@@ -355,7 +362,11 @@ async function registrarVenta() {
     return;
   }
 
-  const total = parseFloat(totalVentaEl.textContent);
+ const total = carrito.reduce(
+  (acc, item) =>
+    acc + (item.precioVenta - (item.descuentoUnitario || 0)) * item.cantidad,
+  0
+);
   let pagado = parseFloat(valorPagadoInput.value) || 0;
 
   // Si no es efectivo, el pago es igual al total
@@ -566,10 +577,11 @@ function generarTicketTermico(idVenta, pagado, metodoPago, nombreEmpleado) {
 
   ventana.document.close();
 
-  // 🔥 Esperar que cargue antes de imprimir
-  ventana.onload = function () {
-    ventana.print();
-  };
+setTimeout(() => {
+  ventana.focus();
+  ventana.print();
+  ventana.close();
+}, 500);
 }
 
 /* =====================================================
@@ -599,7 +611,7 @@ buscador?.addEventListener("input", (e) => {
 function cargarCategorias() {
   if (!filtroCategoria) return;
 
-  const categorias = [...new Set(productos.map((p) => p.categoria))];
+  const categorias = [...new Set(productos.map((p) => p.categoriaNombre))];
 
   filtroCategoria.innerHTML = `<option value="">Todas las categorías</option>`;
 
@@ -619,7 +631,7 @@ filtroCategoria?.addEventListener("change", (e) => {
     return;
   }
 
-  const filtrados = productos.filter((p) => p.categoria === categoria);
+  const filtrados = productos.filter((p) => p.categoriaNombre === categoria);
 
   renderProductos(filtrados);
 });
