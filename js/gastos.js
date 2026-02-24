@@ -2,6 +2,13 @@ import { supabase } from "./config/supabase.js";
 
 import { obtenerTotalVentas } 
 from "./services/ventas.service.js";
+import {
+  obtenerGastosNequi,
+  crearGastoNequi,
+  eliminarGastoNequi,
+  eliminarTodosLosGastosNequi,
+  eliminarGastosNequiPorRango
+} from "./services/gastosNequi.service.js";
 
 import {
   obtenerGastos,
@@ -12,6 +19,7 @@ import {
 } from "./services/gastos.service.js";
 
 import { initBackButton } from "./ui/backButton.ui.js";
+
 
 let rolUsuario = null;
 
@@ -31,6 +39,9 @@ const modal = document.getElementById("modalEliminar");
 const modalMensaje = document.getElementById("modalMensaje");
 const btnCancelar = document.getElementById("btnCancelarEliminar");
 const btnConfirmar = document.getElementById("btnConfirmarEliminar");
+const tablaNequi = document.getElementById("tablaGastosNequi");
+const totalNequiEl = document.getElementById("totalNequi");
+const totalNequiTablaEl = document.getElementById("totalNequiTabla");
 
 const toggleTheme = document.getElementById("toggleTheme");
 
@@ -61,7 +72,13 @@ async function cargarResumen(fechaInicio = null, fechaFin = null) {
   }
 
   const totalVentas = await obtenerTotalVentas(inicio, fin);
-  const gastos = await obtenerGastos(inicio, fin);
+ const gastos = await obtenerGastos(inicio, fin);
+const gastosNequi = await obtenerGastosNequi(inicio, fin);
+
+let totalNequi = 0;
+gastosNequi.forEach(g => totalNequi += Number(g.monto));
+
+totalNequiEl.textContent = formatoCOP(totalNequi);
 
   let totalGastos = 0;
   gastos.forEach(g => totalGastos += Number(g.monto));
@@ -81,6 +98,7 @@ async function cargarResumen(fechaInicio = null, fechaFin = null) {
   }
 
   renderGastos(gastos);
+  renderGastosNequi(gastosNequi);
 }
 
 /* =========================
@@ -113,6 +131,41 @@ function renderGastos(gastos) {
   });
 }
 
+function renderGastosNequi(gastosNequi) {
+
+  if (!tablaNequi) return;
+
+  tablaNequi.innerHTML = "";
+
+  let total = 0;
+
+  gastosNequi.forEach(gasto => {
+
+    total += Number(gasto.monto);
+
+    tablaNequi.innerHTML += `
+      <tr data-id="${gasto.id}">
+        <td>${new Date(gasto.fecha).toLocaleString("es-CO")}</td>
+        <td>${gasto.descripcion || "-"}</td>
+        <td>${formatoCOP(gasto.monto)}</td>
+        <td>${gasto.registrado_por || "-"}</td>
+        <td>${gasto.tipo || "Nequi"}</td>
+        <td ${rolUsuario === "Trabajador" ? 'style="display:none"' : ""}>
+          ${
+            rolUsuario !== "Trabajador"
+              ? `<button class="btn-delete-row btn-delete-nequi" data-id="${gasto.id}">✕</button>`
+              : ""
+          }
+        </td>
+      </tr>
+    `;
+  });
+
+  if (totalNequiTablaEl) {
+    totalNequiTablaEl.textContent = formatoCOP(total);
+  }
+}
+
 /* =========================
    GUARDAR GASTO
 ========================= */
@@ -129,12 +182,23 @@ btnGuardar.addEventListener("click", async () => {
     return;
   }
 
-  const ok = await crearGasto({
+ let ok = false;
+
+if (tipo === "Nequi") {
+  ok = await crearGastoNequi({
     tipo,
     descripcion,
     monto,
     registrado_por: registradoPor
   });
+} else {
+  ok = await crearGasto({
+    tipo,
+    descripcion,
+    monto,
+    registrado_por: registradoPor
+  });
+}
 
   if (ok) {
     document.getElementById("tipoGasto").value = "";
@@ -204,21 +268,25 @@ tablaGastos.addEventListener("click", (e) => {
 btnEliminarTodos.addEventListener("click", async () => {
 
   const gastos = await obtenerGastos();
+  const gastosNequi = await obtenerGastosNequi();
 
-  if (!gastos.length) {
+  const totalRegistros = gastos.length + gastosNequi.length;
+
+  if (!totalRegistros) {
     alert("No hay gastos para eliminar.");
     return;
   }
 
   abrirModal(
-    `Se eliminarán ${gastos.length} registros. ¿Continuar?`,
+    `Se eliminarán ${totalRegistros} registros. ¿Continuar?`,
     async () => {
 
-      document.querySelectorAll("#tablaGastos tr")
+      document.querySelectorAll("#tablaGastos tr, #tablaGastosNequi tr")
         .forEach(tr => tr.classList.add("fade-out"));
 
       setTimeout(async () => {
         await eliminarTodosLosGastos();
+        await eliminarTodosLosGastosNequi();
         cargarResumen();
       }, 400);
 
@@ -244,21 +312,25 @@ btnEliminarRango.addEventListener("click", async () => {
   const fin = fechaFin + "T23:59:59";
 
   const gastos = await obtenerGastos(inicio, fin);
+  const gastosNequi = await obtenerGastosNequi(inicio, fin);
 
-  if (!gastos.length) {
+  const totalRegistros = gastos.length + gastosNequi.length;
+
+  if (!totalRegistros) {
     alert("No hay registros en ese rango.");
     return;
   }
 
   abrirModal(
-    `Se eliminarán ${gastos.length} registros desde ${fechaInicio} hasta ${fechaFin}.`,
+    `Se eliminarán ${totalRegistros} registros desde ${fechaInicio} hasta ${fechaFin}.`,
     async () => {
 
-      document.querySelectorAll("#tablaGastos tr")
+      document.querySelectorAll("#tablaGastos tr, #tablaGastosNequi tr")
         .forEach(tr => tr.classList.add("fade-out"));
 
       setTimeout(async () => {
         await eliminarGastosPorRango(inicio, fin);
+        await eliminarGastosNequiPorRango(inicio, fin);
         cargarResumen();
       }, 400);
 
@@ -355,7 +427,9 @@ function aplicarPermisosUI() {
     btnEliminarRango.style.display = "none";
 
     // Ocultar columna Acciones (thead)
-    const thAcciones = document.querySelector("th:last-child");
+    document.querySelectorAll("th:last-child").forEach(th => {
+  th.style.display = "none";
+});
     if (thAcciones) thAcciones.style.display = "none";
   }
 }
@@ -380,6 +454,29 @@ async function obtenerRolUsuario() {
 
   aplicarPermisosUI();
 }
+
+
+tablaNequi.addEventListener("click", (e) => {
+
+  const btn = e.target.closest(".btn-delete-nequi");
+  if (!btn) return;
+
+  const id = btn.dataset.id;
+  const fila = btn.closest("tr");
+
+  abrirModal("¿Eliminar este gasto Nequi?", async () => {
+
+    fila.classList.add("fade-out");
+
+    setTimeout(async () => {
+      await eliminarGastoNequi(id);
+      cargarResumen();
+    }, 300);
+
+  });
+
+});
+
 
 
 /* =========================

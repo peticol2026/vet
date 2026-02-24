@@ -54,6 +54,7 @@
     <button id="btnEliminarRango" class="btn-delete-range">
       Eliminar por rango
     </button>
+    
   </div>
 
   <!-- 📊 RESUMEN GENERAL -->
@@ -74,6 +75,11 @@
       <strong id="totalFinal">$0</strong>
     </div>
 
+    <div class="resumen-card nequi-card">
+  <span>Total Nequi</span>
+  <strong id="totalNequi">$0</strong>
+</div>
+
   </div>
 
   <!-- 📝 FORMULARIO NUEVO GASTO -->
@@ -86,7 +92,9 @@
       <option value="Gasto Local">Gasto Local</option>
       <option value="Gasto Pedido">Gasto Pedido</option>
       <option value="Arriendo">Arriendo</option>
+      <option value="Nequi">Nequi</option>
       <option value="Otro">Otro</option>
+      
 
     </select>
 
@@ -114,6 +122,30 @@
       <tbody id="tablaGastos"></tbody>
     </table>
   </div>
+
+
+  <h2>Gastos Nequi</h2>
+
+<div class="card nequi-card">
+  <h3>Total Nequi</h3>
+ <p id="totalNequiTabla">$0</p>
+</div>
+
+<div class="tabla-wrapper">
+  <table class="tabla-historial">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Descripción</th>
+        <th>Monto</th>
+        <th>Registrado por</th>
+        <th>Tipo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="tablaGastosNequi"></tbody>
+  </table>
+</div>
 
 </section>
 
