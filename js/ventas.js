@@ -595,18 +595,60 @@ function formatoCOP(valor) {
   }).format(valor);
 }
 
+
+
+function agregarAlCarrito(producto) {
+  const existente = carrito.find(
+    (p) => p.idProducto == producto.idProducto
+  );
+
+  if (existente) {
+    if (existente.cantidad < existente.stockInicial) {
+      existente.cantidad++;
+    }
+  } else {
+    carrito.push({
+      ...producto,
+      cantidad: 1,
+      stockInicial: producto.cantidad,
+      descuentoUnitario: 0,
+    });
+  }
+
+  actualizarCarrito();
+}
+
+
+
 /* =====================================================
    FILTROS
 ===================================================== */
 buscador?.addEventListener("input", (e) => {
-  const texto = e.target.value.toLowerCase();
+  const texto = e.target.value.trim();
 
-  const filtrados = productos.filter((p) =>
-    p.nombreProducto.toLowerCase().includes(texto),
+  const coincidencias = productos.filter((p) => {
+    const nombre = p.nombreProducto?.toLowerCase() || "";
+    const codigo = String(p.codigoBarras || "");
+
+    return (
+      nombre.includes(texto.toLowerCase()) ||
+      codigo.includes(texto)
+    );
+  });
+
+  renderProductos(coincidencias);
+
+  // 🔥 Si coincide EXACTAMENTE con código de barras
+  const exacto = productos.find(
+    (p) => String(p.codigoBarras) === texto
   );
 
-  renderProductos(filtrados);
+  if (exacto) {
+    agregarAlCarrito(exacto);
+    buscador.value = "";
+  }
 });
+
 
 function cargarCategorias() {
   if (!filtroCategoria) return;

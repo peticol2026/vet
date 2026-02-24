@@ -9,11 +9,12 @@
   <link rel="stylesheet" href="./css/inicio.css">
   <link rel="stylesheet" href="./css/gallery.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
 
-  
+
 
 
   <!-- 🎥 VIDEO DE FONDO -->
@@ -45,117 +46,328 @@
 
   <main id="app">
 
-    <section class="gallery-section" id="galeria">
+    <section class="brand-hero" id="inicio">
 
-      <p class="clinic-description">
-        Peticol es un lugar dedicado a la venta de alimentos, medicamentos y productos especializados
-        para mascotas, complementando sus servicios con revisión general y peluquería animal. Nos enfocamos en brindar
-        atención responsable, productos de calidad y un servicio confiable que contribuya al bienestar y cuidado diario
-        de las mascotas.
-      </p>
+      <div class="brand-text">
+        <h1>Cuidamos lo que más amas</h1>
 
-      <div class="gallery">
-        <div class="gallery-card"><img src="assets/imagenes/imagen1.jpg"></div>
-        <div class="gallery-card"><img src="assets/imagenes/imagen2.jpg"></div>
-        <div class="gallery-card"><img src="assets/imagenes/imagen3.jpg"></div>
-        <div class="gallery-card"><img src="assets/imagenes/imagen4.jpg"></div>
+        <p>
+          Peticol es un lugar dedicado a la venta de alimentos, medicamentos y productos especializados
+          para mascotas, complementando sus servicios con revisión general y peluquería animal.
+          Nos enfocamos en brindar atención responsable, productos de calidad y un servicio confiable
+          que contribuya al bienestar y cuidado diario de las mascotas.
+        </p>
+
+        <a href="productosCliente.html" class="brand-btn">Ver Productos</a>
       </div>
+
+      <div class="hero-gallery">
+
+        <div class="side left">
+          <img src="assets/imagenes/imagen1.jpg">
+          <img src="assets/imagenes/imagen2.jpg">
+        </div>
+
+        <div class="center">
+          <img src="assets/imagenes/imagen5.jpg">
+        </div>
+
+        <div class="side right">
+          <img src="assets/imagenes/imagen3.jpg">
+          <img src="assets/imagenes/imagen4.jpg">
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <section class="trust-section">
+
+      <div class="trust-container">
+
+        <div class="trust-item">
+          <h2>+5,000</h2>
+          <p>Mascotas atendidas</p>
+        </div>
+
+        <div class="trust-item">
+          <h2>Confianza </h2>
+          <p> construida dia a dia</p>
+        </div>
+
+        <div class="trust-item">
+          <h2>100%</h2>
+          <p>Compromiso y calidad</p>
+        </div>
+
+        <div class="trust-item">
+          <h2>Soporte</h2>
+          <p>Atención personalizada</p>
+        </div>
+
+      </div>
+
     </section>
 
     <section class="carousel-cards-section">
-      <h3>Nuestros Productos</h3>
+
+      <div class="section-header">
+        <span class="section-tag">Servicios & Productos</span>
+        <h2>Todo lo que tu mascota necesita</h2>
+        <p>Ofrecemos soluciones completas para el bienestar, cuidado y diversión de tu mejor amigo.</p>
+      </div>
 
       <div class="carousel-3d">
         <button class="nav-btn left">&#10094;</button>
 
         <div class="carousel-viewport">
           <div class="carousel-cards">
-            <div class="card active"><img src="assets/imagenes/imagen5.jpg">
+
+            <div class="card active">
+              <div class="card-image">
+                <img src="assets/imagenes/imagen5.jpg">
+                <div class="card-overlay">
+                  <span>Explorar</span>
+                </div>
+              </div>
               <h4>Juguetes para perros</h4>
             </div>
-            <div class="card"><img src="assets/imagenes/imagen6.jpg">
+
+            <div class="card">
+              <div class="card-image">
+                <img src="assets/imagenes/imagen6.jpg">
+                <div class="card-overlay">
+                  <span>Explorar</span>
+                </div>
+              </div>
               <h4>Juguetes para gatos</h4>
             </div>
-            <div class="card"><img src="assets/imagenes/imagen7.jpg">
-              <h4>Purina</h4>
+
+            <div class="card">
+              <div class="card-image">
+                <img src="assets/imagenes/imagen7.jpg">
+                <div class="card-overlay">
+                  <span>Explorar</span>
+                </div>
+              </div>
+              <h4>Alimentos Premium</h4>
             </div>
-            <div class="card"><img src="assets/imagenes/imagen8.jpg">
+
+            <div class="card">
+              <div class="card-image">
+                <img src="assets/imagenes/imagen8.jpg">
+                <div class="card-overlay">
+                  <span>Explorar</span>
+                </div>
+              </div>
               <h4>Medicamentos</h4>
             </div>
-            <div class="card"><img src="assets/imagenes/imagen9.jpg">
+
+            <div class="card">
+              <div class="card-image">
+                <img src="assets/imagenes/imagen9.jpg">
+                <div class="card-overlay">
+                  <span>Explorar</span>
+                </div>
+              </div>
               <h4>Peluquería canina</h4>
             </div>
-            <div class="card"><img src="assets/imagenes/imagen10.jpg">
+
+            <div class="card">
+              <div class="card-image">
+                <img src="assets/imagenes/imagen10.jpg">
+                <div class="card-overlay">
+                  <span>Explorar</span>
+                </div>
+              </div>
               <h4>Vacunación</h4>
             </div>
-            
+
           </div>
         </div>
 
         <button class="nav-btn right">&#10095;</button>
       </div>
+
     </section>
 
-  </main>
 
-  <footer>
-    <p>&copy; 2026 Peticol</p>
+    <section class="why-section">
+
+      <h2>¿Por qué elegir Peticol?</h2>
+
+      <div class="why-grid">
+
+        <div class="why-card">
+          <h3>Productos Certificados</h3>
+          <p>Trabajamos con marcas reconocidas y aprobadas para garantizar la salud de tu mascota.</p>
+        </div>
+
+        <div class="why-card">
+          <h3>Atención Profesional</h3>
+          <p>Personal capacitado para brindar orientación responsable y especializada.</p>
+        </div>
+
+        <div class="why-card">
+          <h3>Servicios Integrales</h3>
+          <p>Desde alimentos hasta peluquería y revisión general en un solo lugar.</p>
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="cta-section">
+      <h2>Tu mascota merece lo mejor</h2>
+      <p>Agenda una cita o descubre nuestros productos ahora mismo.</p>
+      <a href="productosCliente.html" class="brand-btn">Explorar Ahora</a>
+    </section>
+
+
+
+  </main>
+  <footer class="footer">
+
+    <div class="footer-container">
+
+      <div>
+        <h3>Peticol</h3>
+        <p>Cuidado integral para mascotas con calidad y confianza.</p>
+      </div>
+
+      <div>
+        <h4>Enlaces</h4>
+        <ul>
+          <li><a href="#inicio">Inicio</a></li>
+          <li><a href="productosCliente.html">Productos</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contacto</h4>
+        <p>Email: jhonduran001@gmail.com</p>
+        <p>Teléfono - WhatsApp: +57 322 407 79 12</p>
+
+        <div class="social-icons">
+
+          <!-- Instagram -->
+          <a href="https://www.instagram.com/peti_col?igsh=ZDhodnZkbzFtcXln" target="_blank">
+            <i class="fab fa-instagram"></i>
+          </a>
+
+          <!-- Facebook -->
+          <a href="https://www.facebook.com/people/Peticol/61582970919891/?rdid=z0m1ozqWxNLvmSmj&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1BqtJqzmZZ%2F"
+            target="_blank">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+
+          <!-- WhatsApp Directo -->
+          <a href="https://wa.me/573224077912?text=Hola%20Peticol,%20quiero%20información%20sobre%20sus%20servicios"
+            target="_blank" class="whatsapp-btn">
+            <i class="fab fa-whatsapp"></i>
+          </a>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      © 2026 Peticol — Todos los derechos reservados
+    </div>
+
   </footer>
 
 
   <!-- MODAL LOGIN -->
-<div class="modal-overlay" id="loginModal">
-  <div class="modal-login">
+  <div class="modal-overlay" id="loginModal">
+    <div class="modal-login">
 
-    <div class="modal-paw">🐾</div>
-    <span class="modal-close" onclick="cerrarLogin()">×</span>
+      <div class="modal-paw">🐾</div>
+      <span class="modal-close" onclick="cerrarLogin()">×</span>
 
-    <div class="modal-body">
+      <div class="modal-body">
 
-      <!-- FORMULARIO -->
-      <div class="login-form">
+        <!-- FORMULARIO -->
+        <div class="login-form">
 
-        <div class="login-logo">
-          <img src="./assets/imagenes/logo.svg" alt="Logo Peticol">
+          <div class="login-logo">
+            <img src="./assets/imagenes/logo.svg" alt="Logo Peticol">
+          </div>
+
+          <h2>Inicio de sesión</h2>
+          <p class="login-subtitle">Accede a tu cuenta para continuar</p>
+
+          <form id="loginForm">
+            <div class="input-group">
+              <label>Correo electrónico</label>
+              <input id="correo" type="email" required>
+            </div>
+
+            <div class="input-group">
+              <label>Contraseña</label>
+              <input id="clave" type="password" required>
+            </div>
+
+            <button type="submit" class="login-btn">Ingresar</button>
+          </form>
+
         </div>
 
-        <h2>Inicio de sesión</h2>
-        <p class="login-subtitle">Accede a tu cuenta para continuar</p>
-
-        <form id="loginForm">
-          <div class="input-group">
-            <label>Correo electrónico</label>
-            <input id="correo" type="email" required>
-          </div>
-
-          <div class="input-group">
-            <label>Contraseña</label>
-            <input id="clave" type="password" required>
-          </div>
-
-          <button type="submit" class="login-btn">Ingresar</button>
-        </form>
+        <!-- IMAGEN -->
+        <div class="login-image">
+          <img src="./assets/imagenes/imagenlogin2.jpg" alt="Mascotas Peticol">
+        </div>
 
       </div>
-
-      <!-- IMAGEN -->
-      <div class="login-image">
-        <img src="./assets/imagenes/imagenlogin2.jpg" alt="Mascotas Peticol">
-      </div>
-
     </div>
   </div>
-</div>
 
 
 
 
-    <script type="module" src="./js/app.js"></script>
-    <script src="./js/carousel.js"></script>
-    <script src="./js/modal.js"></script>
+  <script type="module" src="./js/app.js"></script>
+  <script src="./js/carousel.js"></script>
+  <script src="./js/modal.js"></script>
 
 
-    <div id="toast" class="toast"></div>
+  <div id="toast" class="toast"></div>
+
+
+  <script type="module">
+    import { animate, scroll } from "https://cdn.jsdelivr.net/npm/motion@11.11.16/+esm";
+
+    const section = document.querySelector(".scroll-gallery");
+    const images = document.querySelectorAll(".gallery-layer img");
+    const centerImage = document.querySelector(".gallery-center img");
+
+    scroll(
+      animate(centerImage, {
+        scale: [2, 1],
+        opacity: [0.4, 1]
+      }),
+      {
+        target: section,
+        offset: ["start start", "70% end"]
+      }
+    );
+
+    images.forEach((img, index) => {
+      scroll(
+        animate(img, {
+          opacity: [0, 1],
+          scale: [0.6, 1]
+        }, { delay: index * 0.1 }),
+        {
+          target: section,
+          offset: ["20% start", "80% end"]
+        }
+      );
+    });
+  </script>
+
 
 
 </body>
