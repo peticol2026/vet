@@ -21,6 +21,7 @@ export async function obtenerProductos() {
     nombre
   )
 `)
+.eq("activo", true)
 ;
 
 if (error) {
@@ -80,11 +81,11 @@ export async function crearProducto(producto) {
 export async function eliminarProducto(idProducto) {
   const { error } = await supabase
     .from("productos")
-    .delete()
+    .update({ activo: false })
     .eq("idProducto", idProducto);
 
   if (error) {
-    console.error("Error eliminando producto:", error);
+    console.error("Error desactivando producto:", error);
     throw error;
   }
 }
