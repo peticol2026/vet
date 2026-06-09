@@ -11,34 +11,64 @@
 </head>
 <body>
 
-<!-- NAVBAR -->
 <header class="navbar">
-  <button id="toggleSidebar">☰</button>
-  <input type="text" id="searchInput" placeholder="Buscar..." />
 
-<button id="logoutBtn" class="btn-logout">
-    Cerrar sesión
-  </button>
+  <img
+    src="./assets/imagenes/logo.svg"
+    alt="Logo Peticol"
+    class="navbar-logo">
 
+    <div class="navbar-title">
+
+  <span class="navbar-subtitle">
+    SISTEMA ADMINISTRATIVO
+  </span>
+
+  <div class="navbar-heading">
+
+    <h2>🏠 Módulo Principal</h2>
+
+    <span class="navbar-badge">
+      Online
+    </span>
+
+  </div>
+
+</div>
+
+
+  <div class="search-container">
+
+        <span class="search-icon">🔍</span>
+
+        <input
+          type="text"
+          id="searchInput"
+          class="navbar-search"
+          placeholder="Buscar módulos...">
+
+  </div>
+
+  <button id="logoutBtn" class="btn-logout">
+  <span>🚪</span>
+  <span>Cerrar sesión</span>
+</button>
 
 </header>
 
+<div id="logoModal" class="logo-modal">
 
-<!-- SIDEBAR -->
-<aside id="sidebar" class="sidebar">
+  <div class="logo-modal-content">
 
-  <div class="sidebar-brand">
-    <h2>PETICOL</h2>
-    <img src="./assets/imagenes/logo.svg" alt="Logo Peticol">
+    <img
+      src="./assets/imagenes/logo.svg"
+      alt="Logo Peticol"
+      class="logo-modal-img">
+
   </div>
 
-  <a href="#">Inicio</a>
-  <a href="#">Productos</a>
-  <a href="#">Usuarios</a>
-  <a href="#">Inventario</a>
-  <a href="#">Pedidos</a>
+</div>
 
-</aside>
 
 
 <!-- CONTENIDO -->
@@ -56,17 +86,17 @@
     </div>
 
     <div class="card" data-link="indexVentas.html">
-      <img src="./assets/cards/inventario2.jpg">
+      <img src="https://i.pinimg.com/1200x/22/b5/60/22b5604eca105ae195aa809dc734d071.jpg">
       <div class="card-text">Ventas</div>
     </div>
 
     <div class="card" data-link="historial.html">
-      <img src="./assets/cards/pedidos2.jpg">
+      <img src="https://i.pinimg.com/1200x/0b/8c/f9/0b8cf9bae65559a15f616bece56070c8.jpg">
       <div class="card-text">Historial de ventas</div>
     </div>
 
     <div class="card" data-link="gastos.html">
-      <img src="./assets/imagenes/gastos.jpg">
+      <img src="https://i.pinimg.com/736x/01/f6/48/01f64838522d0c52fc4db623708dc1ee.jpg">
       <div class="card-text">Gastos</div>
     </div>
 
@@ -79,9 +109,8 @@
       <img src="https://i.pinimg.com/1200x/f7/ee/99/f7ee993d1902f0d5b55efcb6e4f3f01c.jpg">
       <div class="card-text">Scanner</div>
     </div>
-
     <div class="card" data-link="calendario.html">
-      <img src="https://i.pinimg.com/1200x/f7/ee/99/f7ee993d1902f0d5b55efcb6e4f3f01c.jpg">
+      <img src="https://i.pinimg.com/736x/73/7d/b4/737db42fa99f6b07ee9a889d869de430.jpg">
       <div class="card-text">Calendario</div>
     </div>
 
