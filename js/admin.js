@@ -53,10 +53,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 // SIDEBAR TOGGLE
 // ==============================
 
-toggle.addEventListener("click", () => {
-  sidebar.classList.toggle("hidden");
-  content.classList.toggle("full");
-});
+if (toggle) {
+  toggle.addEventListener("click", () => {
+    sidebar?.classList.toggle("hidden");
+    content?.classList.toggle("full");
+  });
+}
 
 document.querySelectorAll(".card").forEach(card => {
   card.addEventListener("click", () => {
@@ -65,9 +67,11 @@ document.querySelectorAll(".card").forEach(card => {
   });
 });
 
-toggleBtn.addEventListener("click", () => {
-  sidebar.classList.toggle("show");
-});
+if (toggleBtn) {
+  toggleBtn.addEventListener("click", () => {
+    sidebar?.classList.toggle("show");
+  });
+}
 
 
 // ==============================
@@ -111,4 +115,36 @@ if (logoutBtn) {
     // 🔥 Redirige a index.html
     window.location.href = "index.html";
   });
+}
+
+
+// ==============================
+// MODAL LOGO
+// ==============================
+
+const logo = document.querySelector(".navbar-logo");
+const logoModal = document.getElementById("logoModal");
+
+if (logo && logoModal) {
+
+  logo.addEventListener("click", () => {
+    logoModal.classList.add("show");
+  });
+
+  logoModal.addEventListener("click", (e) => {
+
+    if (e.target === logoModal) {
+      logoModal.classList.remove("show");
+    }
+
+  });
+
+  document.addEventListener("keydown", (e) => {
+
+    if (e.key === "Escape") {
+      logoModal.classList.remove("show");
+    }
+
+  });
+
 }

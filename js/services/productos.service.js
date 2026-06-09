@@ -1,8 +1,5 @@
 import { supabase } from "../config/supabase.js";
 
-
-
-
 export async function obtenerProductos() {
 
   const { data, error } = await supabase
