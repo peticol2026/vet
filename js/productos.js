@@ -1,6 +1,6 @@
-import {obtenerProductos, crearProducto, subirImagen,  eliminarProducto,  eliminarImagen, actualizarProducto, buscarProductoIgual} from "./services/productos.service.js";
+import {obtenerProductos, crearProducto, subirImagen,  eliminarProducto,  eliminarImagen, actualizarProducto, buscarProductoIgual,actualizarMostrarTodos} from "./services/productos.service.js";
 import { mostrarToast } from "./ui/toast.ui.js";
-import {renderProductos, initModal ,initFormulario } from "./ui/productos.ui.js";
+import {renderProductos, initModal ,initFormulario,toggleChecks } from "./ui/productos.ui.js";
 import { initBackButton } from "./ui/backButton.ui.js";
 import {
   obtenerCategorias,
@@ -23,9 +23,10 @@ let productosGlobales = [];
 async function cargarProductos() {
   const productos = await obtenerProductos();
 
+  console.log(productos);
   productosGlobales = productos;
 
-  renderProductos(productos, borrarProducto, editarProducto);
+  renderProductos(productos, borrarProducto, editarProducto,null,cambiarMostrarProducto);
 
   const hoy = new Date();
   hoy.setHours(0, 0, 0, 0);
@@ -60,7 +61,13 @@ if (inputBuscar) {
         producto.categoriaNombre?.toLowerCase().includes(texto),
     );
 
-    renderProductos(filtrados, borrarProducto, editarProducto);
+    renderProductos(
+  filtrados,
+  borrarProducto,
+  editarProducto,
+  null,
+  cambiarMostrarProducto
+);
   });
 }
 
@@ -103,7 +110,8 @@ async function guardarProducto(producto) {
         precioVenta: producto.precioVenta,
         cantidad: producto.cantidad,
         fechaVencimiento: producto.fechaVencimiento,
-        imagen: imagenUrl
+        imagen: imagenUrl,
+        mostrar: true
       };
 
       if (productoEditando) {
@@ -150,6 +158,22 @@ async function borrarProducto(producto) {
   }
 }
 
+
+//Cambiar mostrar o ocultar productos
+
+async function cambiarMostrarProducto(idProducto, valor) {
+
+  try {
+
+    await actualizarProducto(idProducto, {
+      mostrar: valor
+    });
+
+  } catch (error) {
+    console.error(error);
+  }
+
+}
 
 
 // EDITAR PRODUCTOS
@@ -313,6 +337,90 @@ function cerrarModal() {
   productModal.classList.add("hidden");
   document.body.classList.remove("modal-open");
 }
+
+let modoVisibilidad = false;
+
+const btnModoMostrar =
+  document.getElementById(
+    "btnModoMostrar"
+  );
+
+btnModoMostrar?.addEventListener(
+  "click",
+  () => {
+
+    modoVisibilidad =
+      !modoVisibilidad;
+
+    document.body.classList.toggle(
+      "modo-visibilidad"
+    );
+
+    btnModoMostrar.textContent =
+      modoVisibilidad
+        ? "❌ Salir del modo"
+        : "👁 Gestionar visibilidad";
+
+  }
+);
+
+const btnSeleccionarTodos =
+  document.getElementById(
+    "btnSeleccionarTodos"
+  );
+
+let todosSeleccionados = false;
+
+btnSeleccionarTodos?.addEventListener(
+  "click",
+  async () => {
+
+    const checkboxes =
+      document.querySelectorAll(
+        ".checkbox-mostrar"
+      );
+
+    todosSeleccionados =
+      !todosSeleccionados;
+
+    // Actualización visual inmediata
+    checkboxes.forEach(checkbox => {
+
+      checkbox.checked =
+        todosSeleccionados;
+
+      const icono =
+        checkbox
+          .closest(".pet-toggle")
+          .querySelector(".pet-icon");
+
+      icono.textContent =
+        todosSeleccionados
+          ? "🐶"
+          : "🙈";
+
+    });
+
+    btnSeleccionarTodos.textContent =
+      todosSeleccionados
+        ? "🙈 Ocultar todos"
+        : "🐶 Mostrar todos";
+
+    // Actualizar Supabase en paralelo
+    const promesas =
+      [...checkboxes].map(
+        checkbox =>
+          cambiarMostrarProducto(
+            checkbox.dataset.id,
+            todosSeleccionados
+          )
+      );
+
+    await Promise.all(promesas);
+
+  }
+);
+
 
 
 

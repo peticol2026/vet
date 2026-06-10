@@ -4,16 +4,17 @@ export async function obtenerProductos() {
 
   const { data, error } = await supabase
     .from("productos")
-    .select(`
+.select(`
   idProducto,
   nombreProducto,
-   codigoBarras,
+  codigoBarras,
   precioVenta,
   precioCosto,
   cantidad,
   imagen,
   fechaVencimiento,
   categoria_id,
+  mostrar,
   categorias (
     nombre
   )
@@ -160,5 +161,40 @@ export async function buscarProductoIgual(producto) {
   }
 
   return data;
+}
+
+export async function actualizarMostrar(
+  idProducto,
+  mostrar
+) {
+
+  const { error } = await supabase
+    .from("productos")
+    .update({
+      mostrar
+    })
+    .eq("idProducto", idProducto);
+
+  if (error) {
+    throw error;
+  }
+
+}
+
+export async function actualizarMostrarTodos(
+  mostrar
+) {
+
+  const { error } = await supabase
+    .from("productos")
+    .update({
+      mostrar
+    })
+    .eq("activo", true);
+
+  if (error) {
+    throw error;
+  }
+
 }
 

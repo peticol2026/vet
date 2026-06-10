@@ -205,6 +205,45 @@ body {
   background-color: #d97706;
 }
 
+#btnModoMostrar{
+
+  background: rgba(33,158,188,.15);
+
+  border: 1px solid rgba(33,158,188,.4);
+
+  color: #8be9fd;
+
+  font-weight: 600;
+}
+
+#btnModoMostrar:hover{
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 20px rgba(33,158,188,.25);
+}
+
+#btnSeleccionarTodos{
+
+  background: rgba(34,197,94,.15);
+
+  border: 1px solid rgba(34,197,94,.4);
+
+  color: #86efac;
+
+  font-weight: 600;
+}
+
+#btnSeleccionarTodos:hover{
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 20px rgba(34,197,94,.25);
+}
+
+
 /* =====================================================
    MODAL GENERAL
 ===================================================== */
@@ -514,3 +553,70 @@ body.modal-open {
   overflow: hidden;
 }
 
+
+/* ===================================
+   MODO MOSTRAR / OCULTAR
+=================================== */
+
+.product-card{
+  position:relative;
+}
+
+/* CONTENEDOR */
+
+.pet-toggle{
+
+  display:none;
+
+  position:absolute;
+
+  top:10px;
+  right:10px;
+
+  z-index:50;
+
+  cursor:pointer;
+}
+
+/* APARECE SOLO EN MODO VISIBILIDAD */
+
+.modo-visibilidad .pet-toggle{
+  display:block;
+}
+
+/* ESCONDER CHECK REAL */
+
+.pet-toggle input{
+  display:none;
+}
+
+/* ICONO */
+
+.pet-icon{
+
+  width:44px;
+  height:44px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:28px;
+
+  background:rgba(0,0,0,.45);
+
+  backdrop-filter:blur(8px);
+
+  border-radius:50%;
+
+  transition:.25s;
+}
+
+/* HOVER */
+
+.pet-icon:hover{
+
+  transform:scale(1.15);
+
+  background:rgba(255,255,255,.15);
+}
