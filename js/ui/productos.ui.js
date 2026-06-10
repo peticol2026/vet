@@ -13,12 +13,18 @@ const modal = document.getElementById("productModal");
 const btnAdd = document.getElementById("btnAddProduct");
 const btnCancel = document.getElementById("btnCancelModal");
 
+let mostrarChecks = false;
+
+export function toggleChecks() {
+  mostrarChecks = !mostrarChecks;
+}
+
 
 
 /* =========================
    RENDER PRODUCTOS (CARDS)
 ========================= */
-export function renderProductos(productos = [], onEliminar, onEditar, editarProducto) {
+export function renderProductos(productos = [], onEliminar, onEditar, editarProducto,onMostrarChange) {
 
   grid.innerHTML = "";
 
@@ -39,7 +45,22 @@ export function renderProductos(productos = [], onEliminar, onEditar, editarProd
 
 
 
-    card.innerHTML = `
+   card.innerHTML = `
+
+  <label class="pet-toggle">
+
+  <input
+    type="checkbox"
+    class="checkbox-mostrar"
+    data-id="${producto.idProducto}"
+    ${producto.mostrar ? "checked" : ""}>
+
+  <span class="pet-icon">
+    ${producto.mostrar ? "🐶" : "🙈"}
+  </span>
+
+</label>
+
   <img 
     src="${imagenSrc}" 
     alt="${producto.nombreProducto}"
@@ -145,6 +166,33 @@ const btnEdit = card.querySelector(".btn-edit");
 btnEdit.addEventListener("click", () => {
   onEditar(producto);
 });
+
+const checkbox =
+  card.querySelector(".checkbox-mostrar");
+
+const icono =
+  card.querySelector(".pet-icon");
+
+if (checkbox) {
+
+  checkbox.addEventListener(
+    "change",
+    () => {
+
+      icono.textContent =
+        checkbox.checked
+          ? "🐶"
+          : "🙈";
+
+      onMostrarChange(
+        producto.idProducto,
+        checkbox.checked
+      );
+
+    }
+  );
+
+}
 
 
 

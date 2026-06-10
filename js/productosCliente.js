@@ -23,9 +23,22 @@ async function init() {
 ========================= */
 
 async function cargarProductos() {
-  const productos = await obtenerProductos();
-  productosGlobales = productos;
-  renderProductos(productos);
+
+  const productos =
+    await obtenerProductos();
+
+  const productosVisibles =
+    productos.filter(
+      producto => producto.mostrar === true
+    );
+
+  productosGlobales =
+    productosVisibles;
+
+  renderProductos(
+    productosVisibles
+  );
+
 }
 
 /* =========================
