@@ -439,17 +439,13 @@ toggleTheme.addEventListener("change", () => {
 function aplicarPermisosUI() {
   if (rolUsuario === "Trabajador") {
 
-    // Ocultar botón eliminar todos
     btnEliminarTodos.style.display = "none";
-
-    // Ocultar botón eliminar por rango
     btnEliminarRango.style.display = "none";
 
-    // Ocultar columna Acciones (thead)
     document.querySelectorAll("th:last-child").forEach(th => {
-  th.style.display = "none";
-});
-    if (thAcciones) thAcciones.style.display = "none";
+      th.style.display = "none";
+    });
+
   }
 }
 
