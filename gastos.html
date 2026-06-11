@@ -21,21 +21,25 @@
   </div>
 
   <!-- 🔥 HEADER SUPERIOR -->
-  <div class="header-gastos">
+<!-- 🔥 HEADER SUPERIOR -->
+<div class="header-gastos">
+  <div class="header-left">
+    <button class="btn-back" onclick="window.location.href='indexAdmin.html'">
+      ← Volver
+    </button>
+  </div>
 
-    <div class="header-left">
-      <button class="btn-back" onclick="window.location.href='indexAdmin.html'">
-        ← Volver
-      </button>
-      <h2>💸 Control de Gastos</h2>
-    </div>
+  <div class="header-center">
+    <h2>💸 Control de Gastos</h2>
+  </div>
 
+  <div class="header-right">
     <button id="btnEliminarTodos" class="btn-delete-all">
       <span class="icon">🗑</span>
       <span>Eliminar todos</span>
     </button>
-
   </div>
+</div>
 
   <!-- 📆 FILTROS RÁPIDOS -->
   <div class="filtros-tiempo">
@@ -75,12 +79,41 @@
       <strong id="totalFinal">$0</strong>
     </div>
 
-    <div class="resumen-card nequi-card">
-  <span>Total Nequi</span>
-  <strong id="totalNequi">$0</strong>
+  </div>
+
+  <div class="nequi-section">
+
+  <div class="nequi-header">
+  <div class="nequi-badge">
+    NEQUI
+  </div>
+
+  <div>
+    <h3>Control de gastos Nequi</h3>
+    <p>Venta , gastos y disponibilidad actual</p>
+  </div>
 </div>
 
+  <div class="nequi-cards">
+
+    <div class="nequi-card-modern">
+      <span>Gastos Nequi</span>
+      <strong id="totalNequi">$0</strong>
+    </div>
+
+    <div class="nequi-card-modern">
+      <span>Ventas Nequi</span>
+      <strong id="totalVentasNequi">$0</strong>
+    </div>
+
+    <div class="nequi-card-modern saldo-nequi">
+      <span>Saldo Final</span>
+      <strong id="saldoNequi">$0</strong>
+    </div>
+
   </div>
+
+</div>
 
   <!-- 📝 FORMULARIO NUEVO GASTO -->
   <div class="filtros">
