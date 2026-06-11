@@ -6,11 +6,10 @@
 }
 
 /* =========================
-   FONDO GENERAL
+   FONDO GENERAL (Más elegante y neutro)
 ========================= */
-
 body {
-  background: linear-gradient(135deg, #0f172a, #111827);
+  background: #0f172a; /* Slate oscuro sólido para un contraste limpio */
   color: #f1f5f9;
   overflow-x: hidden;
 }
@@ -19,24 +18,27 @@ body {
   position: fixed;
   inset: 0;
   z-index: -1;
+  opacity: 0.5; /* Atenuamos partículas para no competir con el catálogo */
 }
 
 /* =========================
    TOPBAR
 ========================= */
-
 .topbar {
   background: rgba(15, 23, 42, 0.6);
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   padding: 30px 20px;
   text-align: center;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .topbar h1 {
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 20px;
-  font-size: 28px;
+  font-size: 32px;
+  letter-spacing: 0.5px;
+  color: #ffffff;
 }
 
 .filters {
@@ -50,166 +52,172 @@ body {
 .filters select {
   padding: 12px 15px;
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   outline: none;
   width: 250px;
   font-size: 14px;
-  background: rgba(255,255,255,0.05);
+  background: rgba(30, 41, 59, 0.5);
   color: white;
-  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
 }
 
-.filters input::placeholder {
-  color: rgba(255,255,255,0.6);
-}
-
-.filters select {
-  cursor: pointer;
+.filters input:focus,
+.filters select:focus {
+  border-color: #38bdf8;
+  background: rgba(30, 41, 59, 0.8);
 }
 
 /* =========================
-   CONTENEDOR
+   CONTENEDOR Y GRID
 ========================= */
-
 .productos-container {
-  padding: 50px 6%;
+  padding: 60px 6% 80px; 
 }
-
-/* =========================
-   GRID
-========================= */
 
 .productos-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 30px;
+  gap: 35px; /* Espaciado estándar y limpio */
 }
 
 /* =========================
-   CARD FLIP DESKTOP
+   NUEVO EFECTO: MINIMAL ELEVATION & SLIDE
 ========================= */
-
 .product-card {
   background: transparent;
-  perspective: 1200px;
-  height: 340px;
+  height: 390px;
+  border-radius: 20px;
+  position: relative;
+  /* Eliminamos la perspectiva forzada */
 }
 
 .flip-card-inner {
   position: relative;
   width: 100%;
   height: 100%;
-  transition: transform 0.7s cubic-bezier(.4,.2,.2,1);
-  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  transform: none; /* Sin rotaciones extrañas */
 }
 
+/* Al pasar el mouse, toda la tarjeta sube suavemente y gana volumen */
 .product-card:hover .flip-card-inner {
-  transform: rotateY(180deg);
+  transform: translateY(-10px);
 }
 
-/* Caras */
-
-.flip-card-front,
-.flip-card-back {
+/* CARA FRONTAL (Estilo tarjeta física premium) */
+.flip-card-front {
   position: absolute;
   width: 100%;
   height: 100%;
   border-radius: 20px;
-  backface-visibility: hidden;
-  overflow: hidden;
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-}
-
-/* FRONT */
-
-.flip-card-front {
-  background: rgba(255,255,255,0.05);
+  background: #ffffff; /* Fondo blanco para integrar tus imágenes de forma invisible */
   display: flex;
   flex-direction: column;
+  overflow: hidden; /* Mantiene todo limpio dentro de los bordes redondeados */
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.4s ease;
 }
 
+/* Sombra profunda y sofisticada en hover */
+.product-card:hover .flip-card-front {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* CONTENEDOR DE LA IMAGEN */
 .flip-card-front img {
   width: 100%;
-  height: 200px;
-  object-fit: cover;
+  height: 230px;
+  object-fit: contain;
+  padding: 20px;
+  background: #ffffff; /* Asegura fusión total con el recuadro blanco de tus archivos */
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  margin: 0 auto;
+  filter: none; /* Eliminamos máscaras y filtros raros */
 }
 
+/* Efecto sutil de zoom en el producto */
+.product-card:hover .flip-card-front img {
+  transform: scale(1.06);
+}
+
+/* SECCIÓN DE INFORMACIÓN (Contraste inverso elegante) */
 .product-info {
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.product-name {
-  font-weight: 600;
-  font-size: 16px;
-}
-
-.product-price {
-  font-weight: 700;
-  font-size: 18px;
-  color: #38bdf8;
-}
-
-/* BACK */
-
-.flip-card-back {
-  background: rgba(30, 41, 59, 0.95);
-  transform: rotateY(180deg);
-  padding: 25px;
+  padding: 20px;
+  background: #1e293b; /* Bloque oscuro abajo para separar la info del área de la foto */
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 15px;
-  text-align: center;
+  gap: 6px;
+  transition: background-color 0.3s ease;
 }
 
-.flip-card-back h3 {
-  font-size: 18px;
-  font-weight: 600;
+/* Al hacer hover, el bloque informativo se ilumina sutilmente */
+.product-card:hover .product-info {
+  background: #243147;
 }
 
-.flip-card-back p {
-  font-size: 14px;
-  color: rgba(255,255,255,0.7);
-}
-
-/* BOTÓN */
-
-.ver-info-btn {
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
-  background: linear-gradient(135deg, #3b82f6, #6366f1);
-  color: white;
-  cursor: pointer;
+.product-name {
   font-weight: 500;
-  transition: 0.3s ease;
+  font-size: 15px;
+  color: #cbd5e1; /* Gris claro muy legible */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.4;
+  transition: color 0.3s ease;
 }
 
-.ver-info-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(99,102,241,0.4);
+.product-card:hover .product-name {
+  color: #ffffff; /* Resalta a blanco puro en hover */
+}
+
+.product-price {
+  font-weight: 600;
+  font-size: 19px;
+  color: #38bdf8; /* Azul brillante limpio */
+  transition: transform 0.3s ease;
+}
+
+/* El precio se desplaza sutilmente a la derecha en hover para guiar el ojo */
+.product-card:hover .product-price {
+  transform: translateX(4px);
+}
+
+/* DESACTIVACIÓN DE CAPAS TRASERAS NO DESEADAS */
+.flip-card-back {
+  display: none; 
+}
+
+/* BOTÓN INVISIBLE PARA EL JS MODAL */
+.ver-info-btn {
+  display: block !important;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 10;
+  cursor: pointer;
 }
 
 /* =========================
-   MODAL
+   MODAL (Estilo limpio a juego)
 ========================= */
-
 .modal-product-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(10px);
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: center;
   opacity: 0;
   pointer-events: none;
-  transition: 0.3s ease;
+  transition: opacity 0.3s ease;
   z-index: 1000;
 }
 
@@ -219,29 +227,47 @@ body {
 }
 
 .modal-product {
-  background: #0f172a;
-  width: 850px;
-  max-width: 95%;
-  border-radius: 25px;
-  transform: scale(0.9);
-  transition: 0.3s ease;
-  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+  background: #1e293b;
+  width: 750px;
+  max-width: 90%;
+  border-radius: 16px;
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
 }
 
 .modal-product-overlay.active .modal-product {
-  transform: scale(1);
+  transform: translateY(0);
+}
+
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 28px;
+  color: #64748b;
+  cursor: pointer;
+  transition: color 0.2s;
+  z-index: 10;
+}
+
+.modal-close:hover {
+  color: #ffffff;
 }
 
 .modal-product-content {
   display: flex;
-  flex-wrap: wrap;
 }
 
 .modal-product img {
-  width: 50%;
-  object-fit: cover;
+  width: 45%;
+  max-height: 400px;
+  object-fit: contain;
+  padding: 20px;
+  background: #ffffff; /* Fusión de imagen dentro del modal */
 }
 
 .modal-product-info {
@@ -249,88 +275,81 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 12px;
+  justify-content: center;
+}
+
+#modalNombre {
+  font-size: 22px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+#modalCategoria {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #38bdf8;
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+#modalPrecio {
+  font-size: 24px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+#modalDescripcion {
+  color: #94a3b8;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.modal-btn {
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background: #22c55e;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.modal-btn:hover {
+  background: #16a34a;
 }
 
 /* =========================
-   RESPONSIVE OPTIMIZADO
+   RESPONSIVE DESIGN MÓVIL (Simple y robusto)
 ========================= */
-
 @media (max-width: 1024px) {
   .productos-grid {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 20px;
-  }
-
-  .product-card {
-    height: 320px;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 25px;
   }
 }
 
-/* =========================
-   FIX DEFINITIVO MOVIL
-========================= */
-
 @media (max-width: 768px) {
-
-  body {
-    background: linear-gradient(180deg, #0f172a 0%, #0b1220 100%);
-    font-size: 14px;
-  }
-
-  .topbar {
-    padding: 20px 15px;
-  }
-
-  .topbar h1 {
-    font-size: 20px;
-    margin-bottom: 15px;
-  }
-
-  .filters {
+  .modal-product-content {
     flex-direction: column;
-    gap: 12px;
   }
-
-  .filters input,
-  .filters select {
+  .modal-product img {
     width: 100%;
-    padding: 14px;
+    height: 200px;
   }
-
   .productos-container {
-    padding: 20px 15px 40px;
+    padding: 30px 4%;
   }
-
   .productos-grid {
-    grid-template-columns: 1fr;
-    gap: 18px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
   }
-
-  /* 🔥 EL FIX REAL */
   .product-card {
-    perspective: none !important;
-    height: auto;
+    height: 360px;
   }
-
-  .flip-card-inner {
-    transform: none !important;
-    transform-style: flat !important;
-  }
-
-  .flip-card-front,
-  .flip-card-back {
-    position: relative;
-    backface-visibility: visible !important;
-  }
-
-  /* Ocultamos la parte trasera en móvil */
-  .flip-card-back {
-    display: none;
-  }
-
   .flip-card-front img {
-    height: 180px;
+    height: 200px;
   }
-
 }

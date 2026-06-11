@@ -1,6 +1,6 @@
 import { supabase } from "./config/supabase.js";
 
-import { obtenerTotalVentas } 
+import { obtenerTotalVentas,obtenerTotalVentasNequi } 
 from "./services/ventas.service.js";
 import {
   obtenerGastosNequi,
@@ -43,6 +43,12 @@ const tablaNequi = document.getElementById("tablaGastosNequi");
 const totalNequiEl = document.getElementById("totalNequi");
 const totalNequiTablaEl = document.getElementById("totalNequiTabla");
 
+const totalVentasNequiEl =
+  document.getElementById("totalVentasNequi");
+
+const saldoNequiEl =
+  document.getElementById("saldoNequi");
+
 const toggleTheme = document.getElementById("toggleTheme");
 
 /* =========================
@@ -72,13 +78,26 @@ async function cargarResumen(fechaInicio = null, fechaFin = null) {
   }
 
   const totalVentas = await obtenerTotalVentas(inicio, fin);
+
+  const totalVentasNequi =
+  await obtenerTotalVentasNequi(inicio, fin);
+
  const gastos = await obtenerGastos(inicio, fin);
 const gastosNequi = await obtenerGastosNequi(inicio, fin);
 
 let totalNequi = 0;
 gastosNequi.forEach(g => totalNequi += Number(g.monto));
 
+const saldoNequi =
+  totalVentasNequi - totalNequi;
+
 totalNequiEl.textContent = formatoCOP(totalNequi);
+
+totalVentasNequiEl.textContent =
+  formatoCOP(totalVentasNequi);
+
+saldoNequiEl.textContent =
+  formatoCOP(saldoNequi);
 
   let totalGastos = 0;
   gastos.forEach(g => totalGastos += Number(g.monto));

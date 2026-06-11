@@ -63,3 +63,45 @@ export async function eliminarVenta(id) {
 
   return true;
 }
+
+
+export async function obtenerTotalVentasNequi(fechaInicio, fechaFin) {
+
+  let query = supabase
+    .from("ventas")
+    .select(`
+      metodo_pago,
+      fecha,
+      detalle_venta (
+        cantidad,
+        precio
+      )
+    `);
+
+  if (fechaInicio && fechaFin) {
+    query = query
+      .gte("fecha", fechaInicio)
+      .lte("fecha", fechaFin);
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error("Error obteniendo ventas Nequi:", error);
+    return 0;
+  }
+
+  let totalNequi = 0;
+
+  data.forEach(venta => {
+
+    if (venta.metodo_pago !== "Nequi") return;
+
+    venta.detalle_venta.forEach(item => {
+      totalNequi += item.cantidad * item.precio;
+    });
+
+  });
+
+  return totalNequi;
+}
