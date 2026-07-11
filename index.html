@@ -283,12 +283,22 @@
           <form id="loginForm">
             <div class="input-group">
               <label>Correo electrónico:</label>
-              <input id="correo" type="email" required>
+              <input
+                id="correo"
+                type="email"
+                autocomplete="email"
+                required
+              >
             </div>
 
             <div class="input-group">
               <label>Contraseña:</label>
-              <input id="clave" type="password" required>
+              <input
+                id="clave"
+                type="password"
+                autocomplete="current-password"
+                required
+              >
             </div>
 
             <button type="submit" class="login-btn">Ingresar</button>
@@ -298,7 +308,7 @@
 
         <!-- IMAGEN -->
         <div class="login-image">
-          <img src="./assets/imagenes/imagenlogin2.jpg" alt="Mascotas Peticol">
+          <img src="./assets/imagenes/imagenlogin2.jpg"  alt="Mascotas Peticol">
         </div>
 
       </div>
@@ -316,7 +326,7 @@
   <div id="toast" class="toast"></div>
 
 
-  <script type="module">
+  <!-- <script type="module">
     import { animate, scroll } from "https://cdn.jsdelivr.net/npm/motion@11.11.16/+esm";
 
     const section = document.querySelector(".scroll-gallery");
@@ -346,7 +356,7 @@
         }
       );
     });
-  </script>
+  </script> -->
 
 
 
