@@ -105,3 +105,44 @@ export async function obtenerTotalVentasNequi(fechaInicio, fechaFin) {
 
   return totalNequi;
 }
+
+export async function obtenerTotalVentasEfectivo(fechaInicio, fechaFin) {
+
+  let query = supabase
+    .from("ventas")
+    .select(`
+      metodo_pago,
+      fecha,
+      detalle_venta (
+        cantidad,
+        precio
+      )
+    `);
+
+  if (fechaInicio && fechaFin) {
+    query = query
+      .gte("fecha", fechaInicio)
+      .lte("fecha", fechaFin);
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error("Error obteniendo ventas Efectivo:", error);
+    return 0;
+  }
+
+  let totalEfectivo = 0;
+
+  data.forEach(venta => {
+
+    if (venta.metodo_pago !== "Efectivo") return;
+
+    venta.detalle_venta.forEach(item => {
+      totalEfectivo += item.cantidad * item.precio;
+    });
+
+  });
+
+  return totalEfectivo;
+}
