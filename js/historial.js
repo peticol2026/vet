@@ -110,7 +110,13 @@ async function cargarVentas() {
   let totalTransferencia = 0;
 
   data.forEach((venta) => {
-    const fechaVenta = new Date(venta.fecha);
+    console.log("Fecha BD:", venta.fecha);
+
+const fechaVenta = new Date(venta.fecha + "Z");
+
+console.log("Objeto Date:", fechaVenta);
+console.log("Locale CO:", fechaVenta.toLocaleString("es-CO"));
+console.log("ISO:", fechaVenta.toISOString());
     const metodo = venta.metodo_pago;
 
     venta.detalle_venta.forEach((item) => {
@@ -383,7 +389,7 @@ async function exportarExcel() {
 
     data.forEach((venta) => {
 
-      const fechaVenta = new Date(venta.fecha);
+      const fechaVenta = new Date(venta.fecha.replace(" ", "T") + "Z");
       const metodo = venta.metodo_pago;
 
       venta.detalle_venta.forEach((item) => {
