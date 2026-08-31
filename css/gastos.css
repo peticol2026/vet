@@ -718,3 +718,76 @@ input:checked + .slider:before {
   color: #94a3b8;
   transform: scale(1.1);
 }
+
+/* =====================================
+   EFECTIVO SECTION
+===================================== */
+
+.efectivo-section {
+  position: relative;
+  padding: 40px;
+  background: var(--bg-card);
+  backdrop-filter: blur(24px);
+  border-radius: 28px;
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.efectivo-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, #22c55e, #86efac);
+  border-radius: 28px 28px 0 0;
+}
+
+.efectivo-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.efectivo-badge {
+  background: linear-gradient(135deg, #22c55e, #4ade80);
+  color: #000000;
+  font-weight: 700;
+  padding: 10px 26px;
+  border-radius: 9999px;
+  font-size: 13.5px;
+  white-space: nowrap;
+}
+
+.efectivo-header h3 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.efectivo-header p {
+  margin: 4px 0 0;
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+.efectivo-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.saldo-efectivo {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.18), rgba(34, 197, 94, 0.05));
+  border-color: var(--success);
+  grid-column: 1 / -1;
+}
+
+.saldo-efectivo strong {
+  color: var(--success);
+  font-size: 38px;
+}

@@ -1,7 +1,10 @@
 import { supabase } from "./config/supabase.js";
 
-import { obtenerTotalVentas,obtenerTotalVentasNequi } 
-from "./services/ventas.service.js";
+import { 
+  obtenerTotalVentas,
+  obtenerTotalVentasNequi,
+  obtenerTotalVentasEfectivo 
+} from "./services/ventas.service.js";
 import {
   obtenerGastosNequi,
   crearGastoNequi,
@@ -43,6 +46,10 @@ const tablaNequi = document.getElementById("tablaGastosNequi");
 const totalNequiEl = document.getElementById("totalNequi");
 const totalNequiTablaEl = document.getElementById("totalNequiTabla");
 
+const totalGastosEfectivoEl = document.getElementById("totalGastosEfectivo");
+const totalVentasEfectivoEl = document.getElementById("totalVentasEfectivo");
+const saldoEfectivoEl = document.getElementById("saldoEfectivo");
+
 const totalVentasNequiEl =
   document.getElementById("totalVentasNequi");
 
@@ -77,40 +84,45 @@ async function cargarResumen(fechaInicio = null, fechaFin = null) {
     fin = fechaFin + "T23:59:59";
   }
 
-  const totalVentas = await obtenerTotalVentas(inicio, fin);
+  // 1. Consultar BD directamente
+  const totalVentasGlobal = await obtenerTotalVentas(inicio, fin);
+  const totalVentasNequi = await obtenerTotalVentasNequi(inicio, fin);
+  const totalVentasEfectivo = await obtenerTotalVentasEfectivo(inicio, fin);
 
-  const totalVentasNequi =
-  await obtenerTotalVentasNequi(inicio, fin);
+  const gastos = await obtenerGastos(inicio, fin);
+  const gastosNequi = await obtenerGastosNequi(inicio, fin);
 
- const gastos = await obtenerGastos(inicio, fin);
-const gastosNequi = await obtenerGastosNequi(inicio, fin);
+  // 2. Sumar Gastos
+  let totalGastosNequi = 0;
+  gastosNequi.forEach(g => totalGastosNequi += Number(g.monto));
 
-let totalNequi = 0;
-gastosNequi.forEach(g => totalNequi += Number(g.monto));
+  let totalGastosEfectivo = 0;
+  gastos.forEach(g => totalGastosEfectivo += Number(g.monto));
 
-const saldoNequi =
-  totalVentasNequi - totalNequi;
+  // 3. Calcular Saldos
+  const saldoNequi = totalVentasNequi - totalGastosNequi;
+  const saldoEfectivo = totalVentasEfectivo - totalGastosEfectivo;
 
-totalNequiEl.textContent = formatoCOP(totalNequi);
+  // 4. Pintar datos Nequi
+  if (totalNequiEl) totalNequiEl.textContent = formatoCOP(totalGastosNequi);
+  if (totalVentasNequiEl) totalVentasNequiEl.textContent = formatoCOP(totalVentasNequi);
+  if (saldoNequiEl) saldoNequiEl.textContent = formatoCOP(saldoNequi);
 
-totalVentasNequiEl.textContent =
-  formatoCOP(totalVentasNequi);
+  // 5. Pintar datos Efectivo
+  if (totalGastosEfectivoEl) totalGastosEfectivoEl.textContent = formatoCOP(totalGastosEfectivo);
+  if (totalVentasEfectivoEl) totalVentasEfectivoEl.textContent = formatoCOP(totalVentasEfectivo);
+  if (saldoEfectivoEl) saldoEfectivoEl.textContent = formatoCOP(saldoEfectivo);
 
-saldoNequiEl.textContent =
-  formatoCOP(saldoNequi);
+  // 6. Tarjetas Globales (Superior)
+  const totalGastosGlobal = totalGastosEfectivo + totalGastosNequi;
+  const totalFinalGlobal = totalVentasGlobal - totalGastosGlobal;
 
-  let totalGastos = 0;
-  gastos.forEach(g => totalGastos += Number(g.monto));
-
-  const totalFinal = totalVentas - totalGastos;
-
-  totalVentasEl.textContent = formatoCOP(totalVentas);
-  totalGastosEl.textContent = formatoCOP(totalGastos);
-  totalFinalEl.textContent = formatoCOP(totalFinal);
+  totalVentasEl.textContent = formatoCOP(totalVentasGlobal);
+  totalGastosEl.textContent = formatoCOP(totalGastosGlobal);
+  totalFinalEl.textContent = formatoCOP(totalFinalGlobal);
 
   totalFinalEl.classList.remove("saldo-positivo", "saldo-negativo");
-
-  if (totalFinal >= 0) {
+  if (totalFinalGlobal >= 0) {
     totalFinalEl.classList.add("saldo-positivo");
   } else {
     totalFinalEl.classList.add("saldo-negativo");

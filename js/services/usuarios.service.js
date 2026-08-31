@@ -56,7 +56,6 @@ export async function crearUsuario({ nombre, email, password, rol }) {
    ACTUALIZAR USUARIO (EDGE)
 ========================= */
 export async function actualizarUsuario(datos) {
-
   const token = await getAccessToken();
 
   const { data, error } = await supabase.functions.invoke(
@@ -70,21 +69,20 @@ export async function actualizarUsuario(datos) {
   );
 
   if (error) throw error;
-
   return data;
 }
 
 /* =========================
    ELIMINAR USUARIO (EDGE)
 ========================= */
-export async function eliminarUsuario(idusuario) {
+export async function eliminarUsuario(datos) {
 
   const token = await getAccessToken();
 
   const { data, error } = await supabase.functions.invoke(
     "eliminar-usuario",
     {
-      body: { idusuario },
+      body: typeof datos === "object" ? datos : { idusuario: datos },
       headers: {
         Authorization: `Bearer ${token}`,
       },
